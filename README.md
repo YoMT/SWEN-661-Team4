@@ -41,9 +41,9 @@ CareConnect is a cross-platform Healthcare Management Application designed to su
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/umgc/2026_spring_careconnect.git
-cd 2026_spring_careconnect
-git checkout team_a
+git clone https://github.com/YoMT/SWEN-661-Team4.git
+cd SWEN-661-Team4
+git checkout team_4
 ```
 
 ### 2. Frontend Setup
@@ -58,7 +58,6 @@ Run on a device:
 
 ```bash
 flutter run -d chrome       # Web
-flutter run -d ios          # iOS Simulator (macOS only)
 flutter run -d android      # Android emulator
 ```
 
@@ -70,7 +69,7 @@ flutter run -d android      # Android emulator
 
 ## Branch Strategy
 
-- All work branches off of and merges back into `team_a`
+- All work branches off of and merges back into `team4`
 - Branch format: `<type>/<issue-number>-<short-description>`
 - Example: `feature/1-tremor-filter-module`
 - Direct commits to `main` are not permitted
