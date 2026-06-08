@@ -1,0 +1,26 @@
+{
+  "name": "careconnect",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "pnpm@9.0.0",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "test": "turbo run test",
+    "web": "pnpm --filter web dev",
+    "mobile": "pnpm --filter mobile start",
+    "desktop": "pnpm --filter desktop dev",
+    "desktop:build": "pnpm --filter desktop build",
+    "flutter:run": "cd apps/flutter-app && flutter run",
+    "flutter:build": "cd apps/flutter-app && flutter build apk"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "esbuild": "0.27.7"
+    }
+  }
+}

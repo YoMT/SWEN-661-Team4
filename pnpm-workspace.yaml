@@ -1,0 +1,8 @@
+# Only JS/TS projects belong here. The Flutter app lives in apps/flutter-app
+# but is NOT a pnpm workspace — it's managed by pub/flutter, driven via the
+# convenience scripts in the root package.json.
+packages:
+  - "apps/web"
+  - "apps/mobile"
+  - "apps/desktop"
+  - "packages/*"

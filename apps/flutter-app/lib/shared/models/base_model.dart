@@ -1,0 +1,13 @@
+abstract class BaseModel {
+  final String id;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+
+  const BaseModel({
+    required this.id,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  Map<String, dynamic> toJson();
+}
