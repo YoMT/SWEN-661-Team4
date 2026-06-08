@@ -8,11 +8,11 @@ CareConnect is a cross-platform Healthcare Management Application designed to su
 
 ## Team Members
 
-| Name | GitHub | Email | Timezone | OS |
-|------|--------|-------|----------|-----|
-| Yoseph Tesfay | [@Yomt](https://github.com/Yomt) | Yoseph.Tesfay@gmail.com | EST | Windows |
-| Donielle Kinchen | [@doniellekinchen](https://github.com/doniellekinchen) | donielle.kinchen10@gmail.com | EST | macOS |
-| Nuboke Bakoh | [@Priestb](https://github.com/priestb) | priestbakoh@gmail.com | EST | Windows |
+| Name             | GitHub                                                 | Email                        | Timezone | OS      |
+| ---------------- | ------------------------------------------------------ | ---------------------------- | -------- | ------- |
+| Yoseph Tesfay    | [@Yomt](https://github.com/Yomt)                       | Yoseph.Tesfay@gmail.com      | EST      | Windows |
+| Donielle Kinchen | [@doniellekinchen](https://github.com/doniellekinchen) | donielle.kinchen10@gmail.com | EST      | macOS   |
+| Nuboke Bakoh     | [@Priestb](https://github.com/priestb)                 | priestbakoh@gmail.com        | EST      | Windows |
 
 ---
 
@@ -28,13 +28,13 @@ CareConnect is a cross-platform Healthcare Management Application designed to su
 
 Ensure the following tools are installed before cloning:
 
-| Tool | Version | Required for |
-|------|---------|-------------|
-| [Git](https://git-scm.com/) | Latest | All platforms |
-| [Node.js](https://nodejs.org/) | 20 LTS or higher | Web, Mobile, Desktop |
-| [pnpm](https://pnpm.io/) | 9+ | Monorepo package management |
-| [Flutter](https://flutter.dev/docs/get-started/install) | 3.32+ (Dart SDK ^3.12.1) | Flutter app |
-| [Android Studio](https://developer.android.com/studio) or [Xcode](https://developer.apple.com/xcode/) | Latest | Flutter mobile targets |
+| Tool                                                                                                  | Version                  | Required for                |
+| ----------------------------------------------------------------------------------------------------- | ------------------------ | --------------------------- |
+| [Git](https://git-scm.com/)                                                                           | Latest                   | All platforms               |
+| [Node.js](https://nodejs.org/)                                                                        | 20 LTS or higher         | Web, Mobile, Desktop        |
+| [pnpm](https://pnpm.io/)                                                                              | 9+                       | Monorepo package management |
+| [Flutter](https://flutter.dev/docs/get-started/install)                                               | 3.32+ (Dart SDK ^3.12.1) | Flutter app                 |
+| [Android Studio](https://developer.android.com/studio) or [Xcode](https://developer.apple.com/xcode/) | Latest                   | Flutter mobile targets      |
 
 Verify your installs:
 
@@ -50,8 +50,8 @@ flutter doctor
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/Yomt/CareConnect.git
-cd CareConnect
+git clone https://github.com/YoMT/SWEN-661-Team4.git
+cd SWEN-661-Team4
 ```
 
 Install all JS/TS workspace dependencies from the repo root:
@@ -116,9 +116,9 @@ flutter build ios        # build iOS (requires macOS + Xcode)
 
 We follow a **feature-branch workflow** with two long-lived branches:
 
-| Branch | Purpose |
-|--------|---------|
-| `main` | Stable, deployable code. Protected — no direct pushes. |
+| Branch    | Purpose                                                    |
+| --------- | ---------------------------------------------------------- |
+| `main`    | Stable, deployable code. Protected — no direct pushes.     |
 | `develop` | Integration branch. All feature branches merge here first. |
 
 ### Feature Branches
@@ -167,14 +167,14 @@ git push origin flutter/medication-screen
 <type>(<scope>): <short description>
 ```
 
-| Type | Use for |
-|------|---------|
-| `feat` | New feature |
-| `fix` | Bug fix |
-| `style` | UI/styling changes only |
+| Type       | Use for                                |
+| ---------- | -------------------------------------- |
+| `feat`     | New feature                            |
+| `fix`      | Bug fix                                |
+| `style`    | UI/styling changes only                |
 | `refactor` | Code restructuring, no behavior change |
-| `docs` | Documentation updates |
-| `test` | Adding or updating tests |
-| `chore` | Build scripts, config, tooling |
+| `docs`     | Documentation updates                  |
+| `test`     | Adding or updating tests               |
+| `chore`    | Build scripts, config, tooling         |
 
 Scopes: `flutter`, `web`, `mobile`, `desktop`, `shared`
