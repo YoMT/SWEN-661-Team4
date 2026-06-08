@@ -1,89 +1,242 @@
-# ───────────────────────────────────────────────
-# Node / React / React Native (apps/web, apps/mobile)
-# ───────────────────────────────────────────────
-node_modules/
-.pnpm-store/
-dist/
-build/
-coverage/
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.env
-.env.*
-!.env.example
-
-# Turborepo
-.turbo/
-
-# Electron (apps/desktop)
-out/
-dist-electron/
-release/
-*.dmg
-*.exe
-*.deb
-*.AppImage
-*.snap
-*.blockmap
-
-# React Native / Metro
-.expo/
-.expo-shared/
-*.jsbundle
-metro.config.js.bak
-
-# ───────────────────────────────────────────────
-# Flutter / Dart (apps/flutter-app)
-# ───────────────────────────────────────────────
+# ======================
+# Flutter / Dart
+# ======================
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
 .packages
 .pub-cache/
 .pub/
-build/
-*.iml
 .flutter-versions
+*.g.dart
+*.freezed.dart
+doc/api/
+lib/generated_plugin_registrant.dart
 
-# ───────────────────────────────────────────────
-# iOS (React Native + Flutter)
-# ───────────────────────────────────────────────
-ios/Pods/
-ios/.symlinks/
+# Flutter Web
+lib/generated_plugin_registrant.dart
+
+# Flutter Desktop
+linux/flutter/ephemeral/
+windows/flutter/ephemeral/
+macos/Flutter/ephemeral/
+macos/Flutter/GeneratedPluginRegistrant.swift
+macos/Flutter/Flutter-Debug.xcconfig
+macos/Flutter/Flutter-Release.xcconfig
+
+# Flutter iOS
+ios/Flutter/App.framework
 ios/Flutter/Flutter.framework
 ios/Flutter/Flutter.podspec
-*.xcworkspace/xcuserdata/
-*.xcuserstate
-DerivedData/
+ios/Flutter/Generated.xcconfig
+ios/Flutter/app.flx
+ios/Flutter/app.zip
+ios/Flutter/flutter_assets/
+ios/Flutter/flutter_export_environment.sh
+ios/ServiceDefinitions.json
+ios/Runner/GeneratedPluginRegistrant.*
+ios/.symlinks/
+Pods/
+.symlinks/
 
-# ───────────────────────────────────────────────
-# Android (React Native + Flutter)
-# ───────────────────────────────────────────────
-*.apk
-*.aab
-*.keystore
-!debug.keystore
-.gradle/
-android/.gradle/
-android/app/build/
-android/captures/
+# Flutter Android
 android/local.properties
+android/.gradle/
+android/captures/
+android/gradlew
+android/gradlew.bat
+android/gradle/wrapper/gradle-wrapper.jar
+android/key.properties
+**/*.keystore
+**/*.jks
+!debug.keystore
 key.properties
 
-# ───────────────────────────────────────────────
-# Editors / OS
-# ───────────────────────────────────────────────
-.idea/
-.vscode/*
+# ======================
+# React Native
+# ======================
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+metro.config.js.bak
+
+# React Native Android
+android/app/build/
+android/build/
+
+# React Native iOS
+ios/build/
+ios/Pods/
+ios/Podfile.lock
+
+# React Native Metro
+.metro-health-check*
+__pycache__/
+
+# Expo
+.expo/
+.expo-shared/
+web-build/
+expo-env.d.ts
+*.jsbundle
+
+# ======================
+# Electron
+# ======================
+out/
+dist-electron/
+release/
+electron-builder.env
+app-update.yml
+
+# Electron build artifacts
+*.AppImage
+*.deb
+*.dmg
+*.exe
+*.msi
+*.pkg
+*.rpm
+*.snap
+*.zip
+*.tar.gz
+*.blockmap
+
+# ======================
+# React / Vite
+# ======================
+dist/
+dist-ssr/
+*.local
+.vite/
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+
+# ======================
+# Node / npm / yarn / pnpm / Turborepo
+# ======================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-store/
+package-lock.json
+.npm/
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.turbo/
+
+# ======================
+# Environment & Secrets
+# ======================
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.cert
+firebase-service-account.json
+google-services.json
+GoogleService-Info.plist
+
+# ======================
+# IDE & Editor
+# ======================
+
+# VS Code
+.vscode/
 !.vscode/settings.json
 !.vscode/extensions.json
-*.swp
-.DS_Store
-Thumbs.db
+!.vscode/launch.json
 
-# ───────────────────────────────────────────────
+# Android Studio / IntelliJ
+.idea/
+*.iml
+*.ipr
+*.iws
+.gradle/
+local.properties
+
+# Xcode
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.moved-aside
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+DerivedData/
+*.hmap
+*.ipa
+*.xcarchive
+*.xcuserstate
+
+# ======================
+# OS Files
+# ======================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+.Spotlight-V100
+.Trashes
+.fseventsd
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# ======================
+# Testing & Coverage
+# ======================
+coverage/
+lcov.info
+*.lcov
+.nyc_output/
+jest-coverage/
+test-results/
+playwright-report/
+playwright/.cache/
+flutter_*.png
+
+# ======================
+# Logs & Build
+# ======================
+logs/
+*.log
+pids/
+*.pid
+*.seed
+*.pid.lock
+build/
+
+# ======================
 # Project Documentation
-# ───────────────────────────────────────────────
+# ======================
 Doumentation/
