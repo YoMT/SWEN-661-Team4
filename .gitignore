@@ -1,0 +1,89 @@
+# ───────────────────────────────────────────────
+# Node / React / React Native (apps/web, apps/mobile)
+# ───────────────────────────────────────────────
+node_modules/
+.pnpm-store/
+dist/
+build/
+coverage/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.env
+.env.*
+!.env.example
+
+# Turborepo
+.turbo/
+
+# Electron (apps/desktop)
+out/
+dist-electron/
+release/
+*.dmg
+*.exe
+*.deb
+*.AppImage
+*.snap
+*.blockmap
+
+# React Native / Metro
+.expo/
+.expo-shared/
+*.jsbundle
+metro.config.js.bak
+
+# ───────────────────────────────────────────────
+# Flutter / Dart (apps/flutter-app)
+# ───────────────────────────────────────────────
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+*.iml
+.flutter-versions
+
+# ───────────────────────────────────────────────
+# iOS (React Native + Flutter)
+# ───────────────────────────────────────────────
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+*.xcworkspace/xcuserdata/
+*.xcuserstate
+DerivedData/
+
+# ───────────────────────────────────────────────
+# Android (React Native + Flutter)
+# ───────────────────────────────────────────────
+*.apk
+*.aab
+*.keystore
+!debug.keystore
+.gradle/
+android/.gradle/
+android/app/build/
+android/captures/
+android/local.properties
+key.properties
+
+# ───────────────────────────────────────────────
+# Editors / OS
+# ───────────────────────────────────────────────
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+*.swp
+.DS_Store
+Thumbs.db
+
+# ───────────────────────────────────────────────
+# Project Documentation
+# ───────────────────────────────────────────────
+Doumentation/
