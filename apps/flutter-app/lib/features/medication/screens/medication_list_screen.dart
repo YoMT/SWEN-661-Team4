@@ -5,6 +5,7 @@ import '../providers/medication_provider.dart';
 import '../models/medication_model.dart';
 import '../widgets/medication_card.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/widgets/loading_indicator.dart';
 
 class MedicationListScreen extends StatelessWidget {
   const MedicationListScreen({super.key});
@@ -42,11 +43,51 @@ class MedicationListScreen extends StatelessWidget {
           const SizedBox(width: 8),
         ],
       ),
-      body: ListView(
-        padding: const EdgeInsets.all(16),
+      body: Column(
         children: [
-          // Today's doses progress
-          Container(
+          if (provider.errorMessage != null)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              child: Row(
+                children: [
+                  const Icon(Icons.error_outline, size: 16, color: AppColors.error),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(provider.errorMessage!,
+                        style: const TextStyle(fontSize: 14, color: AppColors.error)),
+                  ),
+                ],
+              ),
+            ),
+          if (provider.isLoading)
+            const Expanded(child: LoadingIndicator())
+          else if (provider.medications.isEmpty)
+            Expanded(
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.medication_outlined, size: 64, color: AppColors.borderStrong),
+                    const SizedBox(height: 16),
+                    const Text('No medications added',
+                        style: TextStyle(fontSize: 16, color: AppColors.textMuted)),
+                    const SizedBox(height: 20),
+                    FilledButton.icon(
+                      onPressed: () => context.go('/medications/new'),
+                      icon: const Icon(Icons.add),
+                      label: const Text('Add medication'),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          else
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.all(16),
+                children: [
+                  // Today's doses progress
+                  Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
               color: AppColors.surface,
@@ -111,8 +152,11 @@ class MedicationListScreen extends StatelessWidget {
             ],
             const SizedBox(height: 10),
           ],
-        ],
-      ),
+                ],
+              ),
+            ),
+          ],
+        ),
     );
   }
 

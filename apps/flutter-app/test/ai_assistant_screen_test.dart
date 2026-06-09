@@ -24,6 +24,7 @@ void main() {
     when(() => mockAi.messages).thenReturn([]);
     when(() => mockAi.isTyping).thenReturn(false);
     when(() => mockAi.isOpen).thenReturn(false);
+    when(() => mockAi.errorMessage).thenReturn(null);
   });
 
   group('AiAssistantScreen — MockAiAssistantProvider', () {
@@ -33,10 +34,10 @@ void main() {
       expect(find.text('AI Assistant'), findsOneWidget);
     });
 
-    testWidgets('renders empty message list when messages is empty', (tester) async {
+    testWidgets('renders empty state when messages is empty', (tester) async {
       await tester.pumpWidget(_buildSubject(mockAi));
       await tester.pumpAndSettle();
-      expect(find.byType(ListView), findsOneWidget);
+      expect(find.text('Ask me anything'), findsOneWidget);
     });
 
     testWidgets('shows TypingIndicator when isTyping is true', (tester) async {

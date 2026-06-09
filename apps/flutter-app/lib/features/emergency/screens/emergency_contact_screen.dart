@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../providers/emergency_provider.dart';
 import '../widgets/contact_card.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/widgets/loading_indicator.dart';
 import '../../ai_assistant/widgets/assistant_toggle_button.dart';
 import '../../ai_assistant/widgets/assistant_panel.dart';
 
@@ -65,11 +66,27 @@ class _EmergencyContactScreenState extends State<EmergencyContactScreen> {
         ],
       ),
       floatingActionButton: const AssistantToggleButton(),
-      body: Stack(
+      body: provider.isLoading
+          ? const LoadingIndicator()
+          : Stack(
         children: [
           ListView(
             padding: const EdgeInsets.all(16),
             children: [
+              if (provider.errorMessage != null)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.error_outline, size: 16, color: AppColors.error),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(provider.errorMessage!,
+                            style: const TextStyle(fontSize: 14, color: AppColors.error)),
+                      ),
+                    ],
+                  ),
+                ),
               // SOS Card
               Container(
                 padding: const EdgeInsets.all(20),

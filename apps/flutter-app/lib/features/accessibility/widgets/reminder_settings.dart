@@ -11,11 +11,14 @@ class ReminderSettings extends StatelessWidget {
     final provider = context.watch<AccessibilityProvider>();
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surface,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: AppColors.borderSubtle, width: 1.5),
       ),
-      child: Column(
+      child: Material(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(12),
+        clipBehavior: Clip.antiAlias,
+        child: Column(
         children: [
           Semantics(
             toggled: provider.highContrast,
@@ -63,6 +66,7 @@ class ReminderSettings extends StatelessWidget {
             ),
           ),
         ],
+        ),
       ),
     );
   }

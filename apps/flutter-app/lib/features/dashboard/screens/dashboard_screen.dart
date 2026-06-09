@@ -76,6 +76,23 @@ class DashboardScreen extends StatelessWidget {
               ),
             ),
 
+            if (dashboard.errorMessage != null)
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.error_outline, size: 16, color: AppColors.error),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(dashboard.errorMessage!,
+                            style: const TextStyle(fontSize: 14, color: AppColors.error)),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
             SliverPadding(
               padding: const EdgeInsets.all(16),
               sliver: SliverList(

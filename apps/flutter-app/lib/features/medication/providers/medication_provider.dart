@@ -4,6 +4,7 @@ import '../models/medication_model.dart';
 class MedicationProvider extends ChangeNotifier {
   List<MedicationModel> medications = _sampleMedications();
   bool isLoading = false;
+  String? errorMessage;
 
   int get totalDoses => medications.length;
   int get givenDoses => medications.where((m) => m.status == DoseStatus.given).length;
@@ -24,22 +25,37 @@ class MedicationProvider extends ChangeNotifier {
   }
 
   Future<void> markAsTaken(String id) async {
-    final idx = medications.indexWhere((m) => m.id == id);
-    if (idx == -1) return;
-    final med = medications[idx];
-    if (!med.canMarkTaken) return;
-    medications = List.of(medications)
-      ..[idx] = med.copyWith(status: DoseStatus.given, takenAt: DateTime.now());
+    errorMessage = null;
+    try {
+      final idx = medications.indexWhere((m) => m.id == id);
+      if (idx == -1) return;
+      final med = medications[idx];
+      if (!med.canMarkTaken) return;
+      medications = List.of(medications)
+        ..[idx] = med.copyWith(status: DoseStatus.given, takenAt: DateTime.now());
+    } catch (e) {
+      errorMessage = 'Failed to mark dose as taken.';
+    }
     notifyListeners();
   }
 
   Future<void> add(MedicationModel med) async {
-    medications = [...medications, med];
+    errorMessage = null;
+    try {
+      medications = [...medications, med];
+    } catch (e) {
+      errorMessage = 'Failed to add medication.';
+    }
     notifyListeners();
   }
 
   Future<void> delete(String id) async {
-    medications = medications.where((m) => m.id != id).toList();
+    errorMessage = null;
+    try {
+      medications = medications.where((m) => m.id != id).toList();
+    } catch (e) {
+      errorMessage = 'Failed to delete medication.';
+    }
     notifyListeners();
   }
 }

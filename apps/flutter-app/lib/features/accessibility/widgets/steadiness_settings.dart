@@ -11,11 +11,14 @@ class SteadinessSettings extends StatelessWidget {
     final provider = context.watch<AccessibilityProvider>();
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surface,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: AppColors.borderSubtle, width: 1.5),
       ),
-      child: Column(
+      child: Material(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(12),
+        clipBehavior: Clip.antiAlias,
+        child: Column(
         children: [
           _ToggleTile(
             title: 'Tremor Mode',
@@ -33,6 +36,7 @@ class SteadinessSettings extends StatelessWidget {
             isFirst: false,
           ),
         ],
+        ),
       ),
     );
   }

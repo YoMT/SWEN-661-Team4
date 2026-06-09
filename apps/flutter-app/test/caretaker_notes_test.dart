@@ -15,6 +15,7 @@ Widget _buildSubject(MockMedicationProvider mockMeds) {
       ChangeNotifierProvider<MedicationProvider>.value(value: mockMeds),
       ChangeNotifierProvider(create: (_) => SymptomProvider()),
       ChangeNotifierProvider(create: (_) => AppointmentProvider()),
+      ChangeNotifierProvider(create: (_) => CaretakerProvider()),
     ],
     child: const MaterialApp(home: CaretakerNotesScreen()),
   );

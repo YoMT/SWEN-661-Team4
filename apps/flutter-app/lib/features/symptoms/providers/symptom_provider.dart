@@ -6,6 +6,8 @@ class SymptomProvider extends ChangeNotifier {
   int severity = 3;
   String overallStatus = 'Stable';
   List<SymptomLogModel> logs = _sampleLogs();
+  bool isLoading = false;
+  String? errorMessage;
 
   void selectSymptom(SymptomType symptom) {
     selectedSymptom = symptom;
@@ -19,20 +21,29 @@ class SymptomProvider extends ChangeNotifier {
 
   Future<void> save(String? note) async {
     if (selectedSymptom == null) return;
-    final now = DateTime.now();
-    final log = SymptomLogModel(
-      id: now.millisecondsSinceEpoch.toString(),
-      createdAt: now,
-      updatedAt: now,
-      symptom: selectedSymptom!,
-      severity: severity,
-      note: note,
-    );
-    logs = [log, ...logs];
-    _updateStatus();
-    selectedSymptom = null;
-    severity = 3;
+    isLoading = true;
+    errorMessage = null;
     notifyListeners();
+    try {
+      final now = DateTime.now();
+      final log = SymptomLogModel(
+        id: now.millisecondsSinceEpoch.toString(),
+        createdAt: now,
+        updatedAt: now,
+        symptom: selectedSymptom!,
+        severity: severity,
+        note: note,
+      );
+      logs = [log, ...logs];
+      _updateStatus();
+      selectedSymptom = null;
+      severity = 3;
+    } catch (e) {
+      errorMessage = 'Failed to save symptom log.';
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
   }
 
   void _updateStatus() {

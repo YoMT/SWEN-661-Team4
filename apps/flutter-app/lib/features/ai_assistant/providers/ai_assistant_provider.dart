@@ -5,6 +5,7 @@ class AiAssistantProvider extends ChangeNotifier {
   bool isOpen = false;
   bool isTyping = false;
   List<ChatMessageModel> messages = [];
+  String? errorMessage;
 
   void toggle() {
     isOpen = !isOpen;
@@ -12,6 +13,7 @@ class AiAssistantProvider extends ChangeNotifier {
   }
 
   Future<void> sendMessage(String content) async {
+    errorMessage = null;
     final now = DateTime.now();
     final userMsg = ChatMessageModel(
       id: '${now.millisecondsSinceEpoch}_user',
@@ -22,18 +24,21 @@ class AiAssistantProvider extends ChangeNotifier {
     messages = [...messages, userMsg];
     isTyping = true;
     notifyListeners();
-
-    // TODO: call AI backend
-    await Future.delayed(const Duration(seconds: 1));
-
-    final reply = ChatMessageModel(
-      id: '${DateTime.now().millisecondsSinceEpoch}_assistant',
-      role: MessageRole.assistant,
-      content: 'I received your message. AI integration coming soon.',
-      timestamp: DateTime.now(),
-    );
-    messages = [...messages, reply];
-    isTyping = false;
-    notifyListeners();
+    try {
+      // TODO: call AI backend
+      await Future.delayed(const Duration(seconds: 1));
+      final reply = ChatMessageModel(
+        id: '${DateTime.now().millisecondsSinceEpoch}_assistant',
+        role: MessageRole.assistant,
+        content: 'I received your message. AI integration coming soon.',
+        timestamp: DateTime.now(),
+      );
+      messages = [...messages, reply];
+    } catch (e) {
+      errorMessage = 'Failed to get a response. Please try again.';
+    } finally {
+      isTyping = false;
+      notifyListeners();
+    }
   }
 }

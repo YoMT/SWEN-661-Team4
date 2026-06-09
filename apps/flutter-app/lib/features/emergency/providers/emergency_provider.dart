@@ -5,6 +5,8 @@ class EmergencyProvider extends ChangeNotifier {
   List<EmergencyContactModel> contacts = _sampleContacts();
   String incidentNote = '';
   bool incidentSaved = false;
+  bool isLoading = false;
+  String? errorMessage;
 
   void setIncidentNote(String value) {
     incidentNote = value;
@@ -12,22 +14,43 @@ class EmergencyProvider extends ChangeNotifier {
   }
 
   Future<void> saveIncident() async {
-    // In production: persist to backend with timestamp
-    incidentSaved = true;
+    errorMessage = null;
+    isLoading = true;
     notifyListeners();
-    await Future.delayed(const Duration(seconds: 2));
-    incidentSaved = false;
-    incidentNote = '';
-    notifyListeners();
+    try {
+      await Future.delayed(const Duration(seconds: 2));
+      incidentSaved = true;
+      incidentNote = '';
+    } catch (e) {
+      errorMessage = 'Failed to save incident log.';
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+    if (incidentSaved) {
+      await Future.delayed(const Duration(seconds: 1));
+      incidentSaved = false;
+      notifyListeners();
+    }
   }
 
   Future<void> add(EmergencyContactModel contact) async {
-    contacts = [...contacts, contact];
+    errorMessage = null;
+    try {
+      contacts = [...contacts, contact];
+    } catch (e) {
+      errorMessage = 'Failed to add contact.';
+    }
     notifyListeners();
   }
 
   Future<void> remove(String id) async {
-    contacts = contacts.where((c) => c.id != id).toList();
+    errorMessage = null;
+    try {
+      contacts = contacts.where((c) => c.id != id).toList();
+    } catch (e) {
+      errorMessage = 'Failed to remove contact.';
+    }
     notifyListeners();
   }
 }

@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../providers/caretaker_provider.dart';
 import '../../medication/providers/medication_provider.dart';
 import '../../symptoms/providers/symptom_provider.dart';
 import '../../appointments/providers/appointment_provider.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../shared/widgets/loading_indicator.dart';
 
 class CaretakerNotesScreen extends StatelessWidget {
   const CaretakerNotesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final caretaker = context.watch<CaretakerProvider>();
     final meds = context.watch<MedicationProvider>();
     final symptoms = context.watch<SymptomProvider>();
     final appts = context.watch<AppointmentProvider>();
@@ -18,12 +21,34 @@ class CaretakerNotesScreen extends StatelessWidget {
         ? 0
         : (meds.givenDoses / meds.totalDoses * 100).round();
 
+    if (caretaker.isLoading) {
+      return Scaffold(
+        backgroundColor: AppColors.bg,
+        appBar: AppBar(title: const Text('Provider Report')),
+        body: const LoadingIndicator(),
+      );
+    }
+
     return Scaffold(
       backgroundColor: AppColors.bg,
       appBar: AppBar(title: const Text('Provider Report')),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          if (caretaker.errorMessage != null)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Row(
+                children: [
+                  const Icon(Icons.error_outline, size: 16, color: AppColors.error),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(caretaker.errorMessage!,
+                        style: const TextStyle(fontSize: 14, color: AppColors.error)),
+                  ),
+                ],
+              ),
+            ),
           // Period selector stub
           Container(
             height: 48,

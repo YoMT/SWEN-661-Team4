@@ -44,6 +44,8 @@ void main() {
 
   setUp(() {
     mockMeds = MockMedicationProvider();
+    when(() => mockMeds.isLoading).thenReturn(false);
+    when(() => mockMeds.errorMessage).thenReturn(null);
     when(() => mockMeds.medications).thenReturn([]);
     when(() => mockMeds.totalDoses).thenReturn(0);
     when(() => mockMeds.givenDoses).thenReturn(0);
@@ -58,13 +60,19 @@ void main() {
       expect(find.text('Medications'), findsOneWidget);
     });
 
-    testWidgets('shows 0 of 0 given when medications list is empty', (tester) async {
+    testWidgets('shows empty state when medications list is empty', (tester) async {
       await tester.pumpWidget(_buildSubject(mockMeds));
       await tester.pumpAndSettle();
-      expect(find.text("0 of 0 given"), findsOneWidget);
+      expect(find.text('No medications added'), findsOneWidget);
     });
 
     testWidgets('shows "next at none" when nextDue is null', (tester) async {
+      final med = _fakeMed(name: 'Aspirin', status: DoseStatus.given);
+      when(() => mockMeds.medications).thenReturn([med]);
+      when(() => mockMeds.totalDoses).thenReturn(1);
+      when(() => mockMeds.givenDoses).thenReturn(1);
+      when(() => mockMeds.byTimeSlot).thenReturn({DoseTimeSlot.morning: [med]});
+      when(() => mockMeds.nextDue).thenReturn(null);
       await tester.pumpWidget(_buildSubject(mockMeds));
       await tester.pumpAndSettle();
       expect(find.textContaining('next at none'), findsOneWidget);

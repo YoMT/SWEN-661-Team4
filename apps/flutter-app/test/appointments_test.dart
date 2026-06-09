@@ -37,6 +37,8 @@ void main() {
 
     setUp(() {
       mockAppts = MockAppointmentProvider();
+      when(() => mockAppts.isLoading).thenReturn(false);
+      when(() => mockAppts.errorMessage).thenReturn(null);
       when(() => mockAppts.todayAppointments).thenReturn([]);
       when(() => mockAppts.upcomingAppointments).thenReturn([]);
     });

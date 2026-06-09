@@ -239,8 +239,9 @@ build/
 # ======================
 # Project Documentation
 # ======================
-Doumentation/
-
+Documentation/
+# Word/Excel temporary lock files
+~$*
 # ======================
 # Claude Code (local tooling)
 # ======================

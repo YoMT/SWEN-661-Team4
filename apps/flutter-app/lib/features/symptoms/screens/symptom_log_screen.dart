@@ -37,6 +37,20 @@ class _SymptomLogScreenState extends State<SymptomLogScreen> {
     ListView(
       padding: const EdgeInsets.all(16),
       children: [
+        if (provider.errorMessage != null)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: Row(
+              children: [
+                const Icon(Icons.error_outline, size: 16, color: AppColors.error),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(provider.errorMessage!,
+                      style: const TextStyle(fontSize: 14, color: AppColors.error)),
+                ),
+              ],
+            ),
+          ),
         const Text("What's bothering Eleanor?",
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.text)),
         const SizedBox(height: 16),
@@ -67,8 +81,21 @@ class _SymptomLogScreenState extends State<SymptomLogScreen> {
         ),
         const SizedBox(height: 24),
         SaveLogButton(noteController: _noteController),
-        if (provider.logs.isNotEmpty) ...[
-          const SizedBox(height: 32),
+        const SizedBox(height: 32),
+        if (provider.logs.isEmpty)
+          const Column(
+            children: [
+              Icon(Icons.monitor_heart_outlined, size: 64, color: AppColors.borderStrong),
+              SizedBox(height: 16),
+              Text('No symptoms logged yet',
+                  style: TextStyle(fontSize: 16, color: AppColors.textMuted)),
+              SizedBox(height: 6),
+              Text('Use the form above to log your first entry',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 13, color: AppColors.textMuted)),
+            ],
+          )
+        else ...[
           const Text('Recent entries',
               style: TextStyle(
                   fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.text)),

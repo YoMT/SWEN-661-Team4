@@ -4,6 +4,7 @@ import '../models/appointment_model.dart';
 class AppointmentProvider extends ChangeNotifier {
   List<AppointmentModel> appointments = _sampleAppointments();
   bool isLoading = false;
+  String? errorMessage;
 
   List<AppointmentModel> get todayAppointments {
     final today = DateTime.now();
@@ -34,27 +35,51 @@ class AppointmentProvider extends ChangeNotifier {
     return future.reduce((a, b) => a.dateTime.isBefore(b.dateTime) ? a : b);
   }
 
+  Future<void> refresh() async {
+    isLoading = true;
+    errorMessage = null;
+    notifyListeners();
+    try {
+      await Future.delayed(const Duration(milliseconds: 400));
+    } catch (e) {
+      errorMessage = 'Failed to refresh appointments.';
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
   Future<void> book(AppointmentModel appt) async {
-    appointments = [...appointments, appt];
+    errorMessage = null;
+    try {
+      appointments = [...appointments, appt];
+    } catch (e) {
+      errorMessage = 'Failed to book appointment.';
+    }
     notifyListeners();
   }
 
   Future<void> cancel(String id) async {
-    final idx = appointments.indexWhere((a) => a.id == id);
-    if (idx == -1) return;
-    final updated = AppointmentModel(
-      id: appointments[idx].id,
-      createdAt: appointments[idx].createdAt,
-      updatedAt: DateTime.now(),
-      doctorName: appointments[idx].doctorName,
-      specialty: appointments[idx].specialty,
-      location: appointments[idx].location,
-      dateTime: appointments[idx].dateTime,
-      type: appointments[idx].type,
-      status: AppointmentStatus.cancelled,
-      notes: appointments[idx].notes,
-    );
-    appointments = List.of(appointments)..[idx] = updated;
+    errorMessage = null;
+    try {
+      final idx = appointments.indexWhere((a) => a.id == id);
+      if (idx == -1) return;
+      final updated = AppointmentModel(
+        id: appointments[idx].id,
+        createdAt: appointments[idx].createdAt,
+        updatedAt: DateTime.now(),
+        doctorName: appointments[idx].doctorName,
+        specialty: appointments[idx].specialty,
+        location: appointments[idx].location,
+        dateTime: appointments[idx].dateTime,
+        type: appointments[idx].type,
+        status: AppointmentStatus.cancelled,
+        notes: appointments[idx].notes,
+      );
+      appointments = List.of(appointments)..[idx] = updated;
+    } catch (e) {
+      errorMessage = 'Failed to cancel appointment.';
+    }
     notifyListeners();
   }
 }
