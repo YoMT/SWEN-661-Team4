@@ -6,11 +6,16 @@ class AppTheme {
   AppTheme._();
 
   static ThemeData get light => _build(Brightness.light);
+  static ThemeData get dark  => _build(Brightness.dark);
 
-  static ThemeData get dark => _build(Brightness.dark);
+  static ThemeData get lightHighContrast => _build(Brightness.light, highContrast: true);
+  static ThemeData get darkHighContrast  => _build(Brightness.dark,  highContrast: true);
 
-  static ThemeData _build(Brightness brightness) {
+  static ThemeData _build(Brightness brightness, {bool highContrast = false}) {
     final isDark = brightness == Brightness.dark;
+    final mutedColor = highContrast
+        ? (isDark ? Colors.white : AppColors.text)
+        : AppColors.textMuted;
     final scheme = ColorScheme(
       brightness: brightness,
       primary: AppColors.primary,
@@ -102,7 +107,7 @@ class AppTheme {
           borderSide: const BorderSide(color: AppColors.error, width: 2),
         ),
         labelStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.text),
-        hintStyle: const TextStyle(fontSize: 16, color: AppColors.textMuted),
+        hintStyle: TextStyle(fontSize: 16, color: mutedColor),
       ),
 
       // Cards: surface fill, 1.5px subtle border, 12px radius
@@ -126,15 +131,15 @@ class AppTheme {
           if (states.contains(WidgetState.selected)) {
             return const IconThemeData(color: AppColors.primary, size: 24);
           }
-          return const IconThemeData(color: AppColors.textMuted, size: 24);
+          return IconThemeData(color: mutedColor, size: 24);
         }),
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
             return const TextStyle(
                 fontSize: 12, fontWeight: FontWeight.w600, color: AppColors.primary);
           }
-          return const TextStyle(
-              fontSize: 12, fontWeight: FontWeight.w500, color: AppColors.textMuted);
+          return TextStyle(
+              fontSize: 12, fontWeight: FontWeight.w500, color: mutedColor);
         }),
       ),
 
@@ -169,7 +174,7 @@ class AppTheme {
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) return Colors.white;
-          return AppColors.textMuted;
+          return mutedColor;
         }),
         trackColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) return AppColors.primary;

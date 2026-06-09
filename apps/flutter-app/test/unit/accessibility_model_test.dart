@@ -20,9 +20,9 @@ void main() {
   });
 
   group('AccessibilityModel.minTouchTarget', () {
-    test('tremorMode off → 44.0', () {
+    test('tremorMode off → 48.0', () {
       const model = AccessibilityModel(tremorMode: false);
-      expect(model.minTouchTarget, 44.0);
+      expect(model.minTouchTarget, 48.0);
     });
 
     test('tremorMode on → 60.0', () {

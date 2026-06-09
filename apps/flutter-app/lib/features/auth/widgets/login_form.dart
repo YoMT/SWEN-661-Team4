@@ -76,15 +76,18 @@ class _LoginFormState extends State<LoginForm> {
             ),
             if (auth.errorMessage != null) ...[
               const SizedBox(height: 12),
-              Row(
-                children: [
-                  const Icon(Icons.error_outline, size: 16, color: AppColors.error),
-                  const SizedBox(width: 6),
-                  Expanded(
-                    child: Text(auth.errorMessage!,
-                        style: const TextStyle(fontSize: 14, color: AppColors.error)),
-                  ),
-                ],
+              Semantics(
+                liveRegion: true,
+                child: Row(
+                  children: [
+                    const Icon(Icons.error_outline, size: 16, color: AppColors.error),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(auth.errorMessage!,
+                          style: const TextStyle(fontSize: 14, color: AppColors.error)),
+                    ),
+                  ],
+                ),
               ),
             ],
             const SizedBox(height: 20),
