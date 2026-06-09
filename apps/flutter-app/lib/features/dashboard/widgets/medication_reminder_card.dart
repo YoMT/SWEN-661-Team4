@@ -116,9 +116,12 @@ class MedicationReminderCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                Text(next.scheduledTime,
-                    style: const TextStyle(
-                        fontSize: 13, fontWeight: FontWeight.w500, color: AppColors.textMuted)),
+                Flexible(
+                  child: Text(next.scheduledTime,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                          fontSize: 13, fontWeight: FontWeight.w500, color: AppColors.textMuted)),
+                ),
               ],
             ),
             const SizedBox(height: 14),

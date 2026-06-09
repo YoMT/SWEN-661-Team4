@@ -95,9 +95,12 @@ class MedicationCard extends StatelessWidget {
                   ],
                 ),
               ),
-              Text(medication.scheduledTime,
-                  style: const TextStyle(
-                      fontSize: 13, fontWeight: FontWeight.w500, color: AppColors.textMuted)),
+              Flexible(
+                child: Text(medication.scheduledTime,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                        fontSize: 13, fontWeight: FontWeight.w500, color: AppColors.textMuted)),
+              ),
             ],
           ),
           const SizedBox(height: 10),

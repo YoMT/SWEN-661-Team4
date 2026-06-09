@@ -35,12 +35,15 @@ class LandingScreen extends StatelessWidget {
           child: const Icon(Icons.favorite_outline, color: Colors.white, size: 20),
         ),
         const SizedBox(width: 10),
-        const Text(
-          'CareConnect',
-          style: TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.bold,
-            color: AppColors.text,
+        const Flexible(
+          child: Text(
+            'CareConnect',
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.bold,
+              color: AppColors.text,
+            ),
           ),
         ),
         const Spacer(),
@@ -85,7 +88,7 @@ class LandingScreen extends StatelessWidget {
           TextSpan(text: 'A '),
           TextSpan(
             text: 'gentle helping hand',
-            style: TextStyle(color: Color(0xFF8B5E3C)),
+            style: TextStyle(color: Color(0xFF6B4522)),
           ),
           TextSpan(text: '\nthrough every day.'),
         ],

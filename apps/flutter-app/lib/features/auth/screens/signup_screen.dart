@@ -29,9 +29,12 @@ class SignupScreen extends StatelessWidget {
                 children: [
                   Icon(Icons.favorite_outline, color: AppColors.primary, size: 28),
                   SizedBox(width: 10),
-                  Text('CareConnect',
-                      style: TextStyle(
-                          fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.text)),
+                  Flexible(
+                    child: Text('CareConnect',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontSize: 24, fontWeight: FontWeight.bold, color: AppColors.text)),
+                  ),
                 ],
               ),
               const SizedBox(height: 8),

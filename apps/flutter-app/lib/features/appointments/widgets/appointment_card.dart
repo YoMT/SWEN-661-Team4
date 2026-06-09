@@ -40,8 +40,11 @@ class AppointmentCard extends StatelessWidget {
               children: [
                 const Icon(Icons.calendar_month_outlined, size: 16, color: AppColors.textMuted),
                 const SizedBox(width: 6),
-                Text(_formatDateTime(appointment.dateTime),
-                    style: const TextStyle(fontSize: 13, color: AppColors.textMuted)),
+                Flexible(
+                  child: Text(_formatDateTime(appointment.dateTime),
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 13, color: AppColors.textMuted)),
+                ),
                 const Spacer(),
                 // Type badge
                 Container(
