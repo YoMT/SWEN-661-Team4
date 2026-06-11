@@ -81,12 +81,18 @@ class CaretakerNotesScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.baseline,
                   textBaseline: TextBaseline.alphabetic,
                   children: [
-                    Text('$adherencePct%',
-                        style: const TextStyle(
-                            fontSize: 32, fontWeight: FontWeight.bold, color: AppColors.success)),
+                    Flexible(
+                      child: Text('$adherencePct%',
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              fontSize: 32, fontWeight: FontWeight.bold, color: AppColors.success)),
+                    ),
                     const SizedBox(width: 10),
-                    Text('${meds.givenDoses} of ${meds.totalDoses} doses',
-                        style: const TextStyle(fontSize: 14, color: AppColors.textMuted)),
+                    Flexible(
+                      child: Text('${meds.givenDoses} of ${meds.totalDoses} doses',
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontSize: 14, color: AppColors.textMuted)),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 16),

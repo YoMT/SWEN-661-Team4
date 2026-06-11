@@ -31,24 +31,28 @@ class _Chip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: InkWell(
-        onTap: () => context.go(route),
-        borderRadius: BorderRadius.circular(10),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: AppColors.borderSubtle, width: 1.5),
-          ),
-          child: Column(
-            children: [
-              Icon(icon, color: AppColors.primary, size: 22),
-              const SizedBox(height: 4),
-              Text(label,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 11, color: AppColors.textMuted, height: 1.3)),
-            ],
+      child: Semantics(
+        label: label,
+        button: true,
+        child: InkWell(
+          onTap: () => context.go(route),
+          borderRadius: BorderRadius.circular(10),
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 6),
+            decoration: BoxDecoration(
+              color: AppColors.surface,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: AppColors.borderSubtle, width: 1.5),
+            ),
+            child: Column(
+              children: [
+                Icon(icon, color: AppColors.primary, size: 22),
+                const SizedBox(height: 4),
+                Text(label,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 11, color: AppColors.textMuted, height: 1.3)),
+              ],
+            ),
           ),
         ),
       ),

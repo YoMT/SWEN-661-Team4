@@ -24,7 +24,7 @@ class AccessibilityModel {
       };
 
   // Minimum touch target sizes driven by Tremor Mode
-  double get minTouchTarget => tremorMode ? 60.0 : 44.0;
+  double get minTouchTarget => tremorMode ? 60.0 : 48.0;
   double get primaryButtonHeight => tremorMode ? 72.0 : 64.0;
   double get navItemHeight => tremorMode ? 64.0 : 56.0;
   double get symptomTileHeight => tremorMode ? 84.0 : 72.0;

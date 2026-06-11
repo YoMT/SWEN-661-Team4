@@ -12,8 +12,8 @@ class CareConnectApp extends StatelessWidget {
     final accessibility = context.watch<AccessibilityProvider>();
     return MaterialApp.router(
       title: 'CareConnect',
-      theme: AppTheme.light,
-      darkTheme: AppTheme.dark,
+      theme:     accessibility.highContrast ? AppTheme.lightHighContrast : AppTheme.light,
+      darkTheme: accessibility.highContrast ? AppTheme.darkHighContrast  : AppTheme.dark,
       routerConfig: AppRouter.router,
       debugShowCheckedModeBanner: false,
       // Respond to in-app text size setting (Pillar 1 / spec §3.2)

@@ -98,13 +98,20 @@ class MedicationListScreen extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    const Text("Today's doses",
-                        style: TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.text)),
+                    const Flexible(
+                      child: Text("Today's doses",
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.text)),
+                    ),
                     const Spacer(),
-                    Text('$given of $total given',
-                        style: const TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.success)),
+                    Flexible(
+                      child: Text('$given of $total given',
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.end,
+                          style: const TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.success)),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 10),
@@ -138,10 +145,13 @@ class MedicationListScreen extends StatelessWidget {
                 children: [
                   Icon(_slotIcon(slot), size: 16, color: AppColors.textMuted),
                   const SizedBox(width: 6),
-                  Text(
-                    '${slot.label} · ${bySlot[slot]!.first.scheduledTime}',
-                    style: const TextStyle(
-                        fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.textMuted),
+                  Flexible(
+                    child: Text(
+                      '${slot.label} · ${bySlot[slot]!.first.scheduledTime}',
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                          fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.textMuted),
+                    ),
                   ),
                 ],
               ),

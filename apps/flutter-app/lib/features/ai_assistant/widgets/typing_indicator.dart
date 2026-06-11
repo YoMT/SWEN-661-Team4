@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/theme/app_colors.dart';
 
 class TypingIndicator extends StatelessWidget {
   const TypingIndicator({super.key});
@@ -64,7 +65,7 @@ class _DotState extends State<_Dot> with SingleTickerProviderStateMixin {
   Widget build(BuildContext context) {
     return FadeTransition(
       opacity: _anim,
-      child: Container(width: 8, height: 8, decoration: const BoxDecoration(color: Colors.grey, shape: BoxShape.circle)),
+      child: Container(width: 8, height: 8, decoration: const BoxDecoration(color: AppColors.textMuted, shape: BoxShape.circle)),
     );
   }
 }

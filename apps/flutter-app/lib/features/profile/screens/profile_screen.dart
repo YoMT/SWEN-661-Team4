@@ -117,12 +117,19 @@ class _InfoTile extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Text(label,
-              style: const TextStyle(
-                  fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.textMuted)),
+          Flexible(
+            child: Text(label,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                    fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.textMuted)),
+          ),
           const Spacer(),
-          Text(value,
-              style: const TextStyle(fontSize: 14, color: AppColors.text)),
+          Flexible(
+            child: Text(value,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.end,
+                style: const TextStyle(fontSize: 14, color: AppColors.text)),
+          ),
         ],
       ),
     );
@@ -156,9 +163,12 @@ class _LinkTile extends StatelessWidget {
             children: [
               Icon(icon, color: AppColors.primary, size: 20),
               const SizedBox(width: 12),
-              Text(title,
-                  style: const TextStyle(
-                      fontSize: 15, fontWeight: FontWeight.w500, color: AppColors.text)),
+              Flexible(
+                child: Text(title,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                        fontSize: 15, fontWeight: FontWeight.w500, color: AppColors.text)),
+              ),
               const Spacer(),
               const Icon(Icons.chevron_right, color: AppColors.textMuted, size: 18),
             ],

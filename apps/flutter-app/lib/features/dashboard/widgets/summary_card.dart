@@ -73,6 +73,7 @@ class _StatTile extends StatelessWidget {
             value,
             style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppColors.text),
             textAlign: TextAlign.center,
+            overflow: TextOverflow.ellipsis,
           ),
           const SizedBox(height: 4),
           Text(
