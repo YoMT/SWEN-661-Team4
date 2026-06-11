@@ -6,6 +6,8 @@ import '../widgets/upcoming_appointment_card.dart';
 import '../widgets/medication_reminder_card.dart';
 import '../widgets/quick_actions_bar.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../ai_assistant/widgets/assistant_drawer.dart';
+import '../../ai_assistant/widgets/assistant_toggle_button.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({super.key});
@@ -22,6 +24,8 @@ class DashboardScreen extends StatelessWidget {
     final dashboard = context.watch<DashboardProvider>();
     return Scaffold(
       backgroundColor: AppColors.bg,
+      floatingActionButton: const AssistantToggleButton(),
+      endDrawer: const AssistantDrawer(),
       body: RefreshIndicator(
         onRefresh: () => context.read<DashboardProvider>().refresh(),
         color: AppColors.primary,

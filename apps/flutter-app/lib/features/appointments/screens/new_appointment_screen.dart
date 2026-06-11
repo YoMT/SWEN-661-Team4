@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../shared/widgets/app_button.dart';
 import '../../../shared/widgets/app_text_field.dart';
+import '../../ai_assistant/widgets/assistant_toggle_button.dart';
+import '../../ai_assistant/widgets/assistant_drawer.dart';
 
 class NewAppointmentScreen extends StatelessWidget {
   const NewAppointmentScreen({super.key});
@@ -9,6 +11,8 @@ class NewAppointmentScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Book Appointment')),
+      floatingActionButton: const AssistantToggleButton(),
+      endDrawer: const AssistantDrawer(),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [

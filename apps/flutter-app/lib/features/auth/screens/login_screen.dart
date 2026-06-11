@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../widgets/login_form.dart';
-import '../../ai_assistant/widgets/assistant_toggle_button.dart';
-import '../../ai_assistant/widgets/assistant_panel.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -12,11 +10,8 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.bg,
-      floatingActionButton: const AssistantToggleButton(),
       body: SafeArea(
-        child: Stack(
-          children: [
-            SingleChildScrollView(
+        child: SingleChildScrollView(
               child: Column(
                 children: [
                   // Brand header — primary blue
@@ -127,9 +122,6 @@ class LoginScreen extends StatelessWidget {
                 ],
               ),
             ),
-            const AssistantPanel(),
-          ],
-        ),
       ),
     );
   }

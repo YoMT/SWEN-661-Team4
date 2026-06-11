@@ -5,7 +5,7 @@ import '../widgets/contact_card.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/widgets/loading_indicator.dart';
 import '../../ai_assistant/widgets/assistant_toggle_button.dart';
-import '../../ai_assistant/widgets/assistant_panel.dart';
+import '../../ai_assistant/widgets/assistant_drawer.dart';
 
 class EmergencyContactScreen extends StatefulWidget {
   const EmergencyContactScreen({super.key});
@@ -66,11 +66,10 @@ class _EmergencyContactScreenState extends State<EmergencyContactScreen> {
         ],
       ),
       floatingActionButton: const AssistantToggleButton(),
+      endDrawer: const AssistantDrawer(),
       body: provider.isLoading
           ? const LoadingIndicator()
-          : Stack(
-        children: [
-          ListView(
+          : ListView(
             padding: const EdgeInsets.all(16),
             children: [
               if (provider.errorMessage != null)
@@ -256,9 +255,6 @@ class _EmergencyContactScreenState extends State<EmergencyContactScreen> {
               const SizedBox(height: 24),
             ],
           ),
-          const AssistantPanel(),
-        ],
-      ),
     );
   }
 

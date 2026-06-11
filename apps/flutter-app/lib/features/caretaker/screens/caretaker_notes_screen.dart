@@ -6,6 +6,8 @@ import '../../symptoms/providers/symptom_provider.dart';
 import '../../appointments/providers/appointment_provider.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/widgets/loading_indicator.dart';
+import '../../ai_assistant/widgets/assistant_toggle_button.dart';
+import '../../ai_assistant/widgets/assistant_drawer.dart';
 
 class CaretakerNotesScreen extends StatelessWidget {
   const CaretakerNotesScreen({super.key});
@@ -25,6 +27,8 @@ class CaretakerNotesScreen extends StatelessWidget {
       return Scaffold(
         backgroundColor: AppColors.bg,
         appBar: AppBar(title: const Text('Provider Report')),
+        floatingActionButton: const AssistantToggleButton(),
+        endDrawer: const AssistantDrawer(),
         body: const LoadingIndicator(),
       );
     }
@@ -32,6 +36,8 @@ class CaretakerNotesScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.bg,
       appBar: AppBar(title: const Text('Provider Report')),
+      floatingActionButton: const AssistantToggleButton(),
+      endDrawer: const AssistantDrawer(),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -180,8 +186,8 @@ class CaretakerNotesScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-        ],
-      ),
+      ],
+    ),
     );
   }
 }

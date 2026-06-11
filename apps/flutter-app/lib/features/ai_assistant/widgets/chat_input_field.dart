@@ -35,12 +35,29 @@ class _ChatInputFieldState extends State<ChatInputField> {
             Expanded(
               child: TextField(
                 controller: _controller,
-                decoration: const InputDecoration(hintText: 'Ask me anything...', border: OutlineInputBorder(), isDense: true),
+                decoration: const InputDecoration(
+                  hintText: 'Ask me anything...',
+                  border: OutlineInputBorder(),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+                ),
                 onSubmitted: (_) => _send(),
               ),
             ),
             const SizedBox(width: 8),
-            IconButton.filled(icon: const Icon(Icons.send), onPressed: _send),
+            Semantics(
+              label: 'Send message',
+              button: true,
+              child: SizedBox(
+                width: 48,
+                height: 48,
+                child: IconButton.filled(
+                  icon: const Icon(Icons.send),
+                  onPressed: _send,
+                  tooltip: 'Send',
+                ),
+              ),
+            ),
           ],
         ),
       ),

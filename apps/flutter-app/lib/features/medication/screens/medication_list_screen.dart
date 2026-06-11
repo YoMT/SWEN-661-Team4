@@ -6,6 +6,8 @@ import '../models/medication_model.dart';
 import '../widgets/medication_card.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/widgets/loading_indicator.dart';
+import '../../ai_assistant/widgets/assistant_toggle_button.dart';
+import '../../ai_assistant/widgets/assistant_drawer.dart';
 
 class MedicationListScreen extends StatelessWidget {
   const MedicationListScreen({super.key});
@@ -43,6 +45,8 @@ class MedicationListScreen extends StatelessWidget {
           const SizedBox(width: 8),
         ],
       ),
+      floatingActionButton: const AssistantToggleButton(),
+      endDrawer: const AssistantDrawer(),
       body: Column(
         children: [
           if (provider.errorMessage != null)
@@ -166,7 +170,7 @@ class MedicationListScreen extends StatelessWidget {
               ),
             ),
           ],
-        ),
+      ),
     );
   }
 

@@ -3,6 +3,8 @@ import '../widgets/text_display_settings.dart';
 import '../widgets/steadiness_settings.dart';
 import '../widgets/reminder_settings.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../ai_assistant/widgets/assistant_toggle_button.dart';
+import '../../ai_assistant/widgets/assistant_drawer.dart';
 
 class AccessibilityScreen extends StatelessWidget {
   const AccessibilityScreen({super.key});
@@ -12,6 +14,8 @@ class AccessibilityScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.bg,
       appBar: AppBar(title: const Text('Accessibility')),
+      floatingActionButton: const AssistantToggleButton(),
+      endDrawer: const AssistantDrawer(),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: const [

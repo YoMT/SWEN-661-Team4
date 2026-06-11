@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/care_report_model.dart';
+import '../../ai_assistant/widgets/assistant_drawer.dart';
+import '../../ai_assistant/widgets/assistant_toggle_button.dart';
 
 class ProviderReportScreen extends StatelessWidget {
   const ProviderReportScreen({super.key});
@@ -17,21 +19,8 @@ class ProviderReportScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Provider Report')),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) => const AlertDialog(
-              title: Text('Peggy AI Assistant'),
-              content: Text(
-                'Hi, I am Peggy. This report shows medication adherence, missed doses, symptom summary, and upcoming appointments. You can share it with the care team after confirming.',
-              ),
-            ),
-          );
-        },
-        icon: const Icon(Icons.smart_toy),
-        label: const Text('Peggy'),
-      ),
+      floatingActionButton: const AssistantToggleButton(),
+      endDrawer: const AssistantDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: ListView(

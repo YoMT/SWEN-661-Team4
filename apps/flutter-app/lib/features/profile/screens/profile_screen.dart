@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../providers/profile_provider.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../ai_assistant/widgets/assistant_toggle_button.dart';
+import '../../ai_assistant/widgets/assistant_drawer.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -13,6 +15,8 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.bg,
       appBar: AppBar(title: const Text('Profile')),
+      floatingActionButton: const AssistantToggleButton(),
+      endDrawer: const AssistantDrawer(),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -93,8 +97,8 @@ class ProfileScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 24),
-        ],
-      ),
+      ],
+    ),
     );
   }
 }

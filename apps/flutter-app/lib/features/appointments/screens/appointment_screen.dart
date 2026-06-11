@@ -5,6 +5,8 @@ import '../providers/appointment_provider.dart';
 import '../widgets/appointment_card.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../shared/widgets/loading_indicator.dart';
+import '../../ai_assistant/widgets/assistant_toggle_button.dart';
+import '../../ai_assistant/widgets/assistant_drawer.dart';
 
 class AppointmentScreen extends StatelessWidget {
   const AppointmentScreen({super.key});
@@ -39,6 +41,8 @@ class AppointmentScreen extends StatelessWidget {
           const SizedBox(width: 8),
         ],
       ),
+      floatingActionButton: const AssistantToggleButton(),
+      endDrawer: const AssistantDrawer(),
       body: Column(
         children: [
           if (provider.errorMessage != null)
@@ -108,7 +112,7 @@ class AppointmentScreen extends StatelessWidget {
                         ],
                       ),
           ),
-        ],
+          ],
       ),
     );
   }

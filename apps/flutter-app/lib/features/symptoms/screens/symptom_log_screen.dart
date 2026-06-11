@@ -7,7 +7,7 @@ import '../widgets/save_log_button.dart';
 import '../widgets/recent_entries_list.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../ai_assistant/widgets/assistant_toggle_button.dart';
-import '../../ai_assistant/widgets/assistant_panel.dart';
+import '../../ai_assistant/widgets/assistant_drawer.dart';
 
 class SymptomLogScreen extends StatefulWidget {
   const SymptomLogScreen({super.key});
@@ -32,9 +32,8 @@ class _SymptomLogScreenState extends State<SymptomLogScreen> {
       backgroundColor: AppColors.bg,
       appBar: AppBar(title: const Text('Log a symptom')),
       floatingActionButton: const AssistantToggleButton(),
-     body: Stack(
-  children: [
-    ListView(
+      endDrawer: const AssistantDrawer(),
+      body: ListView(
       padding: const EdgeInsets.all(16),
       children: [
         if (provider.errorMessage != null)
@@ -103,10 +102,7 @@ class _SymptomLogScreenState extends State<SymptomLogScreen> {
           const RecentEntriesList(),
         ],
       ],
-    ),
-    const AssistantPanel(),
-  ],
-),
+      ),
     );
   }
 }
