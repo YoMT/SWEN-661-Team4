@@ -1,8 +1,3 @@
-/**
- * Below are the colors that are used in the app. The colors are defined in the light and dark mode.
- * There are many other ways to style your app. For example, [Nativewind](https://www.nativewind.dev/), [Tamagui](https://tamagui.dev/), [unistyles](https://reactnativeunistyles.vercel.app), etc.
- */
-
 import '@/global.css';
 
 import { Platform } from 'react-native';
@@ -22,6 +17,52 @@ export const Colors = {
     backgroundSelected: '#2E3135',
     textSecondary: '#B0B4BA',
   },
+} as const;
+
+export const CC = {
+  bg: '#F8F9FA',
+  surface: '#FFFFFF',
+  surfaceAlt: '#EBF0F6',
+  primary: '#2E5C8A',
+  onPrimary: '#FFFFFF',
+  text: '#1A1A1A',
+  textMuted: '#595959',
+  borderSubtle: '#E0E0E0',
+  borderStrong: '#6B6B6B',
+  success: '#4A7C59',
+  onSuccess: '#FFFFFF',
+  warning: '#D4A574',
+  onWarning: '#1A1A1A',
+  error: '#C85C5C',
+  onError: '#FFFFFF',
+} as const;
+
+export const LANDING_BG = '#F5EFE6';
+export const HEADLINE_BROWN = '#6B4522';
+
+export function useCC() {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { useAccessibilityContext } = require('@/context/accessibility-context');
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const { settings } = useAccessibilityContext();
+  return {
+    ...CC,
+    textMuted: settings.highContrast ? CC.text : CC.textMuted,
+    borderSubtle: settings.highContrast ? CC.borderStrong : CC.borderSubtle,
+  };
+}
+
+export const Typography = {
+  headlineLarge: { fontSize: 24, fontWeight: '700' as const, lineHeight: 31 },
+  headlineMedium: { fontSize: 20, fontWeight: '600' as const, lineHeight: 26 },
+  titleLarge: { fontSize: 18, fontWeight: '600' as const, lineHeight: 25 },
+  titleMedium: { fontSize: 16, fontWeight: '600' as const, lineHeight: 24 },
+  bodyLarge: { fontSize: 16, fontWeight: '400' as const, lineHeight: 24 },
+  bodyMedium: { fontSize: 15, fontWeight: '400' as const, lineHeight: 22 },
+  bodySmall: { fontSize: 13, fontWeight: '400' as const, lineHeight: 20 },
+  labelLarge: { fontSize: 16, fontWeight: '600' as const, lineHeight: 24 },
+  labelMedium: { fontSize: 14, fontWeight: '600' as const, lineHeight: 21 },
+  labelSmall: { fontSize: 12, fontWeight: '500' as const, lineHeight: 18 },
 } as const;
 
 export type ThemeColor = keyof typeof Colors.light & keyof typeof Colors.dark;
