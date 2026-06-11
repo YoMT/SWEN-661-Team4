@@ -1,4 +1,4 @@
-import { View, Image, ScrollView, TouchableOpacity, StyleSheet, Text } from 'react-native';
+import { View, Image, ScrollView, TouchableOpacity, StyleSheet, Text, useWindowDimensions } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppButton } from '@/components/shared/app-button';
@@ -7,6 +7,8 @@ import { CC, LANDING_BG, HEADLINE_BROWN } from '@/constants/theme';
 
 export default function LandingScreen() {
   const router = useRouter();
+  const { width } = useWindowDimensions();
+  const isWide = width >= 600;
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -24,59 +26,91 @@ export default function LandingScreen() {
       </View>
 
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-        {/* Badge */}
-        <View style={styles.badge}>
-          <Text style={styles.badgeIcon}>❤️</Text>
-          <CCText size={13} style={styles.badgeText}>Made for caregivers</CCText>
-        </View>
+        <View style={[styles.columns, isWide ? styles.columnsWide : styles.columnsNarrow]}>
 
-        {/* Headline with brown accent */}
-        <CCText size={32} style={styles.headlinePlain}>
-          {'A '}
-          <Text style={styles.headlineBrown}>{'gentle helping hand'}</Text>
-          {' through every day.'}
-        </CCText>
+          {/* LEFT: badge + headline + subtext + buttons */}
+          <View style={[styles.leftCol, isWide && styles.leftColWide]}>
+            <View style={styles.badge}>
+              <Text style={styles.badgeIcon}>❤️</Text>
+              <CCText size={13} style={styles.badgeText}>Made for caregivers</CCText>
+            </View>
 
-        {/* Subtext */}
-        <CCText size={16} style={styles.subtext}>
-          Keep track of medicines, visits, and little moments — without the worry. We'll remember the details so you don't have to.
-        </CCText>
+            <CCText size={32} style={styles.headlinePlain}>
+              {'A '}
+              <Text style={styles.headlineBrown}>{'gentle helping hand'}</Text>
+              {' through every day.'}
+            </CCText>
 
-        {/* Hero image */}
-        <View style={styles.heroContainer}>
-          <Image
-            source={require('@/assets/images/hero_photo.jpg')}
-            style={styles.heroImage}
-            resizeMode="cover"
-            accessibilityLabel="A caregiver and elderly woman sharing a warm moment"
-          />
-        </View>
+            <CCText size={16} style={styles.subtext}>
+              Keep track of medicines, visits, and little moments — without the worry. We'll remember the details so you don't have to.
+            </CCText>
 
-        {/* CTAs */}
-        <View style={styles.ctas}>
-          <AppButton
-            label="Get started — it's free  →"
-            onPress={() => router.push('/(auth)/signup')}
-          />
-          <View style={styles.ctaGap} />
-          <AppButton
-            label="I already have an account"
-            variant="outline"
-            onPress={() => router.push('/(auth)/login')}
-          />
-        </View>
+            {/* In narrow mode, hero sits between subtext and buttons */}
+            {!isWide && (
+              <View style={styles.heroContainer}>
+                <Image
+                  source={require('@/assets/images/hero_photo.jpg')}
+                  style={styles.heroImage}
+                  resizeMode="cover"
+                  accessibilityLabel="A caregiver and elderly woman sharing a warm moment"
+                />
+              </View>
+            )}
 
-        {/* AI pill button */}
-        <View style={styles.aiRow}>
-          <TouchableOpacity
-            style={styles.aiButton}
-            onPress={() => router.push('/(auth)/login')}
-            accessibilityLabel="Ask CareConnect AI assistant"
-            accessibilityRole="button"
-          >
-            <CCText size={14} style={styles.aiButtonText}>+ Ask CareConnect</CCText>
-            <View style={styles.aiLiveDot} />
-          </TouchableOpacity>
+            <View style={styles.ctas}>
+              <AppButton
+                label="Get started — it's free  →"
+                onPress={() => router.push('/(auth)/signup')}
+              />
+              <View style={styles.ctaGap} />
+              <AppButton
+                label="I already have an account"
+                variant="outline"
+                onPress={() => router.push('/(auth)/login')}
+              />
+            </View>
+
+            {/* In narrow mode, AI button sits below the CTAs, centered */}
+            {!isWide && (
+              <View style={styles.aiRowCenter}>
+                <TouchableOpacity
+                  style={styles.aiButton}
+                  onPress={() => router.push('/(auth)/login')}
+                  accessibilityLabel="Ask CareConnect AI assistant"
+                  accessibilityRole="button"
+                >
+                  <CCText size={14} style={styles.aiButtonText}>+ Ask CareConnect</CCText>
+                  <View style={styles.aiLiveDot} />
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
+
+          {/* RIGHT: hero photo (top) + AI button (right-aligned below) — wide only */}
+          {isWide && (
+            <View style={styles.rightCol}>
+              <View style={styles.heroContainer}>
+                <Image
+                  source={require('@/assets/images/hero_photo.jpg')}
+                  style={styles.heroImage}
+                  resizeMode="cover"
+                  accessibilityLabel="A caregiver and elderly woman sharing a warm moment"
+                />
+              </View>
+              <View style={styles.aiRowRight}>
+                <TouchableOpacity
+                  style={styles.aiButton}
+                  onPress={() => router.push('/(auth)/login')}
+                  accessibilityLabel="Ask CareConnect AI assistant"
+                  accessibilityRole="button"
+                >
+                  <CCText size={14} style={styles.aiButtonText}>+ Ask CareConnect</CCText>
+                  <View style={styles.aiLiveDot} />
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -109,7 +143,16 @@ const styles = StyleSheet.create({
   logoName: { color: '#fff', fontWeight: '700' },
   signInLink: { color: 'rgba(255,255,255,0.9)', fontWeight: '600' },
 
-  scroll: { paddingHorizontal: 24, paddingBottom: 32 },
+  scroll: { flexGrow: 1 },
+
+  columns: { paddingHorizontal: 24, paddingVertical: 24, gap: 24 },
+  columnsWide: { flexDirection: 'row', alignItems: 'flex-start' },
+  columnsNarrow: { flexDirection: 'column' },
+
+  leftCol: { gap: 0 },
+  leftColWide: { flex: 1, justifyContent: 'center' },
+
+  rightCol: { flex: 1 },
 
   badge: {
     flexDirection: 'row',
@@ -121,7 +164,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: 14,
     paddingVertical: 6,
-    marginTop: 24,
     marginBottom: 20,
     gap: 6,
   },
@@ -144,17 +186,19 @@ const styles = StyleSheet.create({
 
   heroContainer: {
     width: '100%',
-    height: 240,
+    aspectRatio: 0.9,
     borderRadius: 20,
     overflow: 'hidden',
-    marginBottom: 28,
+    marginBottom: 20,
   },
   heroImage: { width: '100%', height: '100%' },
 
   ctas: { marginBottom: 20 },
   ctaGap: { height: 12 },
 
-  aiRow: { alignItems: 'center' },
+  aiRowCenter: { alignItems: 'center', marginTop: 4 },
+  aiRowRight: { alignSelf: 'flex-end', marginTop: 12 },
+
   aiButton: {
     flexDirection: 'row',
     alignItems: 'center',
