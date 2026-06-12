@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect, useRef } from 'react';
 import { registerErrorHandler } from '@/services/api';
 
 interface ErrorState {
@@ -20,10 +20,13 @@ export function ErrorProvider({ children }: { children: React.ReactNode }) {
     setErrors((prev) => prev.slice(1));
   }, []);
 
+  const pushErrorRef = useRef(pushError);
+  pushErrorRef.current = pushError;
+
   useEffect(() => {
-    registerErrorHandler(pushError);
+    registerErrorHandler((msg) => pushErrorRef.current(msg));
     return () => registerErrorHandler(null);
-  }, [pushError]);
+  }, []);
 
   return (
     <ErrorContext.Provider value={{ errors, pushError, dismissError }}>

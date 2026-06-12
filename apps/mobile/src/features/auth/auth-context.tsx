@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useMemo, useCallback, useEffect } from 'react';
+import React, { createContext, useContext, useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { Platform } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import type { User } from '@/features/auth/user';
@@ -75,11 +75,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setErrorMessage(null);
   }, []);
 
-  // Auto-logout on 401
+  const logoutRef = useRef(logout);
+  logoutRef.current = logout;
+
+  // Auto-logout on 401 — registered once; ref ensures latest logout is always called
   useEffect(() => {
-    registerUnauthorizedHandler(logout);
+    registerUnauthorizedHandler(() => logoutRef.current());
     return () => registerUnauthorizedHandler(null);
-  }, [logout]);
+  }, []);
 
   const login = useCallback(async (email: string, password: string) => {
     setIsLoading(true);

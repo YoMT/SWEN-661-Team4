@@ -9,6 +9,8 @@ import { ErrorProvider } from '@/shared/context/error-context';
 import { RefreshProvider } from '@/shared/context/refresh-context';
 import { GlobalErrorToast } from '@/shared/components/global-error-toast';
 
+process.setMaxListeners?.(20);
+
 export default function RootLayout() {
   return (
     <ErrorBoundary>
