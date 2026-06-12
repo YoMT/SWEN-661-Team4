@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
-import type { ChatMessage } from '@/models/chat-message';
+﻿import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
+import type { ChatMessage } from '@/features/ai-assistant/chat-message';
 import { TIMINGS } from '@/constants/timings';
 
 interface AiAssistantState {

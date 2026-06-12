@@ -1,6 +1,6 @@
-import React from 'react';
+﻿import React from 'react';
 import { Text, TextProps } from 'react-native';
-import { useAccessibilityContext } from '@/context/accessibility-context';
+import { useAccessibilityContext } from '@/features/accessibility/accessibility-context';
 
 interface CCTextProps extends Omit<TextProps, 'style'> {
   size: number;

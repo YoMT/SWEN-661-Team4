@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
-import type { Medication, DoseTimeSlot } from '@/models/medication';
+﻿import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
+import type { Medication, DoseTimeSlot } from '@/features/medications/medication';
 import { MEDICATION_SEEDS } from '@/data/seeds';
 
 interface MedicationState {

@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
-import type { User } from '@/models/user';
+﻿import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
+import type { User } from '@/features/auth/user';
 import { TIMINGS } from '@/constants/timings';
 
 interface AuthState {

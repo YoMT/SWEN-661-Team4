@@ -1,9 +1,9 @@
-import { Stack } from 'expo-router';
-import { AccessibilityProvider } from '@/context/accessibility-context';
-import { AuthProvider } from '@/context/auth-context';
-import { CareDataProvider } from '@/context/care-data-provider';
-import { DashboardProvider } from '@/context/dashboard-context';
-import { AiAssistantProvider } from '@/context/ai-assistant-context';
+﻿import { Stack } from 'expo-router';
+import { AccessibilityProvider } from '@/features/accessibility/accessibility-context';
+import { AuthProvider } from '@/features/auth/auth-context';
+import { CareDataProvider } from '@/shared/components/care-data-provider';
+import { DashboardProvider } from '@/features/dashboard/dashboard-context';
+import { AiAssistantProvider } from '@/features/ai-assistant/ai-assistant-context';
 
 export default function RootLayout() {
   return (

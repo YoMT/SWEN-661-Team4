@@ -1,10 +1,10 @@
 import React from 'react';
-import { MedicationProvider } from './medication-context';
-import { AppointmentProvider } from './appointment-context';
-import { SymptomProvider } from './symptom-context';
-import { EmergencyProvider } from './emergency-context';
-import { CaretakerProvider } from './caretaker-context';
-import { ProfileProvider } from './profile-context';
+import { MedicationProvider } from '@/features/medications/medication-context';
+import { AppointmentProvider } from '@/features/appointments/appointment-context';
+import { SymptomProvider } from '@/features/symptoms/symptom-context';
+import { EmergencyProvider } from '@/features/emergency/emergency-context';
+import { CaretakerProvider } from '@/features/caretaker/caretaker-context';
+import { ProfileProvider } from '@/features/profile/profile-context';
 
 // Compound provider for all care-domain data.
 // Groups related contexts so _layout.tsx stays readable and

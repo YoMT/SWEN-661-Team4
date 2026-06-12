@@ -1,7 +1,7 @@
-import React, { useRef } from 'react';
+﻿import React, { useRef } from 'react';
 import { TouchableOpacity, Text, ActivityIndicator, StyleSheet, ViewStyle } from 'react-native';
 import { CC } from '@/constants/theme';
-import { useAccessibilityContext } from '@/context/accessibility-context';
+import { useAccessibilityContext } from '@/features/accessibility/accessibility-context';
 import { useFS } from './cc-text';
 
 type Variant = 'primary' | 'outline' | 'danger' | 'text';

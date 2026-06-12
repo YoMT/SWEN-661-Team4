@@ -1,8 +1,8 @@
-import React, { useState, useCallback, memo } from 'react';
+﻿import React, { useState, useCallback, memo } from 'react';
 import { Modal, View, Text, TouchableOpacity, FlatList, TextInput, KeyboardAvoidingView, Platform, StyleSheet, SafeAreaView } from 'react-native';
 import { CC } from '@/constants/theme';
-import { useAiAssistantContext } from '@/context/ai-assistant-context';
-import type { ChatMessage } from '@/models/chat-message';
+import { useAiAssistantContext } from '@/features/ai-assistant/ai-assistant-context';
+import type { ChatMessage } from '@/features/ai-assistant/chat-message';
 
 const ChatBubble = memo(function ChatBubble({ msg }: { msg: ChatMessage }) {
   const isUser = msg.role === 'user';

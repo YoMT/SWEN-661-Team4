@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
-import type { EmergencyContact } from '@/models/emergency-contact';
+﻿import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
+import type { EmergencyContact } from '@/features/emergency/emergency-contact';
 import { EMERGENCY_CONTACT_SEEDS } from '@/data/seeds';
 import { TIMINGS } from '@/constants/timings';
 

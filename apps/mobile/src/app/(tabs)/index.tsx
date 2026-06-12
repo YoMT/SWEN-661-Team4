@@ -1,10 +1,10 @@
-import { useCallback } from 'react';
+﻿import { useCallback } from 'react';
 import { View, Text, ScrollView, RefreshControl, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { PeggyFab } from '@/components/shared/peggy-fab';
-import { CCText } from '@/components/shared/cc-text';
-import { useDashboard } from '@/hooks/useDashboard';
+import { PeggyFab } from '@/features/ai-assistant/components/peggy-fab';
+import { CCText } from '@/shared/components/cc-text';
+import { useDashboard } from '@/features/dashboard/use-dashboard';
 import { CC } from '@/constants/theme';
 import { shared } from '@/constants/shared-styles';
 

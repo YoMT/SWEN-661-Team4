@@ -1,11 +1,11 @@
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+﻿import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useProfileContext } from '@/context/profile-context';
-import { useAuthContext } from '@/context/auth-context';
-import { useAccessibilityContext } from '@/context/accessibility-context';
-import { PeggyFab } from '@/components/shared/peggy-fab';
-import { CCText } from '@/components/shared/cc-text';
+import { useProfileContext } from '@/features/profile/profile-context';
+import { useAuthContext } from '@/features/auth/auth-context';
+import { useAccessibilityContext } from '@/features/accessibility/accessibility-context';
+import { PeggyFab } from '@/features/ai-assistant/components/peggy-fab';
+import { CCText } from '@/shared/components/cc-text';
 import { CC } from '@/constants/theme';
 
 function InfoTile({ label, value }: { label: string; value: string }) {

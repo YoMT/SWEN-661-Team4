@@ -1,13 +1,13 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { View, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { AppTextField } from '@/components/shared/app-text-field';
-import { AppButton } from '@/components/shared/app-button';
-import { CCText } from '@/components/shared/cc-text';
-import { useAppointmentContext } from '@/context/appointment-context';
+import { AppTextField } from '@/shared/components/app-text-field';
+import { AppButton } from '@/shared/components/app-button';
+import { CCText } from '@/shared/components/cc-text';
+import { useAppointmentContext } from '@/features/appointments/appointment-context';
 import { CC } from '@/constants/theme';
-import type { AppointmentType } from '@/models/appointment';
+import type { AppointmentType } from '@/features/appointments/appointment';
 
 export default function NewAppointmentScreen() {
   const router = useRouter();

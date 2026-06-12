@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState } from 'react';
-import type { Profile } from '@/models/profile';
+﻿import React, { createContext, useContext, useState } from 'react';
+import type { Profile } from '@/features/profile/profile';
 
 const DEFAULT: Profile = {
   id: '1',

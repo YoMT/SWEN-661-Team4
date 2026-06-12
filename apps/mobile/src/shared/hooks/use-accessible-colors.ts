@@ -1,5 +1,5 @@
-import { CC } from '@/constants/theme';
-import { useAccessibilityContext } from '@/context/accessibility-context';
+﻿import { CC } from '@/constants/theme';
+import { useAccessibilityContext } from '@/features/accessibility/accessibility-context';
 
 export function useAccessibleColors() {
   const { settings } = useAccessibilityContext();

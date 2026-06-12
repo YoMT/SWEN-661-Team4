@@ -1,8 +1,8 @@
-import React, { memo } from 'react';
+﻿import React, { memo } from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
-import { CCText } from './cc-text';
+import { CCText } from '@/shared/components/cc-text';
 import { CC } from '@/constants/theme';
-import type { Medication } from '@/models/medication';
+import type { Medication } from '@/features/medications/medication';
 
 const STATUS_COLOR: Record<string, string> = {
   upcoming: CC.textMuted,

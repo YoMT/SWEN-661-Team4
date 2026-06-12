@@ -1,13 +1,13 @@
-import { View, ScrollView, TouchableOpacity, Alert, StyleSheet, Text } from 'react-native';
+﻿import { View, ScrollView, TouchableOpacity, Alert, StyleSheet, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useMedicationContext } from '@/context/medication-context';
-import { useAppointmentContext } from '@/context/appointment-context';
-import { useSymptomContext } from '@/context/symptom-context';
-import { PeggyFab } from '@/components/shared/peggy-fab';
-import { CCText } from '@/components/shared/cc-text';
+import { useMedicationContext } from '@/features/medications/medication-context';
+import { useAppointmentContext } from '@/features/appointments/appointment-context';
+import { useSymptomContext } from '@/features/symptoms/symptom-context';
+import { PeggyFab } from '@/features/ai-assistant/components/peggy-fab';
+import { CCText } from '@/shared/components/cc-text';
 import { CC } from '@/constants/theme';
-import { adherenceRate } from '@/models/care-report';
+import { adherenceRate } from '@/features/profile/care-report';
 
 function ReportRow({ icon, label, value }: { icon: string; label: string; value: string }) {
   return (

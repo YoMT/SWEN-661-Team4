@@ -1,13 +1,13 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { View, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { AppTextField } from '@/components/shared/app-text-field';
-import { AppButton } from '@/components/shared/app-button';
-import { CCText } from '@/components/shared/cc-text';
-import { useMedicationContext } from '@/context/medication-context';
+import { AppTextField } from '@/shared/components/app-text-field';
+import { AppButton } from '@/shared/components/app-button';
+import { CCText } from '@/shared/components/cc-text';
+import { useMedicationContext } from '@/features/medications/medication-context';
 import { CC } from '@/constants/theme';
-import type { DoseTimeSlot } from '@/models/medication';
+import type { DoseTimeSlot } from '@/features/medications/medication';
 
 const SLOTS: DoseTimeSlot[] = ['morning', 'afternoon', 'evening', 'night'];
 

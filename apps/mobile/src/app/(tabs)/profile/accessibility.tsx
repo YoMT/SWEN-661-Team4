@@ -1,10 +1,10 @@
-import { View, Switch, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+﻿import { View, Switch, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useAccessibilityContext } from '@/context/accessibility-context';
-import { CCText } from '@/components/shared/cc-text';
+import { useAccessibilityContext } from '@/features/accessibility/accessibility-context';
+import { CCText } from '@/shared/components/cc-text';
 import { CC } from '@/constants/theme';
-import type { TextSizeLevel } from '@/models/accessibility';
+import type { TextSizeLevel } from '@/features/accessibility/accessibility';
 
 const TEXT_SIZES: TextSizeLevel[] = ['standard', 'large', 'largest'];
 

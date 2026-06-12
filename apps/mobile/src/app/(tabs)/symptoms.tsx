@@ -1,12 +1,12 @@
-import { useState, useCallback } from 'react';
+﻿import { useState, useCallback } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useSymptomContext } from '@/context/symptom-context';
-import { useAccessibilityContext } from '@/context/accessibility-context';
-import { PeggyFab } from '@/components/shared/peggy-fab';
-import { AppButton } from '@/components/shared/app-button';
-import { CCText, useFS } from '@/components/shared/cc-text';
-import type { SymptomType } from '@/models/symptom-log';
+import { useSymptomContext } from '@/features/symptoms/symptom-context';
+import { useAccessibilityContext } from '@/features/accessibility/accessibility-context';
+import { PeggyFab } from '@/features/ai-assistant/components/peggy-fab';
+import { AppButton } from '@/shared/components/app-button';
+import { CCText, useFS } from '@/shared/components/cc-text';
+import type { SymptomType } from '@/features/symptoms/symptom-log';
 import { CC } from '@/constants/theme';
 import { TIMINGS } from '@/constants/timings';
 

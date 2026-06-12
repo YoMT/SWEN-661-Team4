@@ -1,13 +1,13 @@
-import { useCallback, useMemo, memo } from 'react';
+﻿import { useCallback, useMemo, memo } from 'react';
 import { View, SectionList, TouchableOpacity, StyleSheet, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useAppointmentContext } from '@/context/appointment-context';
-import { PeggyFab } from '@/components/shared/peggy-fab';
-import { CCText } from '@/components/shared/cc-text';
+import { useAppointmentContext } from '@/features/appointments/appointment-context';
+import { PeggyFab } from '@/features/ai-assistant/components/peggy-fab';
+import { CCText } from '@/shared/components/cc-text';
 import { CC } from '@/constants/theme';
 import { shared } from '@/constants/shared-styles';
-import type { Appointment } from '@/models/appointment';
+import type { Appointment } from '@/features/appointments/appointment';
 
 const ApptCard = memo(function ApptCard({ appt, onReschedule }: { appt: Appointment; onReschedule: () => void }) {
   const isVideo = appt.type === 'video';

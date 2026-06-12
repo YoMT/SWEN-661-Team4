@@ -1,16 +1,16 @@
-import { useState, useCallback, useMemo, memo } from 'react';
+﻿import { useState, useCallback, useMemo, memo } from 'react';
 import { View, FlatList, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useCaretakerContext } from '@/context/caretaker-context';
-import { useMedicationContext } from '@/context/medication-context';
-import { useSymptomContext } from '@/context/symptom-context';
-import { useAppointmentContext } from '@/context/appointment-context';
-import { PeggyFab } from '@/components/shared/peggy-fab';
-import { CCText, useFS } from '@/components/shared/cc-text';
+import { useCaretakerContext } from '@/features/caretaker/caretaker-context';
+import { useMedicationContext } from '@/features/medications/medication-context';
+import { useSymptomContext } from '@/features/symptoms/symptom-context';
+import { useAppointmentContext } from '@/features/appointments/appointment-context';
+import { PeggyFab } from '@/features/ai-assistant/components/peggy-fab';
+import { CCText, useFS } from '@/shared/components/cc-text';
 import { CC } from '@/constants/theme';
 import { shared } from '@/constants/shared-styles';
-import type { CaretakerNote } from '@/models/caretaker-note';
+import type { CaretakerNote } from '@/features/caretaker/caretaker-note';
 
 const NoteCard = memo(function NoteCard({
   note,

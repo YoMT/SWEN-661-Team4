@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
-import type { Appointment } from '@/models/appointment';
+﻿import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
+import type { Appointment } from '@/features/appointments/appointment';
 import { APPOINTMENT_SEEDS } from '@/data/seeds';
 
 interface AppointmentState {

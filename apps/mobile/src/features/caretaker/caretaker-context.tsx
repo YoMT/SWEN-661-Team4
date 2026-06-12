@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
-import type { CaretakerNote } from '@/models/caretaker-note';
+﻿import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
+import type { CaretakerNote } from '@/features/caretaker/caretaker-note';
 import { CARETAKER_NOTE_SEEDS } from '@/data/seeds';
 
 interface CaretakerState {

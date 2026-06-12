@@ -1,11 +1,11 @@
-import { useState, useCallback } from 'react';
+﻿import { useState, useCallback } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { AppButton } from '@/components/shared/app-button';
-import { AppTextField } from '@/components/shared/app-text-field';
-import { CCText } from '@/components/shared/cc-text';
-import { useAuthContext } from '@/context/auth-context';
+import { AppButton } from '@/shared/components/app-button';
+import { AppTextField } from '@/shared/components/app-text-field';
+import { CCText } from '@/shared/components/cc-text';
+import { useAuthContext } from '@/features/auth/auth-context';
 import { CC } from '@/constants/theme';
 import { validate } from '@/services/validation';
 

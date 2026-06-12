@@ -1,7 +1,7 @@
-import type { Medication } from '@/models/medication';
-import type { Appointment } from '@/models/appointment';
-import type { EmergencyContact } from '@/models/emergency-contact';
-import type { CaretakerNote } from '@/models/caretaker-note';
+﻿import type { Medication } from '@/features/medications/medication';
+import type { Appointment } from '@/features/appointments/appointment';
+import type { EmergencyContact } from '@/features/emergency/emergency-contact';
+import type { CaretakerNote } from '@/features/caretaker/caretaker-note';
 
 const now = new Date().toISOString();
 const today = new Date();

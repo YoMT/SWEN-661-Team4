@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, TextInputProps } from 'react-native';
 import { CC } from '@/constants/theme';
 import { useFS } from './cc-text';
-import { useAccessibilityContext } from '@/context/accessibility-context';
+import { useAccessibilityContext } from '@/features/accessibility/accessibility-context';
 
 interface AppTextFieldProps extends TextInputProps {
   label: string;

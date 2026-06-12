@@ -1,14 +1,14 @@
-import { useCallback } from 'react';
+﻿import { useCallback } from 'react';
 import { View, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useMedicationContext } from '@/context/medication-context';
-import { PeggyFab } from '@/components/shared/peggy-fab';
-import { MedCard } from '@/components/shared/med-card';
-import { CCText } from '@/components/shared/cc-text';
+import { useMedicationContext } from '@/features/medications/medication-context';
+import { PeggyFab } from '@/features/ai-assistant/components/peggy-fab';
+import { MedCard } from '@/features/medications/components/med-card';
+import { CCText } from '@/shared/components/cc-text';
 import { CC } from '@/constants/theme';
 import { shared } from '@/constants/shared-styles';
-import type { DoseTimeSlot } from '@/models/medication';
+import type { DoseTimeSlot } from '@/features/medications/medication';
 
 const SLOTS: { slot: DoseTimeSlot; label: string; emoji: string }[] = [
   { slot: 'morning', label: 'Morning', emoji: '🌅' },

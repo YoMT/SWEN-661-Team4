@@ -1,10 +1,10 @@
-import { useMemo } from 'react';
-import { useProfileContext } from '@/context/profile-context';
-import { useMedicationContext } from '@/context/medication-context';
-import { useAppointmentContext } from '@/context/appointment-context';
-import { useSymptomContext } from '@/context/symptom-context';
-import { useDashboardContext } from '@/context/dashboard-context';
-import { useAuthContext } from '@/context/auth-context';
+﻿import { useMemo } from 'react';
+import { useProfileContext } from '@/features/profile/profile-context';
+import { useMedicationContext } from '@/features/medications/medication-context';
+import { useAppointmentContext } from '@/features/appointments/appointment-context';
+import { useSymptomContext } from '@/features/symptoms/symptom-context';
+import { useDashboardContext } from '@/features/dashboard/dashboard-context';
+import { useAuthContext } from '@/features/auth/auth-context';
 
 export function useDashboard() {
   const { user } = useAuthContext();

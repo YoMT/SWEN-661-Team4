@@ -1,11 +1,11 @@
-import { useState, useRef } from 'react';
+﻿import { useState, useRef } from 'react';
 import { View, ScrollView, TouchableOpacity, TextInput, StyleSheet, Alert, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useEmergencyContext } from '@/context/emergency-context';
-import { useAccessibilityContext } from '@/context/accessibility-context';
-import { CCText, useFS } from '@/components/shared/cc-text';
-import { getInitials } from '@/models/emergency-contact';
+import { useEmergencyContext } from '@/features/emergency/emergency-context';
+import { useAccessibilityContext } from '@/features/accessibility/accessibility-context';
+import { CCText, useFS } from '@/shared/components/cc-text';
+import { getInitials } from '@/features/emergency/emergency-contact';
 import { CC } from '@/constants/theme';
 
 export default function EmergencyContactScreen() {

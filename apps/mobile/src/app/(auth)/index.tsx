@@ -1,8 +1,8 @@
-import { View, Image, ScrollView, TouchableOpacity, StyleSheet, Text, useWindowDimensions } from 'react-native';
+﻿import { View, Image, ScrollView, TouchableOpacity, StyleSheet, Text, useWindowDimensions } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { AppButton } from '@/components/shared/app-button';
-import { CCText } from '@/components/shared/cc-text';
+import { AppButton } from '@/shared/components/app-button';
+import { CCText } from '@/shared/components/cc-text';
 import { CC, LANDING_BG, HEADLINE_BROWN } from '@/constants/theme';
 
 export default function LandingScreen() {

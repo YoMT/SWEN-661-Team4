@@ -1,6 +1,6 @@
-import { Tabs, Redirect } from 'expo-router';
-import { useAuthContext } from '@/context/auth-context';
-import { useAccessibilityContext } from '@/context/accessibility-context';
+﻿import { Tabs, Redirect } from 'expo-router';
+import { useAuthContext } from '@/features/auth/auth-context';
+import { useAccessibilityContext } from '@/features/accessibility/accessibility-context';
 import { CC } from '@/constants/theme';
 import { View, Text, StyleSheet } from 'react-native';
 

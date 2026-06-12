@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
-import type { SymptomLog } from '@/models/symptom-log';
+﻿import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
+import type { SymptomLog } from '@/features/symptoms/symptom-log';
 
 interface SymptomState {
   logs: SymptomLog[];

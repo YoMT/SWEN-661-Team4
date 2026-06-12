@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState } from 'react';
-import { defaultAccessibility, primaryButtonHeight, navItemHeight, textScale, minTouchTarget } from '@/models/accessibility';
-import type { AccessibilitySettings } from '@/models/accessibility';
+﻿import React, { createContext, useContext, useState } from 'react';
+import { defaultAccessibility, primaryButtonHeight, navItemHeight, textScale, minTouchTarget } from '@/features/accessibility/accessibility';
+import type { AccessibilitySettings } from '@/features/accessibility/accessibility';
 
 interface AccessibilityState {
   settings: AccessibilitySettings;

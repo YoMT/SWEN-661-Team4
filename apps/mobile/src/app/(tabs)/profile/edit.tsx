@@ -1,11 +1,11 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { View, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { AppTextField } from '@/components/shared/app-text-field';
-import { AppButton } from '@/components/shared/app-button';
-import { CCText } from '@/components/shared/cc-text';
-import { useProfileContext } from '@/context/profile-context';
+import { AppTextField } from '@/shared/components/app-text-field';
+import { AppButton } from '@/shared/components/app-button';
+import { CCText } from '@/shared/components/cc-text';
+import { useProfileContext } from '@/features/profile/profile-context';
 import { CC } from '@/constants/theme';
 
 export default function EditProfileScreen() {
