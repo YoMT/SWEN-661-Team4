@@ -1,9 +1,36 @@
 import React, { createContext, useContext, useState, useMemo, useCallback, useEffect } from 'react';
+import { Platform } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import type { User } from '@/features/auth/user';
 import { api, setAuthToken, registerUnauthorizedHandler } from '@/services/api';
 
 const TOKEN_KEY = 'auth_token';
+
+async function getStoredToken(): Promise<string | null> {
+  if (Platform.OS === 'web') {
+    return localStorage.getItem(TOKEN_KEY);
+  }
+
+  return SecureStore.getItemAsync(TOKEN_KEY);
+}
+
+async function saveStoredToken(token: string): Promise<void> {
+  if (Platform.OS === 'web') {
+    localStorage.setItem(TOKEN_KEY, token);
+    return;
+  }
+
+  await SecureStore.setItemAsync(TOKEN_KEY, token);
+}
+
+async function deleteStoredToken(): Promise<void> {
+  if (Platform.OS === 'web') {
+    localStorage.removeItem(TOKEN_KEY);
+    return;
+  }
+
+  await SecureStore.deleteItemAsync(TOKEN_KEY);
+}
 
 interface AuthState {
   user: User | null;
@@ -26,7 +53,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     (async () => {
       try {
-        const token = await SecureStore.getItemAsync(TOKEN_KEY);
+        const token = await getStoredToken();
         if (token) {
           setAuthToken(token);
           const me = await api.get<User>('/auth/me');
@@ -34,7 +61,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
       } catch {
         setAuthToken(null);
-        await SecureStore.deleteItemAsync(TOKEN_KEY);
+        await deleteStoredToken();
       } finally {
         setIsLoading(false);
       }
@@ -43,7 +70,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const logout = useCallback(async () => {
     setAuthToken(null);
-    await SecureStore.deleteItemAsync(TOKEN_KEY);
+    await deleteStoredToken();
     setUser(null);
     setErrorMessage(null);
   }, []);
@@ -62,7 +89,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         '/auth/login', { email, password },
       );
       setAuthToken(token);
-      await SecureStore.setItemAsync(TOKEN_KEY, token);
+      await saveStoredToken(token);
       setUser(me);
     } catch {
       setErrorMessage('Invalid email or password.');
@@ -79,7 +106,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         '/auth/signup', { name, email, password },
       );
       setAuthToken(token);
-      await SecureStore.setItemAsync(TOKEN_KEY, token);
+      await saveStoredToken(token);
       setUser(me);
     } catch {
       setErrorMessage('Could not create account.');
