@@ -4,6 +4,12 @@ import { CCText } from '@/shared/components/cc-text';
 import { CC } from '@/constants/theme';
 import type { Medication } from '@/features/medications/medication';
 
+function fmtTime(s: string): string {
+  const d = new Date(s);
+  if (isNaN(d.getTime())) return s;
+  return d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+}
+
 const STATUS_COLOR: Record<string, string> = {
   upcoming: CC.textMuted,
   dueNow: CC.warning,
@@ -22,7 +28,7 @@ export const MedCard = memo(function MedCard({ med, onTake }: MedCardProps) {
       <View style={styles.medInfo}>
         <CCText size={16} style={styles.medName}>{med.name}</CCText>
         <CCText size={13} style={styles.medDosage}>{med.dosage} · {med.instruction}</CCText>
-        <CCText size={13} style={styles.medTime}>{med.scheduledTime}</CCText>
+        <CCText size={13} style={styles.medTime}>{fmtTime(med.scheduledTime)}</CCText>
       </View>
       <View style={styles.medRight}>
         <CCText size={12} style={[styles.medStatus, { color: STATUS_COLOR[med.status] ?? CC.textMuted }]}>
