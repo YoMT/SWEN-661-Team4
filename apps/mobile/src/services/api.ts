@@ -1,4 +1,7 @@
+import { mockRequest } from './mock-api';
+
 const BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? '';
+const USE_MOCK = !BASE_URL || BASE_URL.includes('example.com');
 
 let _token: string | null = null;
 let _onError: ((msg: string) => void) | null = null;
@@ -11,6 +14,16 @@ export const registerUnauthorizedHandler = (fn: (() => void) | null) => { _onUna
 type Method = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 
 async function request<T>(path: string, method: Method = 'GET', body?: unknown): Promise<T> {
+  if (USE_MOCK) {
+    try {
+      return mockRequest<T>(method, path, body);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Request failed';
+      _onError?.(msg);
+      throw err;
+    }
+  }
+
   const res = await fetch(`${BASE_URL}${path}`, {
     method,
     headers: {
