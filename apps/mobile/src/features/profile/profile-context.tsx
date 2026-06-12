@@ -1,34 +1,39 @@
-﻿import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import type { Profile } from '@/features/profile/profile';
-
-const DEFAULT: Profile = {
-  id: '1',
-  name: 'Alex Carter',
-  email: 'alex.carter@email.com',
-  phone: '+1 (555) 123-4567',
-  careeName: 'Gloria Washington',
-  bloodType: 'A+',
-  allergies: ['Penicillin'],
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
-};
+import { api } from '@/services/api';
+import { useRefreshContext } from '@/shared/context/refresh-context';
 
 interface ProfileState {
-  profile: Profile;
-  update: (patch: Partial<Profile>) => void;
+  profile: Profile | null;
+  isLoading: boolean;
+  error: string | null;
+  update: (patch: Partial<Profile>) => Promise<void>;
 }
 
 const ProfileContext = createContext<ProfileState | null>(null);
 
 export function ProfileProvider({ children }: { children: React.ReactNode }) {
-  const [profile, setProfile] = useState<Profile>(DEFAULT);
+  const { refreshKey } = useRefreshContext();
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  function update(patch: Partial<Profile>) {
-    setProfile((prev) => ({ ...prev, ...patch, updatedAt: new Date().toISOString() }));
-  }
+  useEffect(() => {
+    setIsLoading(true);
+    setError(null);
+    api.get<Profile>('/profile')
+      .then(setProfile)
+      .catch(() => setError('Could not load profile'))
+      .finally(() => setIsLoading(false));
+  }, [refreshKey]);
+
+  const update = useCallback(async (patch: Partial<Profile>) => {
+    const updated = await api.patch<Profile>('/profile', patch);
+    setProfile(updated);
+  }, []);
 
   return (
-    <ProfileContext.Provider value={{ profile, update }}>
+    <ProfileContext.Provider value={{ profile, isLoading, error, update }}>
       {children}
     </ProfileContext.Provider>
   );

@@ -23,7 +23,7 @@ export function useDashboard() {
 
   return {
     user,
-    careeName: profile.careeName ?? 'your loved one',
+    careeName: profile?.careeName ?? 'your loved one',
     isLoading,
     refresh,
     givenDoses,

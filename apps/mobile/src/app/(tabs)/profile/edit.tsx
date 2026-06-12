@@ -11,11 +11,13 @@ import { CC } from '@/constants/theme';
 export default function EditProfileScreen() {
   const router = useRouter();
   const { profile, update } = useProfileContext();
-  const [name, setName] = useState(profile.name);
-  const [email, setEmail] = useState(profile.email);
-  const [phone, setPhone] = useState(profile.phone ?? '');
-  const [careeName, setCareeName] = useState(profile.careeName ?? '');
-  const [bloodType, setBloodType] = useState(profile.bloodType ?? '');
+  const [name, setName] = useState(profile?.name ?? '');
+  const [email, setEmail] = useState(profile?.email ?? '');
+  const [phone, setPhone] = useState(profile?.phone ?? '');
+  const [careeName, setCareeName] = useState(profile?.careeName ?? '');
+  const [bloodType, setBloodType] = useState(profile?.bloodType ?? '');
+
+  if (!profile) return null;
 
   function handleSave() {
     update({ name, email, phone: phone || undefined, careeName: careeName || undefined, bloodType: bloodType || undefined });

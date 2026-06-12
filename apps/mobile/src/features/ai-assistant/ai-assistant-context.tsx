@@ -1,6 +1,6 @@
-﻿import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
+import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
 import type { ChatMessage } from '@/features/ai-assistant/chat-message';
-import { TIMINGS } from '@/constants/timings';
+import { api } from '@/services/api';
 
 interface AiAssistantState {
   messages: ChatMessage[];
@@ -19,19 +19,20 @@ export function AiAssistantProvider({ children }: { children: React.ReactNode })
 
   const sendMessage = useCallback(async (content: string) => {
     setErrorMessage(null);
-    const now = new Date().toISOString();
-    const userMsg: ChatMessage = { id: `${Date.now()}_user`, role: 'user', content, timestamp: now };
+    const userMsg: ChatMessage = {
+      id: `${Date.now()}_user`,
+      role: 'user',
+      content,
+      timestamp: new Date().toISOString(),
+    };
     setMessages((prev) => [...prev, userMsg]);
     setIsTyping(true);
     try {
-      await new Promise((r) => setTimeout(r, TIMINGS.AI_RESPONSE_MS));
-      const reply: ChatMessage = {
-        id: `${Date.now()}_assistant`,
-        role: 'assistant',
-        content: 'I received your message. AI integration coming soon.',
-        timestamp: new Date().toISOString(),
-      };
-      setMessages((prev) => [...prev, reply]);
+      const { reply } = await api.post<{ reply: string }>('/ai/chat', { message: content });
+      setMessages((prev) => [
+        ...prev,
+        { id: `${Date.now()}_assistant`, role: 'assistant', content: reply, timestamp: new Date().toISOString() },
+      ]);
     } catch {
       setErrorMessage('Failed to get a response. Please try again.');
     } finally {

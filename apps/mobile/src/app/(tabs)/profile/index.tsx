@@ -33,6 +33,8 @@ export default function ProfileScreen() {
   const { profile } = useProfileContext();
   const { logout } = useAuthContext();
 
+  if (!profile) return null;
+
   const initials = profile.name.split(' ').map((n) => n[0]).join('').toUpperCase().slice(0, 2);
 
   return (

@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
-import { TIMINGS } from '@/constants/timings';
+import { useRefreshContext } from '@/shared/context/refresh-context';
 
-// careeName is NOT stored here — read it from ProfileContext via the useDashboard hook.
 interface DashboardState {
   isLoading: boolean;
   refresh: () => Promise<void>;
@@ -10,16 +9,17 @@ interface DashboardState {
 const DashboardContext = createContext<DashboardState | null>(null);
 
 export function DashboardProvider({ children }: { children: React.ReactNode }) {
+  const { triggerRefresh } = useRefreshContext();
   const [isLoading, setIsLoading] = useState(false);
 
   const refresh = useCallback(async () => {
     setIsLoading(true);
-    try {
-      await new Promise((r) => setTimeout(r, TIMINGS.DASHBOARD_REFRESH_MS));
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+    triggerRefresh();
+    // Loading state clears once individual contexts finish their own fetches.
+    // Give a brief visual pulse so the RefreshControl spinner is visible.
+    await new Promise((r) => setTimeout(r, 300));
+    setIsLoading(false);
+  }, [triggerRefresh]);
 
   const value = useMemo(() => ({ isLoading, refresh }), [isLoading, refresh]);
 

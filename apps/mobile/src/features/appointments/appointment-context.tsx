@@ -1,19 +1,34 @@
-﻿import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
+import React, { createContext, useContext, useState, useMemo, useCallback, useEffect } from 'react';
 import type { Appointment } from '@/features/appointments/appointment';
-import { APPOINTMENT_SEEDS } from '@/data/seeds';
+import { api } from '@/services/api';
+import { useRefreshContext } from '@/shared/context/refresh-context';
 
 interface AppointmentState {
   appointments: Appointment[];
   todayAppointments: Appointment[];
   upcomingAppointments: Appointment[];
-  addAppointment: (appt: Omit<Appointment, 'id' | 'createdAt' | 'updatedAt'>) => void;
-  reschedule: (id: string, dateTime: string) => void;
+  isLoading: boolean;
+  error: string | null;
+  addAppointment: (appt: Omit<Appointment, 'id' | 'createdAt' | 'updatedAt'>) => Promise<void>;
+  reschedule: (id: string, dateTime: string) => Promise<void>;
 }
 
 const AppointmentContext = createContext<AppointmentState | null>(null);
 
 export function AppointmentProvider({ children }: { children: React.ReactNode }) {
-  const [appointments, setAppointments] = useState<Appointment[]>(APPOINTMENT_SEEDS);
+  const { refreshKey } = useRefreshContext();
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setIsLoading(true);
+    setError(null);
+    api.get<Appointment[]>('/appointments')
+      .then(setAppointments)
+      .catch(() => setError('Could not load appointments'))
+      .finally(() => setIsLoading(false));
+  }, [refreshKey]);
 
   const todayStr = new Date().toDateString();
 
@@ -27,20 +42,21 @@ export function AppointmentProvider({ children }: { children: React.ReactNode })
     [appointments, todayStr],
   );
 
-  const addAppointment = useCallback((appt: Omit<Appointment, 'id' | 'createdAt' | 'updatedAt'>) => {
-    const now = new Date().toISOString();
-    setAppointments((prev) => [...prev, { ...appt, id: String(Date.now()), createdAt: now, updatedAt: now }]);
+  const addAppointment = useCallback(async (appt: Omit<Appointment, 'id' | 'createdAt' | 'updatedAt'>) => {
+    const created = await api.post<Appointment>('/appointments', appt);
+    setAppointments((prev) => [...prev, created]);
   }, []);
 
-  const reschedule = useCallback((id: string, dateTime: string) => {
+  const reschedule = useCallback(async (id: string, dateTime: string) => {
+    await api.patch(`/appointments/${id}`, { dateTime });
     setAppointments((prev) =>
-      prev.map((a) => (a.id === id ? { ...a, dateTime, updatedAt: new Date().toISOString() } : a)),
+      prev.map((a) => a.id === id ? { ...a, dateTime, updatedAt: new Date().toISOString() } : a),
     );
   }, []);
 
   const value = useMemo(
-    () => ({ appointments, todayAppointments, upcomingAppointments, addAppointment, reschedule }),
-    [appointments, todayAppointments, upcomingAppointments, addAppointment, reschedule],
+    () => ({ appointments, todayAppointments, upcomingAppointments, isLoading, error, addAppointment, reschedule }),
+    [appointments, todayAppointments, upcomingAppointments, isLoading, error, addAppointment, reschedule],
   );
 
   return <AppointmentContext.Provider value={value}>{children}</AppointmentContext.Provider>;

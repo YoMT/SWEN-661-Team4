@@ -1,32 +1,38 @@
-// Base API client — stub for future backend integration.
-// Replace BASE_URL and swap the mock implementations in each context
-// with calls to these functions when a real backend is available.
-
 const BASE_URL = process.env.EXPO_PUBLIC_API_URL ?? '';
 
-type RequestOptions = {
-  method?: 'GET' | 'POST' | 'PATCH' | 'DELETE';
-  body?: unknown;
-  token?: string;
-};
+let _token: string | null = null;
+let _onError: ((msg: string) => void) | null = null;
+let _onUnauthorized: (() => void) | null = null;
 
-async function request<T>(path: string, opts: RequestOptions = {}): Promise<T> {
-  const { method = 'GET', body, token } = opts;
+export const setAuthToken = (t: string | null) => { _token = t; };
+export const registerErrorHandler = (fn: ((msg: string) => void) | null) => { _onError = fn; };
+export const registerUnauthorizedHandler = (fn: (() => void) | null) => { _onUnauthorized = fn; };
+
+type Method = 'GET' | 'POST' | 'PATCH' | 'DELETE';
+
+async function request<T>(path: string, method: Method = 'GET', body?: unknown): Promise<T> {
   const res = await fetch(`${BASE_URL}${path}`, {
     method,
     headers: {
       'Content-Type': 'application/json',
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(_token ? { Authorization: `Bearer ${_token}` } : {}),
     },
     body: body !== undefined ? JSON.stringify(body) : undefined,
   });
-  if (!res.ok) throw new Error(`API ${method} ${path} → ${res.status}`);
+
+  if (!res.ok) {
+    if (res.status === 401) _onUnauthorized?.();
+    const msg = `Request failed (${res.status})`;
+    _onError?.(msg);
+    throw new Error(msg);
+  }
+
   return res.json() as Promise<T>;
 }
 
 export const api = {
-  get: <T>(path: string, token?: string) => request<T>(path, { token }),
-  post: <T>(path: string, body: unknown, token?: string) => request<T>(path, { method: 'POST', body, token }),
-  patch: <T>(path: string, body: unknown, token?: string) => request<T>(path, { method: 'PATCH', body, token }),
-  delete: <T>(path: string, token?: string) => request<T>(path, { method: 'DELETE', token }),
+  get:    <T>(path: string) => request<T>(path, 'GET'),
+  post:   <T>(path: string, body: unknown) => request<T>(path, 'POST', body),
+  patch:  <T>(path: string, body: unknown) => request<T>(path, 'PATCH', body),
+  delete: <T>(path: string) => request<T>(path, 'DELETE'),
 };
