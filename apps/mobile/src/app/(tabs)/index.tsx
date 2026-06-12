@@ -1,14 +1,12 @@
+import { useCallback } from 'react';
 import { View, Text, ScrollView, RefreshControl, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useDashboardContext } from '@/context/dashboard-context';
-import { useMedicationContext } from '@/context/medication-context';
-import { useAppointmentContext } from '@/context/appointment-context';
-import { useSymptomContext } from '@/context/symptom-context';
-import { useAuthContext } from '@/context/auth-context';
 import { PeggyFab } from '@/components/shared/peggy-fab';
 import { CCText } from '@/components/shared/cc-text';
+import { useDashboard } from '@/hooks/useDashboard';
 import { CC } from '@/constants/theme';
+import { shared } from '@/constants/shared-styles';
 
 function greeting() {
   const h = new Date().getHours();
@@ -26,19 +24,21 @@ function StatTile({ label, value, color }: { label: string; value: string; color
   );
 }
 
+const QUICK_LINKS = [
+  { label: '🆘 Emergency', route: '/(tabs)/profile/emergency' },
+  { label: '📋 Report', route: '/(tabs)/profile/report' },
+  { label: '⚙️ Accessibility', route: '/(tabs)/profile/accessibility' },
+] as const;
+
 export default function DashboardScreen() {
   const router = useRouter();
-  const { careeName, isLoading, refresh } = useDashboardContext();
-  const { totalDoses, givenDoses, medications } = useMedicationContext();
-  const { todayAppointments } = useAppointmentContext();
-  const { logs } = useSymptomContext();
-  const { user } = useAuthContext();
+  const { user, careeName, isLoading, refresh, givenDoses, totalDoses, todayAppointmentsCount, logsCount, nextMed, nextAppt } = useDashboard();
 
-  const nextMed = medications.find((m) => m.status === 'upcoming' || m.status === 'dueNow');
-  const nextAppt = todayAppointments[0];
+  const handleMedsNav = useCallback(() => router.push('/(tabs)/medications'), [router]);
+  const handleApptNav = useCallback(() => router.push('/(tabs)/appointments'), [router]);
 
   return (
-    <SafeAreaView style={styles.safe}>
+    <SafeAreaView style={shared.safeArea}>
       <View style={styles.appBar}>
         <View style={styles.appBarLeft}>
           <View style={styles.avatar}>
@@ -55,44 +55,40 @@ export default function DashboardScreen() {
       </View>
 
       <ScrollView
-        contentContainerStyle={styles.scroll}
+        contentContainerStyle={shared.scrollContent}
         refreshControl={<RefreshControl refreshing={isLoading} onRefresh={refresh} tintColor={CC.primary} />}
       >
         <View style={styles.statsRow}>
           <StatTile label="Doses today" value={`${givenDoses}/${totalDoses}`} color={CC.success} />
-          <StatTile label="Appointments" value={String(todayAppointments.length)} color={CC.primary} />
-          <StatTile label="Logs" value={String(logs.length)} color={CC.warning} />
+          <StatTile label="Appointments" value={String(todayAppointmentsCount)} color={CC.primary} />
+          <StatTile label="Logs" value={String(logsCount)} color={CC.warning} />
         </View>
 
         {nextMed && (
-          <View style={styles.card}>
+          <View style={shared.card}>
             <CCText size={13} style={styles.cardTitle}>💊 Next medication</CCText>
             <CCText size={17} style={styles.cardMain}>{nextMed.name} · {nextMed.dosage}</CCText>
             <CCText size={14} style={styles.cardSub}>{nextMed.scheduledTime} · {nextMed.instruction}</CCText>
-            <TouchableOpacity onPress={() => router.push('/(tabs)/medications')} style={styles.cardBtn}>
+            <TouchableOpacity onPress={handleMedsNav} style={styles.cardBtn}>
               <CCText size={14} style={styles.cardBtnText}>View all medications →</CCText>
             </TouchableOpacity>
           </View>
         )}
 
         {nextAppt && (
-          <View style={styles.card}>
+          <View style={shared.card}>
             <CCText size={13} style={styles.cardTitle}>📅 Today's appointment</CCText>
             <CCText size={17} style={styles.cardMain}>{nextAppt.doctorName}</CCText>
             <CCText size={14} style={styles.cardSub}>{nextAppt.specialty} · {nextAppt.location}</CCText>
-            <TouchableOpacity onPress={() => router.push('/(tabs)/appointments')} style={styles.cardBtn}>
+            <TouchableOpacity onPress={handleApptNav} style={styles.cardBtn}>
               <CCText size={14} style={styles.cardBtnText}>View schedule →</CCText>
             </TouchableOpacity>
           </View>
         )}
 
         <View style={styles.quickRow}>
-          {[
-            { label: '🆘 Emergency', route: '/(tabs)/profile/emergency' },
-            { label: '📋 Report', route: '/(tabs)/profile/report' },
-            { label: '⚙️ Accessibility', route: '/(tabs)/profile/accessibility' },
-          ].map((item) => (
-            <TouchableOpacity key={item.label} style={styles.quickBtn} onPress={() => router.push(item.route as any)}>
+          {QUICK_LINKS.map((item) => (
+            <TouchableOpacity key={item.label} style={styles.quickBtn} onPress={() => router.push(item.route)}>
               <CCText size={12} style={styles.quickBtnText}>{item.label}</CCText>
             </TouchableOpacity>
           ))}
@@ -105,7 +101,6 @@ export default function DashboardScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: CC.bg },
   appBar: { backgroundColor: CC.primary, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 20, paddingVertical: 16 },
   appBarLeft: { flexDirection: 'row', alignItems: 'center', gap: 12 },
   avatar: { width: 40, height: 40, borderRadius: 20, backgroundColor: 'rgba(255,255,255,0.24)', alignItems: 'center', justifyContent: 'center' },
@@ -113,12 +108,10 @@ const styles = StyleSheet.create({
   greetingText: { fontSize: 13, color: 'rgba(255,255,255,0.8)' },
   careeName: { fontSize: 18, fontWeight: '700', color: '#fff' },
   notifIcon: { fontSize: 22, color: '#fff' },
-  scroll: { padding: 16, gap: 0 },
   statsRow: { flexDirection: 'row', gap: 12, marginBottom: 16 },
   statTile: { flex: 1, backgroundColor: CC.surface, borderRadius: 12, padding: 14, borderLeftWidth: 4, borderWidth: 1, borderColor: CC.borderSubtle },
   statValue: { fontSize: 20, fontWeight: '700', color: CC.text },
   statLabel: { fontSize: 12, color: CC.textMuted, marginTop: 2 },
-  card: { backgroundColor: CC.surface, borderRadius: 12, padding: 16, marginBottom: 16, borderWidth: 1, borderColor: CC.borderSubtle },
   cardTitle: { fontSize: 13, color: CC.textMuted, marginBottom: 6 },
   cardMain: { fontSize: 17, fontWeight: '600', color: CC.text },
   cardSub: { fontSize: 14, color: CC.textMuted, marginTop: 2 },

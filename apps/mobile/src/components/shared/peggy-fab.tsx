@@ -1,42 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, memo } from 'react';
 import { Modal, View, Text, TouchableOpacity, FlatList, TextInput, KeyboardAvoidingView, Platform, StyleSheet, SafeAreaView } from 'react-native';
 import { CC } from '@/constants/theme';
 import { useAiAssistantContext } from '@/context/ai-assistant-context';
 import type { ChatMessage } from '@/models/chat-message';
 
-function ChatBubble({ msg }: { msg: ChatMessage }) {
+const ChatBubble = memo(function ChatBubble({ msg }: { msg: ChatMessage }) {
   const isUser = msg.role === 'user';
   return (
     <View style={[styles.bubble, isUser ? styles.bubbleUser : styles.bubbleAssistant]}>
       <Text style={styles.bubbleText}>{msg.content}</Text>
     </View>
   );
-}
+});
 
-function TypingDots() {
+const TypingDots = memo(function TypingDots() {
   return (
     <View style={[styles.bubble, styles.bubbleAssistant]}>
       <Text style={styles.bubbleText}>Peggy is typing…</Text>
     </View>
   );
-}
+});
+
+const EmptyChat = memo(function EmptyChat() {
+  return (
+    <View style={styles.empty}>
+      <Text style={styles.emptyIcon}>🤖</Text>
+      <Text style={styles.emptyText}>{"Hi, I'm Peggy!\nHow can I help you today?"}</Text>
+    </View>
+  );
+});
 
 export function PeggyFab() {
   const [open, setOpen] = useState(false);
   const [text, setText] = useState('');
   const { messages, isTyping, sendMessage } = useAiAssistantContext();
 
-  async function handleSend() {
+  const handleSend = useCallback(async () => {
     const trimmed = text.trim();
     if (!trimmed) return;
     setText('');
     await sendMessage(trimmed);
-  }
+  }, [text, sendMessage]);
+
+  const handleOpen = useCallback(() => setOpen(true), []);
+  const handleClose = useCallback(() => setOpen(false), []);
+
+  const renderItem = useCallback(
+    ({ item }: { item: ChatMessage }) => <ChatBubble msg={item} />,
+    [],
+  );
 
   return (
     <>
       <TouchableOpacity
-        onPress={() => setOpen(true)}
+        onPress={handleOpen}
         style={styles.fab}
         accessibilityLabel="Open Peggy assistant"
         accessibilityRole="button"
@@ -44,12 +61,12 @@ export function PeggyFab() {
         <Text style={styles.fabIcon}>🤖</Text>
       </TouchableOpacity>
 
-      <Modal visible={open} animationType="slide" presentationStyle="pageSheet" onRequestClose={() => setOpen(false)}>
+      <Modal visible={open} animationType="slide" presentationStyle="pageSheet" onRequestClose={handleClose}>
         <SafeAreaView style={styles.sheet}>
           <View style={styles.header}>
             <Text style={styles.headerIcon}>🤖</Text>
             <Text style={styles.headerTitle}>Peggy</Text>
-            <TouchableOpacity onPress={() => setOpen(false)} accessibilityLabel="Close assistant">
+            <TouchableOpacity onPress={handleClose} accessibilityLabel="Close assistant">
               <Text style={styles.closeBtn}>✕</Text>
             </TouchableOpacity>
           </View>
@@ -57,15 +74,11 @@ export function PeggyFab() {
           <FlatList
             data={messages}
             keyExtractor={(m) => m.id}
-            renderItem={({ item }) => <ChatBubble msg={item} />}
-            ListEmptyComponent={
-              <View style={styles.empty}>
-                <Text style={styles.emptyIcon}>🤖</Text>
-                <Text style={styles.emptyText}>{"Hi, I'm Peggy!\nHow can I help you today?"}</Text>
-              </View>
-            }
+            renderItem={renderItem}
+            ListEmptyComponent={EmptyChat}
             ListFooterComponent={isTyping ? <TypingDots /> : null}
             contentContainerStyle={styles.messageList}
+            removeClippedSubviews
           />
 
           <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined}>

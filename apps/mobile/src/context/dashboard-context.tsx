@@ -1,8 +1,8 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
+import { TIMINGS } from '@/constants/timings';
 
+// careeName is NOT stored here — read it from ProfileContext via the useDashboard hook.
 interface DashboardState {
-  careeName: string;
-  errorMessage: string | null;
   isLoading: boolean;
   refresh: () => Promise<void>;
 }
@@ -11,26 +11,19 @@ const DashboardContext = createContext<DashboardState | null>(null);
 
 export function DashboardProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const careeName = 'Gloria Washington';
 
-  async function refresh() {
+  const refresh = useCallback(async () => {
     setIsLoading(true);
-    setErrorMessage(null);
     try {
-      await new Promise((r) => setTimeout(r, 600));
-    } catch {
-      setErrorMessage('Could not refresh dashboard.');
+      await new Promise((r) => setTimeout(r, TIMINGS.DASHBOARD_REFRESH_MS));
     } finally {
       setIsLoading(false);
     }
-  }
+  }, []);
 
-  return (
-    <DashboardContext.Provider value={{ careeName, errorMessage, isLoading, refresh }}>
-      {children}
-    </DashboardContext.Provider>
-  );
+  const value = useMemo(() => ({ isLoading, refresh }), [isLoading, refresh]);
+
+  return <DashboardContext.Provider value={value}>{children}</DashboardContext.Provider>;
 }
 
 export function useDashboardContext() {

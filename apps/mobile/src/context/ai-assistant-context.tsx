@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
 import type { ChatMessage } from '@/models/chat-message';
+import { TIMINGS } from '@/constants/timings';
 
 interface AiAssistantState {
   messages: ChatMessage[];
@@ -16,14 +17,14 @@ export function AiAssistantProvider({ children }: { children: React.ReactNode })
   const [isTyping, setIsTyping] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  async function sendMessage(content: string) {
+  const sendMessage = useCallback(async (content: string) => {
     setErrorMessage(null);
     const now = new Date().toISOString();
     const userMsg: ChatMessage = { id: `${Date.now()}_user`, role: 'user', content, timestamp: now };
     setMessages((prev) => [...prev, userMsg]);
     setIsTyping(true);
     try {
-      await new Promise((r) => setTimeout(r, 1000));
+      await new Promise((r) => setTimeout(r, TIMINGS.AI_RESPONSE_MS));
       const reply: ChatMessage = {
         id: `${Date.now()}_assistant`,
         role: 'assistant',
@@ -36,18 +37,19 @@ export function AiAssistantProvider({ children }: { children: React.ReactNode })
     } finally {
       setIsTyping(false);
     }
-  }
+  }, []);
 
-  function clearMessages() {
+  const clearMessages = useCallback(() => {
     setMessages([]);
     setErrorMessage(null);
-  }
+  }, []);
 
-  return (
-    <AiAssistantContext.Provider value={{ messages, isTyping, errorMessage, sendMessage, clearMessages }}>
-      {children}
-    </AiAssistantContext.Provider>
+  const value = useMemo(
+    () => ({ messages, isTyping, errorMessage, sendMessage, clearMessages }),
+    [messages, isTyping, errorMessage, sendMessage, clearMessages],
   );
+
+  return <AiAssistantContext.Provider value={value}>{children}</AiAssistantContext.Provider>;
 }
 
 export function useAiAssistantContext() {

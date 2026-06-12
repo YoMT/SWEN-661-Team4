@@ -1,15 +1,10 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
 import type { EmergencyContact } from '@/models/emergency-contact';
-
-const SEED: EmergencyContact[] = [
-  { id: '1', name: 'James Washington', phone: '+1 (555) 234-5678', relationship: 'Spouse', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
-  { id: '2', name: 'Dr. Sarah Chen', phone: '+1 (555) 987-6543', relationship: 'Primary Physician', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() },
-];
+import { EMERGENCY_CONTACT_SEEDS } from '@/data/seeds';
+import { TIMINGS } from '@/constants/timings';
 
 interface EmergencyState {
   contacts: EmergencyContact[];
-  isLoading: boolean;
-  errorMessage: string | null;
   incidentNote: string;
   incidentSaved: boolean;
   setIncidentNote: (note: string) => void;
@@ -19,23 +14,22 @@ interface EmergencyState {
 const EmergencyContext = createContext<EmergencyState | null>(null);
 
 export function EmergencyProvider({ children }: { children: React.ReactNode }) {
-  const [contacts] = useState<EmergencyContact[]>(SEED);
-  const [isLoading] = useState(false);
-  const [errorMessage] = useState<string | null>(null);
+  const [contacts] = useState<EmergencyContact[]>(EMERGENCY_CONTACT_SEEDS);
   const [incidentNote, setIncidentNote] = useState('');
   const [incidentSaved, setIncidentSaved] = useState(false);
 
-  async function saveIncident() {
-    await new Promise((r) => setTimeout(r, 500));
+  const saveIncident = useCallback(async () => {
+    await new Promise((r) => setTimeout(r, TIMINGS.INCIDENT_SAVE_MS));
     setIncidentSaved(true);
-    setTimeout(() => setIncidentSaved(false), 3000);
-  }
+    setTimeout(() => setIncidentSaved(false), TIMINGS.INCIDENT_SAVED_RESET_MS);
+  }, []);
 
-  return (
-    <EmergencyContext.Provider value={{ contacts, isLoading, errorMessage, incidentNote, incidentSaved, setIncidentNote, saveIncident }}>
-      {children}
-    </EmergencyContext.Provider>
+  const value = useMemo(
+    () => ({ contacts, incidentNote, incidentSaved, setIncidentNote, saveIncident }),
+    [contacts, incidentNote, incidentSaved, saveIncident],
   );
+
+  return <EmergencyContext.Provider value={value}>{children}</EmergencyContext.Provider>;
 }
 
 export function useEmergencyContext() {

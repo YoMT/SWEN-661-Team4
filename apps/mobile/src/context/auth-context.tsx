@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useMemo, useCallback } from 'react';
 import type { User } from '@/models/user';
+import { TIMINGS } from '@/constants/timings';
 
 interface AuthState {
   user: User | null;
@@ -18,54 +19,43 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  async function login(email: string, _password: string) {
+  const login = useCallback(async (email: string, _password: string) => {
     setIsLoading(true);
     setErrorMessage(null);
     try {
-      await new Promise((r) => setTimeout(r, 800));
-      setUser({
-        id: '1',
-        name: 'Caregiver',
-        email,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      });
+      await new Promise((r) => setTimeout(r, TIMINGS.AUTH_DELAY_MS));
+      setUser({ id: '1', name: 'Caregiver', email, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
     } catch {
       setErrorMessage('Invalid email or password.');
     } finally {
       setIsLoading(false);
     }
-  }
+  }, []);
 
-  async function signup(name: string, email: string, _password: string) {
+  const signup = useCallback(async (name: string, email: string, _password: string) => {
     setIsLoading(true);
     setErrorMessage(null);
     try {
-      await new Promise((r) => setTimeout(r, 800));
-      setUser({
-        id: '1',
-        name,
-        email,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      });
+      await new Promise((r) => setTimeout(r, TIMINGS.AUTH_DELAY_MS));
+      setUser({ id: '1', name, email, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() });
     } catch {
       setErrorMessage('Could not create account.');
     } finally {
       setIsLoading(false);
     }
-  }
+  }, []);
 
-  function logout() {
+  const logout = useCallback(() => {
     setUser(null);
     setErrorMessage(null);
-  }
+  }, []);
 
-  return (
-    <AuthContext.Provider value={{ user, isLoggedIn: user !== null, isLoading, errorMessage, login, signup, logout }}>
-      {children}
-    </AuthContext.Provider>
+  const value = useMemo(
+    () => ({ user, isLoggedIn: user !== null, isLoading, errorMessage, login, signup, logout }),
+    [user, isLoading, errorMessage, login, signup, logout],
   );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuthContext() {

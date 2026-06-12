@@ -1,13 +1,15 @@
-import { View, ScrollView, TouchableOpacity, StyleSheet, Text } from 'react-native';
+import { useCallback, useMemo, memo } from 'react';
+import { View, SectionList, TouchableOpacity, StyleSheet, Text } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAppointmentContext } from '@/context/appointment-context';
 import { PeggyFab } from '@/components/shared/peggy-fab';
 import { CCText } from '@/components/shared/cc-text';
 import { CC } from '@/constants/theme';
+import { shared } from '@/constants/shared-styles';
 import type { Appointment } from '@/models/appointment';
 
-function ApptCard({ appt, onReschedule }: { appt: Appointment; onReschedule: () => void }) {
+const ApptCard = memo(function ApptCard({ appt, onReschedule }: { appt: Appointment; onReschedule: () => void }) {
   const isVideo = appt.type === 'video';
   return (
     <View style={styles.card}>
@@ -34,49 +36,58 @@ function ApptCard({ appt, onReschedule }: { appt: Appointment; onReschedule: () 
       </View>
     </View>
   );
-}
+});
 
 export default function AppointmentScreen() {
   const router = useRouter();
-  const { todayAppointments, upcomingAppointments, errorMessage } = useAppointmentContext();
+  const { todayAppointments, upcomingAppointments } = useAppointmentContext();
+
+  const handleBook = useCallback(() => router.push('/(tabs)/appointments/new'), [router]);
+  const handleReschedule = useCallback(() => router.push('/(tabs)/appointments/reschedule'), [router]);
+
+  const sections = useMemo(() => {
+    const result = [];
+    if (todayAppointments.length > 0) result.push({ title: 'Today', data: todayAppointments });
+    if (upcomingAppointments.length > 0) result.push({ title: 'Upcoming', data: upcomingAppointments });
+    return result;
+  }, [todayAppointments, upcomingAppointments]);
+
+  const renderItem = useCallback(
+    ({ item }: { item: Appointment }) => <ApptCard appt={item} onReschedule={handleReschedule} />,
+    [handleReschedule],
+  );
+
+  const renderSectionHeader = useCallback(
+    ({ section }: { section: { title: string } }) => (
+      <CCText size={16} style={styles.sectionTitle}>{section.title}</CCText>
+    ),
+    [],
+  );
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <View style={styles.header}>
+    <SafeAreaView style={shared.safeArea}>
+      <View style={shared.screenHeader}>
         <CCText size={20} style={styles.title}>Appointments</CCText>
-        <TouchableOpacity onPress={() => router.push('/(tabs)/appointments/new')} style={styles.addBtn} accessibilityLabel="Book appointment">
+        <TouchableOpacity onPress={handleBook} style={styles.addBtn} accessibilityLabel="Book appointment">
           <CCText size={14} style={styles.addBtnText}>+ Book</CCText>
         </TouchableOpacity>
       </View>
 
-      <ScrollView contentContainerStyle={styles.scroll}>
-        {errorMessage && <CCText size={14} style={styles.error}>{errorMessage}</CCText>}
-
-        {todayAppointments.length > 0 && (
-          <>
-            <CCText size={16} style={styles.sectionTitle}>Today</CCText>
-            {todayAppointments.map((a) => (
-              <ApptCard key={a.id} appt={a} onReschedule={() => router.push('/(tabs)/appointments/reschedule')} />
-            ))}
-          </>
-        )}
-
-        {upcomingAppointments.length > 0 && (
-          <>
-            <CCText size={16} style={styles.sectionTitle}>Upcoming</CCText>
-            {upcomingAppointments.map((a) => (
-              <ApptCard key={a.id} appt={a} onReschedule={() => router.push('/(tabs)/appointments/reschedule')} />
-            ))}
-          </>
-        )}
-
-        {todayAppointments.length === 0 && upcomingAppointments.length === 0 && (
-          <View style={styles.empty}>
+      <SectionList
+        sections={sections}
+        keyExtractor={(item) => item.id}
+        renderItem={renderItem}
+        renderSectionHeader={renderSectionHeader}
+        contentContainerStyle={[shared.scrollContent, sections.length === 0 && styles.emptyContainer]}
+        ListEmptyComponent={
+          <View style={shared.emptyState}>
             <Text style={styles.emptyIcon}>📅</Text>
             <CCText size={15} style={styles.emptyText}>No appointments scheduled</CCText>
           </View>
-        )}
-      </ScrollView>
+        }
+        stickySectionHeadersEnabled={false}
+        removeClippedSubviews
+      />
 
       <PeggyFab />
     </SafeAreaView>
@@ -84,14 +95,10 @@ export default function AppointmentScreen() {
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: CC.bg },
-  header: { backgroundColor: CC.surface, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 16, borderBottomWidth: 1, borderBottomColor: CC.borderSubtle },
   title: { fontSize: 20, fontWeight: '700', color: CC.text },
   addBtn: { backgroundColor: CC.primary, borderRadius: 8, paddingHorizontal: 14, paddingVertical: 8 },
   addBtnText: { color: '#fff', fontWeight: '600', fontSize: 14 },
-  scroll: { padding: 16 },
-  error: { color: CC.error, fontSize: 14, marginBottom: 12 },
-  sectionTitle: { fontSize: 16, fontWeight: '700', color: CC.text, marginBottom: 10 },
+  sectionTitle: { fontSize: 16, fontWeight: '700', color: CC.text, marginBottom: 10, marginTop: 4 },
   card: { backgroundColor: CC.surface, borderRadius: 12, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: CC.borderSubtle },
   cardRow: { flexDirection: 'row', gap: 12 },
   cardIcon: { width: 44, height: 44, borderRadius: 22, backgroundColor: CC.surfaceAlt, alignItems: 'center', justifyContent: 'center' },
@@ -106,7 +113,7 @@ const styles = StyleSheet.create({
   joinBtnText: { color: '#fff', fontWeight: '600', fontSize: 14 },
   rescheduleBtn: { flex: 1, borderWidth: 1.5, borderColor: CC.primary, borderRadius: 8, paddingVertical: 10, alignItems: 'center' },
   rescheduleBtnText: { color: CC.primary, fontWeight: '600', fontSize: 14 },
-  empty: { alignItems: 'center', paddingTop: 60 },
+  emptyContainer: { flexGrow: 1 },
   emptyIcon: { fontSize: 48, marginBottom: 12 },
   emptyText: { fontSize: 15, color: CC.textMuted },
 });

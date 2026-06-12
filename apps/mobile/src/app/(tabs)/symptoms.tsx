@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, TextInput, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useSymptomContext } from '@/context/symptom-context';
@@ -8,6 +8,7 @@ import { AppButton } from '@/components/shared/app-button';
 import { CCText, useFS } from '@/components/shared/cc-text';
 import type { SymptomType } from '@/models/symptom-log';
 import { CC } from '@/constants/theme';
+import { TIMINGS } from '@/constants/timings';
 
 const SYMPTOMS: { type: SymptomType; label: string; emoji: string }[] = [
   { type: 'pain', label: 'Pain', emoji: '😣' },
@@ -19,7 +20,7 @@ const SYMPTOMS: { type: SymptomType; label: string; emoji: string }[] = [
 ];
 
 export default function SymptomLogScreen() {
-  const { logs, addLog, errorMessage } = useSymptomContext();
+  const { logs, addLog } = useSymptomContext();
   const { touchTarget } = useAccessibilityContext();
   const fs = useFS();
   const [selected, setSelected] = useState<SymptomType | null>(null);
@@ -29,21 +30,20 @@ export default function SymptomLogScreen() {
 
   const dotSize = Math.max(touchTarget * 0.55, 26);
 
-  function handleSave() {
+  const handleSave = useCallback(() => {
     if (!selected) return;
     addLog({ symptom: selected, severity, note: note.trim() || undefined });
     setSelected(null);
     setSeverity(5);
     setNote('');
     setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
-  }
+    setTimeout(() => setSaved(false), TIMINGS.SAVED_BANNER_MS);
+  }, [selected, severity, note, addLog]);
 
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}><CCText size={20} style={styles.title}>Log a symptom</CCText></View>
       <ScrollView contentContainerStyle={styles.scroll}>
-        {errorMessage && <CCText size={14} style={styles.error}>{errorMessage}</CCText>}
         {saved && <View style={styles.savedBanner}><CCText size={14} style={styles.savedText}>✓ Symptom logged</CCText></View>}
 
         <CCText size={15} style={styles.sectionLabel}>What are you experiencing?</CCText>
@@ -112,7 +112,6 @@ const styles = StyleSheet.create({
   header: { backgroundColor: CC.surface, padding: 16, borderBottomWidth: 1, borderBottomColor: CC.borderSubtle },
   title: { fontSize: 20, fontWeight: '700', color: CC.text },
   scroll: { padding: 16 },
-  error: { color: CC.error, fontSize: 14, marginBottom: 12 },
   savedBanner: { backgroundColor: '#EDF7EE', borderRadius: 8, padding: 12, marginBottom: 12 },
   savedText: { color: CC.success, fontWeight: '600' },
   sectionLabel: { fontSize: 15, fontWeight: '600', color: CC.text, marginBottom: 10, marginTop: 4 },

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -7,12 +7,7 @@ import { AppTextField } from '@/components/shared/app-text-field';
 import { CCText } from '@/components/shared/cc-text';
 import { useAuthContext } from '@/context/auth-context';
 import { CC } from '@/constants/theme';
-
-function validate(email: string, password: string) {
-  if (!email.includes('@')) return 'Please enter a valid email address.';
-  if (password.length < 6) return 'Password must be at least 6 characters.';
-  return null;
-}
+import { validate } from '@/services/validation';
 
 export default function LoginScreen() {
   const router = useRouter();
@@ -21,12 +16,12 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const [localError, setLocalError] = useState<string | null>(null);
 
-  async function handleLogin() {
-    const err = validate(email, password);
+  const handleLogin = useCallback(async () => {
+    const err = validate.loginForm(email, password);
     if (err) { setLocalError(err); return; }
     setLocalError(null);
     await login(email, password);
-  }
+  }, [email, password, login]);
 
   const displayError = localError ?? errorMessage;
 

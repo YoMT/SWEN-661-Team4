@@ -1,5 +1,7 @@
 import '@/global.css';
 
+// useCC has been moved to src/hooks/useAccessibleColors.ts to avoid
+// the circular dependency between theme ↔ accessibility-context.
 import { Platform } from 'react-native';
 
 export const Colors = {
@@ -39,18 +41,6 @@ export const CC = {
 
 export const LANDING_BG = '#F5EFE6';
 export const HEADLINE_BROWN = '#6B4522';
-
-export function useCC() {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const { useAccessibilityContext } = require('@/context/accessibility-context');
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const { settings } = useAccessibilityContext();
-  return {
-    ...CC,
-    textMuted: settings.highContrast ? CC.text : CC.textMuted,
-    borderSubtle: settings.highContrast ? CC.borderStrong : CC.borderSubtle,
-  };
-}
 
 export const Typography = {
   headlineLarge: { fontSize: 24, fontWeight: '700' as const, lineHeight: 31 },
