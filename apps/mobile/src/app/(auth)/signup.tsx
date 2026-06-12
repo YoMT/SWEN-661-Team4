@@ -30,7 +30,7 @@ export default function SignupScreen() {
     <SafeAreaView style={styles.safe}>
       <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
         <View style={styles.header}>
-          <Text style={styles.logoIcon}>❤️</Text>
+          <Text style={styles.logoIcon} accessible={false}>❤️</Text>
           <CCText size={26} style={styles.brand}>CareConnect</CCText>
         </View>
 
@@ -38,7 +38,7 @@ export default function SignupScreen() {
           <CCText size={20} style={styles.cardTitle}>Create account</CCText>
 
           {displayError && (
-            <View style={styles.errorRow}>
+            <View style={styles.errorRow} accessibilityLiveRegion="assertive">
               <CCText size={14} style={styles.errorText}>⚠️ {displayError}</CCText>
             </View>
           )}
@@ -52,7 +52,7 @@ export default function SignupScreen() {
 
         <View style={styles.loginRow}>
           <CCText size={14} style={styles.loginText}>Already have an account? </CCText>
-          <TouchableOpacity onPress={() => router.replace('/(auth)/login')}>
+          <TouchableOpacity onPress={() => router.replace('/(auth)/login')} accessibilityRole="button" accessibilityLabel="Sign in">
             <CCText size={14} style={styles.loginLink}>Sign in</CCText>
           </TouchableOpacity>
         </View>

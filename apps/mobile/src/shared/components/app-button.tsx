@@ -38,6 +38,7 @@ export function AppButton({ label, onPress, variant = 'primary', isLoading, disa
       disabled={disabled || isLoading}
       accessibilityLabel={accessibilityLabel ?? label}
       accessibilityRole="button"
+      accessibilityState={{ busy: !!isLoading, disabled: !!(disabled || isLoading) }}
       style={[
         styles.base,
         { height: buttonHeight, backgroundColor: bg, borderColor: border, borderWidth: variant === 'outline' ? 2 : 0 },

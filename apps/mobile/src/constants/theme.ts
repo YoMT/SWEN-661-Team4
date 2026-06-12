@@ -33,7 +33,7 @@ export const CC = {
   borderStrong: '#6B6B6B',
   success: '#4A7C59',
   onSuccess: '#FFFFFF',
-  warning: '#D4A574',
+  warning: '#9E6E00',
   onWarning: '#1A1A1A',
   error: '#C85C5C',
   onError: '#FFFFFF',

@@ -20,7 +20,7 @@ function InfoTile({ label, value }: { label: string; value: string }) {
 function LinkRow({ icon, label, onPress }: { icon: string; label: string; onPress: () => void }) {
   const { touchTarget } = useAccessibilityContext();
   return (
-    <TouchableOpacity style={[styles.linkRow, { minHeight: touchTarget }]} onPress={onPress} accessibilityRole="button">
+    <TouchableOpacity style={[styles.linkRow, { minHeight: touchTarget }]} onPress={onPress} accessibilityRole="button" accessibilityLabel={label}>
       <Text style={styles.linkIcon}>{icon}</Text>
       <CCText size={15} style={styles.linkLabel}>{label}</CCText>
       <CCText size={20} style={styles.linkChevron}>›</CCText>
@@ -42,7 +42,7 @@ export default function ProfileScreen() {
       <View style={styles.header}>
         <CCText size={20} style={styles.title}>Profile</CCText>
         <View style={styles.headerActions}>
-          <TouchableOpacity onPress={() => router.push('/(tabs)/profile/edit')} accessibilityLabel="Edit profile">
+          <TouchableOpacity onPress={() => router.push('/(tabs)/profile/edit')} accessibilityLabel="Edit profile" accessibilityRole="button">
             <CCText size={16} style={styles.editBtn}>Edit</CCText>
           </TouchableOpacity>
           <TouchableOpacity onPress={logout} accessibilityLabel="Sign out" accessibilityRole="button">
@@ -74,7 +74,7 @@ export default function ProfileScreen() {
           <LinkRow icon="📓" label="Caretaker notes" onPress={() => router.push('/(tabs)/profile/caretaker-notes')} />
         </View>
 
-        <TouchableOpacity style={styles.logoutBtn} onPress={logout} accessibilityLabel="Sign out">
+        <TouchableOpacity style={styles.logoutBtn} onPress={logout} accessibilityLabel="Sign out" accessibilityRole="button">
           <CCText size={16} style={styles.logoutText}>Sign out</CCText>
         </TouchableOpacity>
       </ScrollView>

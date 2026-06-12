@@ -71,12 +71,15 @@ export default function SymptomLogScreen() {
               onPress={() => setSeverity(n)}
               style={[styles.severityDot, { width: dotSize, height: dotSize, borderRadius: dotSize / 2 }, n <= severity && styles.severityDotFilled]}
               accessibilityLabel={`Severity ${n}`}
+              accessibilityRole="radio"
+              accessibilityState={{ checked: n === severity }}
             />
           ))}
         </View>
 
         <CCText size={15} style={styles.sectionLabel}>Note (optional)</CCText>
         <TextInput
+          accessibilityLabel="Note (optional)"
           style={[styles.noteInput, { fontSize: fs(15) }]}
           placeholder="Describe what you're feeling…"
           placeholderTextColor={CC.textMuted}

@@ -29,7 +29,7 @@ export default function LoginScreen() {
     <SafeAreaView style={styles.safe}>
       <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
         <View style={styles.header}>
-          <Text style={styles.logoIcon}>❤️</Text>
+          <Text style={styles.logoIcon} accessible={false}>❤️</Text>
           <CCText size={26} style={styles.brand}>CareConnect</CCText>
           <CCText size={14} style={styles.tagline}>Care management built for caregivers with tremors</CCText>
         </View>
@@ -61,16 +61,16 @@ export default function LoginScreen() {
 
           <AppButton label="Sign In" onPress={handleLogin} isLoading={isLoading} />
           <View style={styles.gap} />
-          <AppButton label="🔒  Sign in with Biometrics" variant="outline" onPress={() => {}} />
+          <AppButton label="🔒  Sign in with Biometrics" accessibilityLabel="Sign in with biometrics" variant="outline" onPress={() => {}} />
 
-          <TouchableOpacity style={styles.forgotBtn}>
+          <TouchableOpacity style={styles.forgotBtn} accessibilityRole="button" accessibilityLabel="Forgot password">
             <CCText size={14} style={styles.forgotText}>Forgot password?</CCText>
           </TouchableOpacity>
         </View>
 
         <View style={styles.signupRow}>
           <CCText size={14} style={styles.signupText}>Don't have an account? </CCText>
-          <TouchableOpacity onPress={() => router.replace('/(auth)/signup')}>
+          <TouchableOpacity onPress={() => router.replace('/(auth)/signup')} accessibilityRole="button" accessibilityLabel="Create account">
             <CCText size={14} style={styles.signupLink}>Create account</CCText>
           </TouchableOpacity>
         </View>

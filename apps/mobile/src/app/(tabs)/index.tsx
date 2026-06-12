@@ -25,9 +25,9 @@ function StatTile({ label, value, color }: { label: string; value: string; color
 }
 
 const QUICK_LINKS = [
-  { label: '🆘 Emergency', route: '/(tabs)/profile/emergency' },
-  { label: '📋 Report', route: '/(tabs)/profile/report' },
-  { label: '⚙️ Accessibility', route: '/(tabs)/profile/accessibility' },
+  { label: '🆘 Emergency', a11yLabel: 'Emergency', route: '/(tabs)/profile/emergency' },
+  { label: '📋 Report', a11yLabel: 'Provider report', route: '/(tabs)/profile/report' },
+  { label: '⚙️ Accessibility', a11yLabel: 'Accessibility settings', route: '/(tabs)/profile/accessibility' },
 ] as const;
 
 export default function DashboardScreen() {
@@ -49,8 +49,8 @@ export default function DashboardScreen() {
             <CCText size={18} style={styles.careeName}>{careeName}</CCText>
           </View>
         </View>
-        <TouchableOpacity accessibilityLabel="Notifications">
-          <Text style={styles.notifIcon}>🔔</Text>
+        <TouchableOpacity accessibilityLabel="Notifications" accessibilityRole="button">
+          <Text style={styles.notifIcon} accessible={false}>🔔</Text>
         </TouchableOpacity>
       </View>
 
@@ -69,7 +69,7 @@ export default function DashboardScreen() {
             <CCText size={13} style={styles.cardTitle}>💊 Next medication</CCText>
             <CCText size={17} style={styles.cardMain}>{nextMed.name} · {nextMed.dosage}</CCText>
             <CCText size={14} style={styles.cardSub}>{nextMed.scheduledTime} · {nextMed.instruction}</CCText>
-            <TouchableOpacity onPress={handleMedsNav} style={styles.cardBtn}>
+            <TouchableOpacity onPress={handleMedsNav} style={styles.cardBtn} accessibilityRole="button" accessibilityLabel="View all medications">
               <CCText size={14} style={styles.cardBtnText}>View all medications →</CCText>
             </TouchableOpacity>
           </View>
@@ -80,7 +80,7 @@ export default function DashboardScreen() {
             <CCText size={13} style={styles.cardTitle}>📅 Today's appointment</CCText>
             <CCText size={17} style={styles.cardMain}>{nextAppt.doctorName}</CCText>
             <CCText size={14} style={styles.cardSub}>{nextAppt.specialty} · {nextAppt.location}</CCText>
-            <TouchableOpacity onPress={handleApptNav} style={styles.cardBtn}>
+            <TouchableOpacity onPress={handleApptNav} style={styles.cardBtn} accessibilityRole="button" accessibilityLabel="View schedule">
               <CCText size={14} style={styles.cardBtnText}>View schedule →</CCText>
             </TouchableOpacity>
           </View>
@@ -88,7 +88,7 @@ export default function DashboardScreen() {
 
         <View style={styles.quickRow}>
           {QUICK_LINKS.map((item) => (
-            <TouchableOpacity key={item.label} style={styles.quickBtn} onPress={() => router.push(item.route)}>
+            <TouchableOpacity key={item.label} style={styles.quickBtn} onPress={() => router.push(item.route)} accessibilityRole="button" accessibilityLabel={item.a11yLabel}>
               <CCText size={12} style={styles.quickBtnText}>{item.label}</CCText>
             </TouchableOpacity>
           ))}

@@ -21,13 +21,14 @@ export function AppTextField({ label, error, obscureToggle, secureTextEntry, sty
       <Text style={[styles.label, { fontSize: fs(14) }]}>{label}</Text>
       <View style={[styles.inputRow, { borderColor }]}>
         <TextInput
+          accessibilityLabel={label}
           style={[styles.input, { fontSize: fs(15) }, style]}
           secureTextEntry={obscureToggle ? hidden : secureTextEntry}
           placeholderTextColor={settings.highContrast ? CC.text : CC.textMuted}
           {...rest}
         />
         {obscureToggle && (
-          <TouchableOpacity onPress={() => setHidden((h) => !h)} accessibilityLabel={hidden ? 'Show password' : 'Hide password'}>
+          <TouchableOpacity onPress={() => setHidden((h) => !h)} accessibilityLabel={hidden ? 'Show password' : 'Hide password'} accessibilityRole="button">
             <Text style={[styles.toggle, { fontSize: fs(18) }]}>{hidden ? '👁️' : '🙈'}</Text>
           </TouchableOpacity>
         )}

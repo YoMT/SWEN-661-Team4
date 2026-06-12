@@ -32,14 +32,14 @@ export default function MedicationFormScreen() {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} accessibilityLabel="Go back">
+        <TouchableOpacity onPress={() => router.back()} accessibilityLabel="Go back" accessibilityRole="button">
           <CCText size={16} style={styles.back}>← Back</CCText>
         </TouchableOpacity>
         <CCText size={18} style={styles.title}>Add Medication</CCText>
       </View>
 
       <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-        {error && <CCText size={14} style={styles.error}>{error}</CCText>}
+        {error && <View accessibilityLiveRegion="assertive"><CCText size={14} style={styles.error}>{error}</CCText></View>}
 
         <AppTextField label="Medication name" placeholder="e.g. Levodopa" value={name} onChangeText={setName} />
         <AppTextField label="Dosage" placeholder="e.g. 100mg" value={dosage} onChangeText={setDosage} />
@@ -47,7 +47,7 @@ export default function MedicationFormScreen() {
         <AppTextField label="Scheduled time" placeholder="e.g. 8:00 AM" value={scheduledTime} onChangeText={setScheduledTime} />
 
         <CCText size={14} style={styles.slotLabel}>Time of day</CCText>
-        <View style={styles.slotRow}>
+        <View style={styles.slotRow} accessibilityRole="radiogroup">
           {SLOTS.map((s) => (
             <TouchableOpacity
               key={s}
