@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useErrorContext } from '@/shared/context/error-context';
 import { CC } from '@/constants/theme';
@@ -31,10 +31,15 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 16,
     paddingVertical: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
+    ...Platform.select({
+      web: { boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)' },
+      default: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+      },
+    }),
     elevation: 6,
   },
   message: { flex: 1, color: '#fff', fontSize: 14, fontWeight: '500' },
