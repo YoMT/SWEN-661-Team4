@@ -41,9 +41,14 @@ export default function ProfileScreen() {
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
         <CCText size={20} style={styles.title}>Profile</CCText>
-        <TouchableOpacity onPress={() => router.push('/(tabs)/profile/edit')} accessibilityLabel="Edit profile">
-          <CCText size={16} style={styles.editBtn}>Edit</CCText>
-        </TouchableOpacity>
+        <View style={styles.headerActions}>
+          <TouchableOpacity onPress={() => router.push('/(tabs)/profile/edit')} accessibilityLabel="Edit profile">
+            <CCText size={16} style={styles.editBtn}>Edit</CCText>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={logout} accessibilityLabel="Sign out" accessibilityRole="button">
+            <Text style={styles.logoutIcon}>⏻</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <ScrollView contentContainerStyle={styles.scroll}>
@@ -84,6 +89,8 @@ const styles = StyleSheet.create({
   header: { backgroundColor: CC.surface, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 16, borderBottomWidth: 1, borderBottomColor: CC.borderSubtle },
   title: { fontSize: 20, fontWeight: '700', color: CC.text },
   editBtn: { color: CC.primary, fontSize: 16, fontWeight: '600' },
+  headerActions: { flexDirection: 'row', alignItems: 'center', gap: 16 },
+  logoutIcon: { fontSize: 22, color: CC.error },
   scroll: { padding: 16 },
   avatarSection: { alignItems: 'center', marginBottom: 24 },
   avatar: { width: 80, height: 80, borderRadius: 40, backgroundColor: CC.primary, alignItems: 'center', justifyContent: 'center', marginBottom: 12 },
