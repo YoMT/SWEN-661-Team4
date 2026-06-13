@@ -1,5 +1,6 @@
 ﻿import React, { useState, useCallback, memo } from 'react';
-import { Modal, View, Text, TouchableOpacity, FlatList, TextInput, KeyboardAvoidingView, Platform, StyleSheet, SafeAreaView } from 'react-native';
+import { Modal, View, Text, TouchableOpacity, FlatList, TextInput, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { CC } from '@/constants/theme';
 import { useAiAssistantContext } from '@/features/ai-assistant/ai-assistant-context';
 import type { ChatMessage } from '@/features/ai-assistant/chat-message';
