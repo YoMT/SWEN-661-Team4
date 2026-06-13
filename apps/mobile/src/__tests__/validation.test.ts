@@ -82,11 +82,11 @@ describe("validate.signupForm", () => {
   });
 
   test("rejects empty name", () => {
-    expect(validate.signupForm("", "john@example.com", "password123")).toBe("This field is required.");
+    expect(validate.signupForm("", "john@example.com", "password123")).toBe("Name is required.");
   });
 
   test("rejects whitespace-only name", () => {
-    expect(validate.signupForm("   ", "john@example.com", "password123")).toBe("This field is required.");
+    expect(validate.signupForm("   ", "john@example.com", "password123")).toBe("Name is required.");
   });
 
   test("rejects invalid email when name is valid", () => {
@@ -98,6 +98,6 @@ describe("validate.signupForm", () => {
   });
 
   test("validates name first when all fields are invalid", () => {
-    expect(validate.signupForm("", "bad", "123")).toBe("This field is required.");
+    expect(validate.signupForm("", "bad", "123")).toBe("Name is required.");
   });
 });

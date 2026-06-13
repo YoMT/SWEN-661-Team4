@@ -22,8 +22,8 @@ afterAll(() => {
 });
 
 describe('ErrorBoundary', () => {
-  it('renders children normally when no error is thrown', () => {
-    const { getByText } = render(
+  it('renders children normally when no error is thrown', async () => {
+    const { getByText } = await render(
       <ErrorBoundary>
         <GoodChild />
       </ErrorBoundary>
@@ -31,8 +31,8 @@ describe('ErrorBoundary', () => {
     expect(getByText('All good')).toBeTruthy();
   });
 
-  it('renders the error screen when a child throws', () => {
-    const { getByText } = render(
+  it('renders the error screen when a child throws', async () => {
+    const { getByText } = await render(
       <ErrorBoundary>
         <BadChild shouldThrow />
       </ErrorBoundary>
@@ -41,8 +41,8 @@ describe('ErrorBoundary', () => {
     expect(getByText('Test render error')).toBeTruthy();
   });
 
-  it('shows "Try again" button when an error is caught', () => {
-    const { getByLabelText } = render(
+  it('shows "Try again" button when an error is caught', async () => {
+    const { getByLabelText } = await render(
       <ErrorBoundary>
         <BadChild shouldThrow />
       </ErrorBoundary>
@@ -50,8 +50,8 @@ describe('ErrorBoundary', () => {
     expect(getByLabelText('Try again')).toBeTruthy();
   });
 
-  it('clears the error and re-renders children when "Try again" is pressed', () => {
-    const { getByLabelText, getByText, queryByText } = render(
+  it('clears the error and re-renders children when "Try again" is pressed', async () => {
+    const { getByLabelText, getByText, queryByText } = await render(
       <ErrorBoundary>
         <BadChild shouldThrow={false} />
       </ErrorBoundary>

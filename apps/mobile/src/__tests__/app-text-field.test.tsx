@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react-native';
+import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import { AppTextField } from '../shared/components/app-text-field';
 
 jest.mock('../shared/components/cc-text', () => ({
@@ -25,23 +25,23 @@ beforeEach(() => {
 });
 
 describe('AppTextField', () => {
-  it('renders with a label', () => {
-    const { getByText } = render(<AppTextField label="Email" />);
+  it('renders with a label', async () => {
+    const { getByText } = await render(<AppTextField label="Email" />);
     expect(getByText('Email')).toBeTruthy();
   });
 
-  it('renders the input with the correct accessibilityLabel', () => {
-    const { getByLabelText } = render(<AppTextField label="Email" />);
+  it('renders the input with the correct accessibilityLabel', async () => {
+    const { getByLabelText } = await render(<AppTextField label="Email" />);
     expect(getByLabelText('Email')).toBeTruthy();
   });
 
-  it('does not show error text when no error prop is given', () => {
-    const { queryByText } = render(<AppTextField label="Email" />);
+  it('does not show error text when no error prop is given', async () => {
+    const { queryByText } = await render(<AppTextField label="Email" />);
     expect(queryByText(/required|invalid|error/i)).toBeNull();
   });
 
-  it('shows error text when error prop is provided', () => {
-    const { getByText } = render(<AppTextField label="Email" error="Invalid email" />);
+  it('shows error text when error prop is provided', async () => {
+    const { getByText } = await render(<AppTextField label="Email" error="Invalid email" />);
     expect(getByText('Invalid email')).toBeTruthy();
   });
 
@@ -51,20 +51,19 @@ describe('AppTextField', () => {
     ).not.toThrow();
   });
 
-  it('shows the toggle button when obscureToggle is true', () => {
-    const { getByLabelText } = render(
+  it('shows the toggle button when obscureToggle is true', async () => {
+    const { getByLabelText } = await render(
       <AppTextField label="Password" secureTextEntry obscureToggle />
     );
     expect(getByLabelText('Show password')).toBeTruthy();
   });
 
-  it('toggles password visibility when the toggle button is pressed', () => {
-    const { getByLabelText } = render(
+  it('toggles password visibility when the toggle button is pressed', async () => {
+    const { getByLabelText } = await render(
       <AppTextField label="Password" secureTextEntry obscureToggle />
     );
-    const toggleBtn = getByLabelText('Show password');
-    fireEvent.press(toggleBtn);
-    expect(getByLabelText('Hide password')).toBeTruthy();
+    fireEvent.press(getByLabelText('Show password'));
+    await waitFor(() => expect(getByLabelText('Hide password')).toBeTruthy());
   });
 
   it('renders without crashing in high contrast mode', () => {

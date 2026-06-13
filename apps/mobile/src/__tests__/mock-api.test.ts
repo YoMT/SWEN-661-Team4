@@ -27,11 +27,11 @@ describe("POST /ai/chat — aiReply keyword routing", () => {
   });
 
   test("responds to symptom keyword", () => {
-    expect(chat("any symptoms?").reply).toContain("symptom");
+    expect(chat("any symptoms?").reply).toContain("dizziness");
   });
 
   test("responds to 'feeling' keyword", () => {
-    expect(chat("how is she feeling?").reply).toContain("symptom");
+    expect(chat("how is she feeling?").reply).toContain("dizziness");
   });
 
   test("responds to blood pressure keyword", () => {

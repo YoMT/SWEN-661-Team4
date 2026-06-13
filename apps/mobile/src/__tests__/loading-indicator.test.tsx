@@ -7,18 +7,18 @@ describe('LoadingIndicator', () => {
     expect(() => render(<LoadingIndicator />)).not.toThrow();
   });
 
-  it('does not show a message when no message prop is given', () => {
-    const { queryByText } = render(<LoadingIndicator />);
+  it('does not show a message when no message prop is given', async () => {
+    const { queryByText } = await render(<LoadingIndicator />);
     expect(queryByText(/.+/)).toBeNull();
   });
 
-  it('renders the message text when provided', () => {
-    const { getByText } = render(<LoadingIndicator message="Please wait…" />);
+  it('renders the message text when provided', async () => {
+    const { getByText } = await render(<LoadingIndicator message="Please wait…" />);
     expect(getByText('Please wait…')).toBeTruthy();
   });
 
-  it('does not render message text when message is empty string', () => {
-    const { queryByText } = render(<LoadingIndicator message="" />);
+  it('does not render message text when message is empty string', async () => {
+    const { queryByText } = await render(<LoadingIndicator message="" />);
     expect(queryByText(/.+/)).toBeNull();
   });
 });

@@ -16,70 +16,60 @@ jest.mock('../shared/components/cc-text', () => ({
 
 describe('AppButton', () => {
   it('renders without crashing', () => {
-    expect(() => {
-      render(<AppButton label="Save Appointment" />);
-    }).not.toThrow();
+    expect(() => render(<AppButton label="Save Appointment" />)).not.toThrow();
   });
 
   it('renders loading state without crashing', () => {
-    expect(() => {
-      render(<AppButton label="Loading" isLoading />);
-    }).not.toThrow();
+    expect(() => render(<AppButton label="Loading" isLoading />)).not.toThrow();
   });
 
   it('renders outline variant without crashing', () => {
-    expect(() => {
-      render(<AppButton label="Cancel" variant="outline" />);
-    }).not.toThrow();
+    expect(() => render(<AppButton label="Cancel" variant="outline" />)).not.toThrow();
   });
 
   it('renders danger variant without crashing', () => {
-    expect(() => {
-      render(<AppButton label="Delete" variant="danger" />);
-    }).not.toThrow();
+    expect(() => render(<AppButton label="Delete" variant="danger" />)).not.toThrow();
   });
 
   it('renders text variant without crashing', () => {
-    expect(() => {
-      render(<AppButton label="Skip" variant="text" />);
-    }).not.toThrow();
+    expect(() => render(<AppButton label="Skip" variant="text" />)).not.toThrow();
   });
 
-  it('renders label text', () => {
-    const { getByText } = render(<AppButton label="Confirm" />);
+  it('renders label text', async () => {
+    const { getByText } = await render(<AppButton label="Confirm" />);
     expect(getByText('Confirm')).toBeTruthy();
   });
 
-  it('calls onPress when pressed', () => {
+  it('calls onPress when pressed', async () => {
     const onPress = jest.fn();
-    const { getByRole } = render(<AppButton label="Submit" onPress={onPress} />);
+    const { getByRole } = await render(<AppButton label="Submit" onPress={onPress} />);
     fireEvent.press(getByRole('button'));
     expect(onPress).toHaveBeenCalledTimes(1);
   });
 
-  it('does not call onPress when disabled', () => {
+  it('does not call onPress when disabled', async () => {
     const onPress = jest.fn();
-    const { getByRole } = render(<AppButton label="Submit" onPress={onPress} disabled />);
+    const { getByRole } = await render(<AppButton label="Submit" onPress={onPress} disabled />);
     fireEvent.press(getByRole('button'));
     expect(onPress).not.toHaveBeenCalled();
   });
 
-  it('does not call onPress when loading', () => {
+  it('does not call onPress when loading', async () => {
     const onPress = jest.fn();
-    const { getByRole } = render(<AppButton label="Submit" onPress={onPress} isLoading />);
+    const { getByRole } = await render(<AppButton label="Submit" onPress={onPress} isLoading />);
     fireEvent.press(getByRole('button'));
     expect(onPress).not.toHaveBeenCalled();
   });
 
-  it('uses custom accessibilityLabel when provided', () => {
-    const { getByLabelText } = render(
+  it('uses custom accessibilityLabel when provided', async () => {
+    const { getByLabelText } = await render(
       <AppButton label="Submit" accessibilityLabel="Custom label" />
     );
     expect(getByLabelText('Custom label')).toBeTruthy();
   });
 
-  it('falls back to label as accessibilityLabel when not provided', () => {
-    const { getByLabelText } = render(<AppButton label="Save" />);
+  it('falls back to label as accessibilityLabel when not provided', async () => {
+    const { getByLabelText } = await render(<AppButton label="Save" />);
     expect(getByLabelText('Save')).toBeTruthy();
   });
 });
