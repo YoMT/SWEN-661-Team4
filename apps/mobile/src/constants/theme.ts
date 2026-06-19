@@ -35,7 +35,7 @@ export const CC = {
   onSuccess: '#FFFFFF',
   warning: '#9E6E00',
   onWarning: '#1A1A1A',
-  error: '#C85C5C',
+  error: '#B34040',
   onError: '#FFFFFF',
 } as const;
 

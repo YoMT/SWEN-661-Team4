@@ -15,14 +15,17 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
     try {
       await Future.delayed(const Duration(milliseconds: 800));
-      // Mock: any non-empty credentials succeed
       if (email.isEmpty || password.isEmpty) {
         errorMessage = 'Please enter your email and password.';
         return false;
       }
+      if (email != 'demo@careconnect.com' || password != 'demo123') {
+        errorMessage = 'Invalid email or password.';
+        return false;
+      }
       _currentUser = UserModel(
-        id: '1',
-        name: email.split('@').first,
+        id: 'u1',
+        name: 'Alex Johnson',
         email: email,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),

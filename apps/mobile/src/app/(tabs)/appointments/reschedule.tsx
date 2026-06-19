@@ -5,16 +5,18 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppTextField } from '@/shared/components/app-text-field';
 import { AppButton } from '@/shared/components/app-button';
 import { CCText } from '@/shared/components/cc-text';
+import { useAccessibilityContext } from '@/features/accessibility/accessibility-context';
 import { CC } from '@/constants/theme';
 
 export default function RescheduleScreen() {
   const router = useRouter();
+  const { touchTarget } = useAccessibilityContext();
   const [dateTime, setDateTime] = useState('');
 
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
+        <TouchableOpacity onPress={() => router.back()} accessibilityLabel="Go back" accessibilityRole="button" style={{ minHeight: touchTarget, justifyContent: 'center' }}>
           <CCText size={16} style={styles.back}>← Back</CCText>
         </TouchableOpacity>
         <CCText size={18} style={styles.title}>Reschedule Appointment</CCText>

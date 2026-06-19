@@ -32,7 +32,7 @@ export default function EmergencyContactScreen() {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={{ minHeight: touchTarget, justifyContent: 'center' }}>
+        <TouchableOpacity onPress={() => router.back()} style={{ minHeight: touchTarget, justifyContent: 'center' }} accessibilityLabel="Go back" accessibilityRole="button">
           <CCText size={16} style={styles.back}>← Back</CCText>
         </TouchableOpacity>
         <CCText size={18} style={styles.title}>Emergency</CCText>
@@ -78,6 +78,8 @@ export default function EmergencyContactScreen() {
             multiline
             numberOfLines={4}
             textAlignVertical="top"
+            accessibilityLabel="Quick incident log"
+            accessibilityHint="Describe what happened"
           />
           <TouchableOpacity style={[styles.saveBtn, { minHeight: touchTarget }]} onPress={saveIncident} accessibilityLabel="Save incident log">
             <CCText size={16} style={styles.saveBtnText}>{incidentSaved ? '✓ Saved' : 'Save Incident Log'}</CCText>

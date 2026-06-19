@@ -6,11 +6,13 @@ import { AppTextField } from '@/shared/components/app-text-field';
 import { AppButton } from '@/shared/components/app-button';
 import { CCText } from '@/shared/components/cc-text';
 import { useAppointmentContext } from '@/features/appointments/appointment-context';
+import { useAccessibilityContext } from '@/features/accessibility/accessibility-context';
 import { CC } from '@/constants/theme';
 import type { AppointmentType } from '@/features/appointments/appointment';
 
 export default function NewAppointmentScreen() {
   const router = useRouter();
+  const { touchTarget } = useAccessibilityContext();
   const { addAppointment } = useAppointmentContext();
   const [doctorName, setDoctorName] = useState('');
   const [specialty, setSpecialty] = useState('');
@@ -30,23 +32,30 @@ export default function NewAppointmentScreen() {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
+        <TouchableOpacity onPress={() => router.back()} accessibilityLabel="Go back" accessibilityRole="button" style={{ minHeight: touchTarget, justifyContent: 'center' }}>
           <CCText size={16} style={styles.back}>← Back</CCText>
         </TouchableOpacity>
         <CCText size={18} style={styles.title}>Book Appointment</CCText>
       </View>
 
       <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-        {error && <CCText size={14} style={styles.error}>{error}</CCText>}
+        {error && <View accessibilityLiveRegion="assertive"><CCText size={14} style={styles.error}>{error}</CCText></View>}
         <AppTextField label="Doctor name" placeholder="e.g. Dr. Sarah Chen" value={doctorName} onChangeText={setDoctorName} />
         <AppTextField label="Specialty" placeholder="e.g. Neurology" value={specialty} onChangeText={setSpecialty} />
         <AppTextField label="Location" placeholder="e.g. City Medical Center" value={location} onChangeText={setLocation} />
         <AppTextField label="Date & time" placeholder="e.g. 2026-06-15 10:00 AM" value={dateTime} onChangeText={setDateTime} />
 
         <CCText size={14} style={styles.typeLabel}>Appointment type</CCText>
-        <View style={styles.typeRow}>
+        <View style={styles.typeRow} accessibilityRole="radiogroup">
           {(['inPerson', 'video'] as AppointmentType[]).map((t) => (
-            <TouchableOpacity key={t} style={[styles.typeBtn, type === t && styles.typeBtnActive]} onPress={() => setType(t)}>
+            <TouchableOpacity
+              key={t}
+              style={[styles.typeBtn, type === t && styles.typeBtnActive]}
+              onPress={() => setType(t)}
+              accessibilityRole="radio"
+              accessibilityState={{ checked: type === t }}
+              accessibilityLabel={t === 'inPerson' ? 'In-person appointment' : 'Video appointment'}
+            >
               <CCText size={14} style={[styles.typeBtnText, type === t && styles.typeBtnTextActive]}>{t === 'inPerson' ? '🏥 In person' : '📹 Video'}</CCText>
             </TouchableOpacity>
           ))}

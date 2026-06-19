@@ -16,7 +16,7 @@ class AppColors {
   static const Color onSuccess = Color(0xFFFFFFFF);
   static const Color warning = Color(0xFFD4A574);
   static const Color onWarning = Color(0xFF1A1A1A); // amber needs dark text
-  static const Color error = Color(0xFFC85C5C);
+  static const Color error = Color(0xFFB34040);
   static const Color onError = Color(0xFFFFFFFF);
   static const Color surfaceAlt = Color(0xFFEBF0F6); // light primary tint
 
