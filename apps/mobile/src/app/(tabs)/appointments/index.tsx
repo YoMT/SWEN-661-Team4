@@ -15,7 +15,7 @@ const ApptCard = memo(function ApptCard({ appt, onReschedule }: { appt: Appointm
     <View style={styles.card}>
       <View style={styles.cardRow}>
         <View style={styles.cardIcon}>
-          <Text style={styles.cardIconText}>{isVideo ? '📹' : '🏥'}</Text>
+          <Text style={styles.cardIconText} accessible={false}>{isVideo ? '📹' : '🏥'}</Text>
         </View>
         <View style={styles.cardInfo}>
           <CCText size={16} style={styles.cardDoctor}>{appt.doctorName}</CCText>
@@ -26,11 +26,11 @@ const ApptCard = memo(function ApptCard({ appt, onReschedule }: { appt: Appointm
       </View>
       <View style={styles.cardActions}>
         {isVideo && (
-          <TouchableOpacity style={styles.joinBtn} accessibilityLabel="Join video call">
+          <TouchableOpacity style={styles.joinBtn} accessibilityLabel="Join video call" accessibilityRole="button">
             <CCText size={14} style={styles.joinBtnText}>📹 Join video call</CCText>
           </TouchableOpacity>
         )}
-        <TouchableOpacity onPress={onReschedule} style={styles.rescheduleBtn} accessibilityLabel="Reschedule appointment">
+        <TouchableOpacity onPress={onReschedule} style={styles.rescheduleBtn} accessibilityLabel="Reschedule appointment" accessibilityRole="button">
           <CCText size={14} style={styles.rescheduleBtnText}>Reschedule</CCText>
         </TouchableOpacity>
       </View>
@@ -68,7 +68,7 @@ export default function AppointmentScreen() {
     <SafeAreaView style={shared.safeArea}>
       <View style={shared.screenHeader}>
         <CCText size={20} style={styles.title}>Appointments</CCText>
-        <TouchableOpacity onPress={handleBook} style={styles.addBtn} accessibilityLabel="Book appointment">
+        <TouchableOpacity onPress={handleBook} style={styles.addBtn} accessibilityLabel="Book appointment" accessibilityRole="button">
           <CCText size={14} style={styles.addBtnText}>+ Book</CCText>
         </TouchableOpacity>
       </View>

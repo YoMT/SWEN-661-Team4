@@ -33,7 +33,7 @@ export default function AccessibilityScreen() {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} style={{ minHeight: touchTarget, justifyContent: 'center' }}>
+        <TouchableOpacity onPress={() => router.back()} style={{ minHeight: touchTarget, justifyContent: 'center' }} accessibilityLabel="Go back" accessibilityRole="button">
           <CCText size={16} style={styles.back}>← Back</CCText>
         </TouchableOpacity>
         <CCText size={18} style={styles.title}>Accessibility</CCText>
@@ -41,7 +41,7 @@ export default function AccessibilityScreen() {
 
       <ScrollView contentContainerStyle={styles.scroll}>
         <CCText size={16} style={styles.sectionTitle}>Text size</CCText>
-        <View style={styles.textSizeRow}>
+        <View style={styles.textSizeRow} accessibilityRole="radiogroup">
           {TEXT_SIZES.map((size) => (
             <TouchableOpacity
               key={size}

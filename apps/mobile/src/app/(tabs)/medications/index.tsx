@@ -29,7 +29,7 @@ export default function MedicationListScreen() {
     <SafeAreaView style={shared.safeArea}>
       <View style={shared.screenHeader}>
         <CCText size={20} style={styles.title}>Medications</CCText>
-        <TouchableOpacity onPress={handleAdd} style={styles.addBtn} accessibilityLabel="Add medication">
+        <TouchableOpacity onPress={handleAdd} style={styles.addBtn} accessibilityLabel="Add medication" accessibilityRole="button">
           <CCText size={14} style={styles.addBtnText}>+ Add</CCText>
         </TouchableOpacity>
       </View>

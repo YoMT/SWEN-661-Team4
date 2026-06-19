@@ -44,7 +44,7 @@ export default function SymptomLogScreen() {
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}><CCText size={20} style={styles.title}>Log a symptom</CCText></View>
       <ScrollView contentContainerStyle={styles.scroll}>
-        {saved && <View style={styles.savedBanner}><CCText size={14} style={styles.savedText}>✓ Symptom logged</CCText></View>}
+        {saved && <View style={styles.savedBanner} accessibilityLiveRegion="polite"><CCText size={14} style={styles.savedText}>✓ Symptom logged</CCText></View>}
 
         <CCText size={15} style={styles.sectionLabel}>What are you experiencing?</CCText>
         <View style={styles.symptomsGrid}>

@@ -6,11 +6,13 @@ import { AppTextField } from '@/shared/components/app-text-field';
 import { AppButton } from '@/shared/components/app-button';
 import { CCText } from '@/shared/components/cc-text';
 import { useProfileContext } from '@/features/profile/profile-context';
+import { useAccessibilityContext } from '@/features/accessibility/accessibility-context';
 import { CC } from '@/constants/theme';
 
 export default function EditProfileScreen() {
   const router = useRouter();
   const { profile, update } = useProfileContext();
+  const { touchTarget } = useAccessibilityContext();
   const [name, setName] = useState(profile?.name ?? '');
   const [email, setEmail] = useState(profile?.email ?? '');
   const [phone, setPhone] = useState(profile?.phone ?? '');
@@ -27,7 +29,7 @@ export default function EditProfileScreen() {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
+        <TouchableOpacity onPress={() => router.back()} accessibilityLabel="Go back" accessibilityRole="button" style={{ minHeight: touchTarget, justifyContent: 'center' }}>
           <CCText size={16} style={styles.back}>← Back</CCText>
         </TouchableOpacity>
         <CCText size={18} style={styles.title}>Edit Profile</CCText>

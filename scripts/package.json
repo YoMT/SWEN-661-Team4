@@ -1,0 +1,9 @@
+{
+  "name": "careconnect-scripts",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "docx": "^9.7.1"
+  }
+}

@@ -8,6 +8,7 @@ import { useSymptomContext } from '@/features/symptoms/symptom-context';
 import { useAppointmentContext } from '@/features/appointments/appointment-context';
 import { PeggyFab } from '@/features/ai-assistant/components/peggy-fab';
 import { CCText, useFS } from '@/shared/components/cc-text';
+import { useAccessibilityContext } from '@/features/accessibility/accessibility-context';
 import { CC } from '@/constants/theme';
 import { shared } from '@/constants/shared-styles';
 import type { CaretakerNote } from '@/features/caretaker/caretaker-note';
@@ -48,6 +49,7 @@ const NoteCard = memo(function NoteCard({
             onPress={() => onSubmitReply(note.id)}
             style={styles.replyBtn}
             accessibilityLabel="Submit reply"
+            accessibilityRole="button"
           >
             <CCText size={14} style={styles.replyBtnText}>Reply</CCText>
           </TouchableOpacity>
@@ -59,6 +61,7 @@ const NoteCard = memo(function NoteCard({
 
 export default function CaretakerNotesScreen() {
   const router = useRouter();
+  const { touchTarget } = useAccessibilityContext();
   const { notes, addReply } = useCaretakerContext();
   const { givenDoses, totalDoses } = useMedicationContext();
   const { logs } = useSymptomContext();
@@ -111,7 +114,7 @@ export default function CaretakerNotesScreen() {
   return (
     <SafeAreaView style={shared.safeArea}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} accessibilityLabel="Go back">
+        <TouchableOpacity onPress={() => router.back()} accessibilityLabel="Go back" accessibilityRole="button" style={{ minHeight: touchTarget, justifyContent: 'center' }}>
           <CCText size={16} style={styles.back}>← Back</CCText>
         </TouchableOpacity>
         <CCText size={18} style={styles.title}>Caretaker Notes</CCText>

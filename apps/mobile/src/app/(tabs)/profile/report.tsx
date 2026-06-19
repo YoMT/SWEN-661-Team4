@@ -6,13 +6,14 @@ import { useAppointmentContext } from '@/features/appointments/appointment-conte
 import { useSymptomContext } from '@/features/symptoms/symptom-context';
 import { PeggyFab } from '@/features/ai-assistant/components/peggy-fab';
 import { CCText } from '@/shared/components/cc-text';
+import { useAccessibilityContext } from '@/features/accessibility/accessibility-context';
 import { CC } from '@/constants/theme';
 import { adherenceRate } from '@/features/profile/care-report';
 
 function ReportRow({ icon, label, value }: { icon: string; label: string; value: string }) {
   return (
     <View style={styles.reportRow}>
-      <Text style={styles.rowIcon}>{icon}</Text>
+      <Text style={styles.rowIcon} accessible={false}>{icon}</Text>
       <View style={styles.rowInfo}>
         <CCText size={14} style={styles.rowLabel}>{label}</CCText>
         <CCText size={16} style={styles.rowValue}>{value}</CCText>
@@ -23,6 +24,7 @@ function ReportRow({ icon, label, value }: { icon: string; label: string; value:
 
 export default function ProviderReportScreen() {
   const router = useRouter();
+  const { touchTarget } = useAccessibilityContext();
   const { totalDoses, givenDoses, medications } = useMedicationContext();
   const { appointments } = useAppointmentContext();
   const { logs } = useSymptomContext();
@@ -41,7 +43,7 @@ export default function ProviderReportScreen() {
   return (
     <SafeAreaView style={styles.safe}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
+        <TouchableOpacity onPress={() => router.back()} accessibilityLabel="Go back" accessibilityRole="button" style={{ minHeight: touchTarget, justifyContent: 'center' }}>
           <CCText size={16} style={styles.back}>← Back</CCText>
         </TouchableOpacity>
         <CCText size={18} style={styles.title}>Provider Report</CCText>
