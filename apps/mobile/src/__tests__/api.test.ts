@@ -6,8 +6,8 @@ import {
 } from "../services/api";
 import { DEMO_EMAIL, DEMO_PASSWORD, DEMO_TOKEN } from "../services/mock-api";
 
-// EXPO_PUBLIC_API_URL is not set in tests → USE_MOCK = true
-// All requests route through mockRequest internally
+// EXPO_PUBLIC_API_URL=http://localhost is set in jest.env.js → USE_MOCK = false
+// All requests go through fetch; MSW intercepts them in jest.setup.js
 
 beforeEach(() => {
   setAuthToken(null);
@@ -33,7 +33,7 @@ describe("registerErrorHandler", () => {
     expect(() => registerErrorHandler(null)).not.toThrow();
   });
 
-  test("calls the handler when a mock endpoint throws", async () => {
+  test("calls the handler when an API endpoint returns an error status", async () => {
     const onError = jest.fn();
     registerErrorHandler(onError);
 
@@ -41,7 +41,7 @@ describe("registerErrorHandler", () => {
       api.post("/auth/login", { email: "bad@test.com", password: "wrong" })
     ).rejects.toThrow();
 
-    expect(onError).toHaveBeenCalledWith("Invalid email or password.");
+    expect(onError).toHaveBeenCalledWith(expect.stringContaining("400"));
   });
 });
 
