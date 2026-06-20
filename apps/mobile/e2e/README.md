@@ -1,18 +1,17 @@
-# CareConnect Mobile — E2E Tests (Maestro)
+# CareConnect Mobile — E2E Tests (Maestro · Android)
 
 End-to-end tests for the CareConnect React Native app using
-[Maestro](https://maestro.mobile.dev). Flows exercise complete user
-journeys against a live running app on an iOS simulator or Android emulator.
+[Maestro](https://maestro.mobile.dev). Flows target an **Android emulator or
+physical device** connected via ADB.
 
 ---
 
 ## Why Maestro
 
-- **No native build changes required** — works with Expo Go or an Expo dev build
-- **Uses existing accessibility labels** — every button and input in the app already has
-  an `accessibilityLabel` (from the WCAG 2.1 AA audit); Maestro finds elements by `label:`
-  directly — no `testID` props needed
-- **YAML flows** double as readable documentation of the user journey
+- No native build changes required — works with Expo Go or an Expo dev build
+- Uses existing `accessibilityLabel` props (set during WCAG 2.1 AA audit) via Maestro's
+  `tapOn: label:` — no `testID` props needed
+- YAML flows double as readable documentation of the user journey
 
 ---
 
@@ -33,34 +32,60 @@ iwr -Uri "https://get.maestro.mobile.dev/install.ps1" -OutFile "$env:TEMP\instal
 
 Verify: `maestro --version`
 
-### 2. Start the App on a Simulator or Emulator
+### 2. Set up Android SDK & ADB
+
+Install [Android Studio](https://developer.android.com/studio) and ensure `adb` is on your PATH:
+
+```bash
+adb version   # should print Android Debug Bridge version x.x.x
+```
+
+### 3. Start an Android Emulator
+
+**Via Android Studio:** Open AVD Manager → start a device (API 33+ recommended).
+
+**Via command line:**
+```bash
+# List available AVDs
+emulator -list-avds
+
+# Start one (replace with your AVD name)
+emulator -avd Pixel_7_API_34 &
+```
+
+Confirm it's ready:
+```bash
+adb devices   # should show: emulator-5554  device
+```
+
+### 4. Build & run the app on the emulator
 
 ```bash
 # From apps/mobile/
-pnpm start --ios      # iOS Simulator
-pnpm start --android  # Android Emulator
+pnpm start --android     # Expo Go on emulator — fastest, no build step
+
+# — OR for a standalone dev build —
+npx expo run:android
 ```
 
-The app uses its built-in mock API when `EXPO_PUBLIC_API_URL` is not set, so
-**no real backend is needed** — all flows work out-of-the-box.
+The app uses its built-in mock API when `EXPO_PUBLIC_API_URL` is unset,
+so **no real backend is needed** — all flows work out-of-the-box.
 
 **Default credentials used in flows:** `demo@careconnect.com` / `demo123`
-(accepted by the mock API for any email/password combination).
+(mock API accepts any email/password).
 
 ---
 
 ## App ID
 
-| Platform | App ID |
+| Target | App ID |
 |---|---|
-| iOS dev build | `com.anonymous.mobile` |
 | Android dev build | `com.anonymous.mobile` |
-| Expo Go (iOS) | `host.exp.exponent` — see note below |
+| Android Expo Go | `host.exp.exponent` — see note below |
 
-> **Expo Go note**: If running inside Expo Go (not a custom dev build), omit `appId` from the
-> flow header and start the app first; Maestro auto-detects the foreground app.
-> Remove the `appId:` line and the `launchApp` step, then run `maestro test` after the app
-> is visible on screen.
+> **Expo Go note:** If running inside Expo Go (not a custom dev build), omit the `appId:`
+> line and the `launchApp` step from each flow. Start the app first, then run
+> `maestro test` — Maestro auto-detects the foreground app via ADB.
 
 ---
 
@@ -73,7 +98,7 @@ The app uses its built-in mock API when `EXPO_PUBLIC_API_URL` is not set, so
 | `flows/medication-add.yaml` | Login → Medications tab → Add medication → Verify in list |
 | `flows/symptom-log.yaml` | Login → Symptoms tab → Log pain symptom → Verify success banner |
 | `flows/dashboard-navigation.yaml` | Login → All tab bar tabs + dashboard quick links |
-| `flows/profile-journey.yaml` | Login → Edit profile → Emergency log → Reply to caretaker note → Peggy AI chat |
+| `flows/profile-journey.yaml` | Login → Edit profile → Emergency log → Caretaker reply → Peggy AI chat |
 
 ---
 
@@ -86,14 +111,14 @@ maestro test e2e/flows/auth-login.yaml
 # All flows (sequential)
 maestro test e2e/flows/
 
-# All flows with JUnit output (CI)
+# All flows with JUnit XML output (CI)
 maestro test e2e/flows/ --format junit --output coverage/e2e-results.xml
 ```
 
-Or use the npm script aliases:
+npm script aliases (from `apps/mobile/`):
 
 ```bash
-pnpm e2e              # runs all flows
+pnpm e2e              # all flows
 pnpm e2e:auth         # login flow only
 pnpm e2e:all          # all flows + JUnit XML to coverage/e2e-results.xml
 ```
@@ -105,7 +130,7 @@ pnpm e2e:all          # all flows + JUnit XML to coverage/e2e-results.xml
 ```
 e2e/
   _helpers/
-    login.yaml              # Reusable login sub-flow (imported via runFlow:)
+    login.yaml                  # Reusable login sub-flow (imported via runFlow:)
   flows/
     auth-login.yaml
     auth-signup.yaml
@@ -120,42 +145,60 @@ e2e/
 
 ## Selector Strategy
 
-All flows use `label:` (Maestro maps this to `accessibilityLabel` in React Native):
+All flows use `label:` which Maestro maps to `accessibilityLabel` in the Android
+accessibility tree:
 
 ```yaml
 - tapOn:
-    label: "Email address"     # finds the TextInput with accessibilityLabel="Email address"
+    label: "Email address"
 - inputText: "demo@careconnect.com"
 ```
 
-Visible text is used as fallback for button labels where the text and `accessibilityLabel`
-are the same (e.g., `tapOn: "Sign In"`).
+Visible text is used as fallback for buttons where the text equals the accessibility
+label (e.g., `tapOn: "Sign In"`).
+
+Back navigation uses `tapOn: label: "Go back"` (the app's explicit back button).
+The Android system swipe-back gesture is disabled in the app
+(`predictiveBackGestureEnabled: false` in `app.json`), so the UI back button is
+the correct and only back path.
 
 ---
 
-## CI Integration
-
-Add to your CI pipeline after `pnpm test` (unit/integration):
+## CI Integration (Android)
 
 ```yaml
-# Example GitHub Actions step
-- name: Start iOS Simulator
-  run: xcrun simctl boot "iPhone 15"
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-- name: Start Expo app
-  run: cd apps/mobile && pnpm start --ios &
-  env:
-    EXPO_PUBLIC_API_URL: ""   # use mock API
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
 
-- name: Wait for app to load
-  run: sleep 30
+      - name: Install dependencies
+        run: cd apps/mobile && pnpm install
 
-- name: Run E2E flows
-  run: cd apps/mobile && maestro test e2e/flows/ --format junit --output coverage/e2e-results.xml
+      - name: Install Maestro
+        run: curl -Ls "https://get.maestro.mobile.dev" | bash
 
-- name: Upload E2E results
-  uses: actions/upload-artifact@v3
-  with:
-    name: e2e-results
-    path: apps/mobile/coverage/e2e-results.xml
+      - name: Start Android Emulator & run app
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          profile: pixel_6
+          script: |
+            cd apps/mobile
+            pnpm start --android &
+            sleep 45
+            maestro test e2e/flows/ --format junit --output coverage/e2e-results.xml
+
+      - name: Upload E2E results
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-results
+          path: apps/mobile/coverage/e2e-results.xml
 ```
