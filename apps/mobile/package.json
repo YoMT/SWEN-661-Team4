@@ -46,7 +46,10 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "e2e": "maestro test e2e/flows/",
+    "e2e:auth": "maestro test e2e/flows/auth-login.yaml",
+    "e2e:all": "maestro test e2e/flows/ --format junit --output coverage/e2e-results.xml"
   },
   "private": true,
   "jest": {

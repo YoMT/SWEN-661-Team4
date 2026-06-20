@@ -1,0 +1,78 @@
+appId: com.anonymous.mobile
+---
+# Journey: Profile tab → edit profile → caretaker notes → emergency contacts → AI chat
+- launchApp:
+    clearState: true
+
+# ── Login ─────────────────────────────────────────────────────────────────────
+- runFlow: ../_helpers/login.yaml
+
+# ── Profile overview ──────────────────────────────────────────────────────────
+- tapOn:
+    label: "Profile tab"
+- assertVisible: "Alex Johnson"
+- assertVisible: "demo@careconnect.com"
+
+# ── Edit profile ──────────────────────────────────────────────────────────────
+- tapOn:
+    label: "Edit profile"
+- assertVisible: "Edit Profile"
+
+- tapOn:
+    label: "Full name"
+- clearText
+- inputText: "Alex Johnson"
+
+- tapOn: "Save Changes"
+
+# Back on profile screen
+- assertVisible: "Alex Johnson"
+
+# ── Emergency contacts ────────────────────────────────────────────────────────
+- tapOn:
+    label: "Emergency contacts"
+- assertVisible: "Sarah Johnson"
+
+# Log an incident
+- tapOn:
+    label: "Quick incident log"
+- inputText: "Patient reported dizziness after lunch"
+- tapOn:
+    label: "Save incident log"
+- assertVisible: "✓ Saved"
+
+- tapOn:
+    label: "Go back"
+
+# ── Caretaker notes ───────────────────────────────────────────────────────────
+- tapOn:
+    label: "Caretaker notes"
+- assertVisible: "Maria (Day Nurse)"
+- assertVisible: "Margaret had a good morning."
+
+# Reply to note
+- tapOn:
+    label: "Reply to note"
+- inputText: "Thank you for the update, Maria!"
+- tapOn:
+    label: "Submit reply"
+- assertVisible: "Thank you for the update, Maria!"
+
+- tapOn:
+    label: "Go back"
+
+# ── AI assistant (Peggy FAB) ──────────────────────────────────────────────────
+- tapOn:
+    label: "Open Peggy assistant"
+- assertVisible: "Peggy"
+- assertVisible: "Hi, I'm Peggy!"
+
+- tapOn:
+    label: "Message input"
+- inputText: "How is Margaret doing today?"
+- tapOn:
+    label: "Send message"
+- assertVisible: "How is Margaret doing today?"
+
+- tapOn:
+    label: "Close assistant"

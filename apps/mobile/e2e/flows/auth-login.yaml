@@ -1,0 +1,30 @@
+appId: com.anonymous.mobile
+---
+# Journey: Landing → Login → Dashboard
+- launchApp:
+    clearState: true
+
+# ── Landing screen ────────────────────────────────────────────────────────────
+- assertVisible: "CareConnect"
+- assertVisible: "A gentle helping hand"
+
+# Navigate to login via the header "Sign in" link
+- tapOn:
+    label: "Sign in"
+
+# ── Login screen ──────────────────────────────────────────────────────────────
+- assertVisible: "Sign in to CareConnect"
+
+- tapOn:
+    label: "Email address"
+- inputText: "demo@careconnect.com"
+
+- tapOn:
+    label: "Password"
+- inputText: "demo123"
+
+- tapOn: "Sign In"
+
+# ── Dashboard ─────────────────────────────────────────────────────────────────
+- assertVisible: "Doses today"
+- assertVisible: "Margaret Johnson"

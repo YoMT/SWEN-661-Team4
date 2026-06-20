@@ -1,0 +1,43 @@
+appId: com.anonymous.mobile
+---
+# Journey: Dashboard → Medications tab → Add medication → Verify in list
+- launchApp:
+    clearState: true
+
+# ── Login ─────────────────────────────────────────────────────────────────────
+- runFlow: ../_helpers/login.yaml
+
+# ── Medications list ──────────────────────────────────────────────────────────
+- tapOn:
+    label: "Medications tab"
+- assertVisible: "Medications"
+- assertVisible: "Add medication"
+
+# Open the add-medication form
+- tapOn:
+    label: "Add medication"
+
+# ── Add medication form ───────────────────────────────────────────────────────
+- assertVisible: "Add Medication"
+
+- tapOn:
+    label: "Medication name"
+- inputText: "Aspirin"
+
+- tapOn:
+    label: "Dosage"
+- inputText: "100mg"
+
+- tapOn:
+    label: "Instructions"
+- inputText: "Take with a full glass of water"
+
+# Select a time slot
+- tapOn:
+    label: "morning"
+
+- tapOn: "Save Medication"
+
+# ── Back on medications list ──────────────────────────────────────────────────
+# New medication should appear in the list
+- assertVisible: "Aspirin"

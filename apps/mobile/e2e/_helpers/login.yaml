@@ -1,0 +1,14 @@
+# Reusable login sub-flow.
+# Assumes the app is already on the landing screen.
+# Usage: runFlow: ../_helpers/login.yaml
+- tapOn:
+    label: "Sign in"
+- assertVisible: "Sign in to CareConnect"
+- tapOn:
+    label: "Email address"
+- inputText: "demo@careconnect.com"
+- tapOn:
+    label: "Password"
+- inputText: "demo123"
+- tapOn: "Sign In"
+- assertVisible: "Doses today"

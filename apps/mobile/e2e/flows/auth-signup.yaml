@@ -1,0 +1,32 @@
+appId: com.anonymous.mobile
+---
+# Journey: Landing → Signup → Dashboard
+- launchApp:
+    clearState: true
+
+# ── Landing screen ────────────────────────────────────────────────────────────
+- assertVisible: "CareConnect"
+
+# Tap the primary CTA to open the signup form
+- tapOn: "Get started — it's free  →"
+
+# ── Signup screen ─────────────────────────────────────────────────────────────
+- assertVisible: "Create account"
+
+- tapOn:
+    label: "Full name"
+- inputText: "Alex Johnson"
+
+- tapOn:
+    label: "Email address"
+- inputText: "alex.e2e@careconnect.com"
+
+- tapOn:
+    label: "Password"
+- inputText: "Password123!"
+
+- tapOn: "Create Account"
+
+# ── Dashboard ─────────────────────────────────────────────────────────────────
+# After successful signup the app redirects to the main tab view
+- assertVisible: "Doses today"

@@ -1,0 +1,33 @@
+appId: com.anonymous.mobile
+---
+# Journey: Dashboard → Symptoms tab → Select symptom → Save → Verify entry
+- launchApp:
+    clearState: true
+
+# ── Login ─────────────────────────────────────────────────────────────────────
+- runFlow: ../_helpers/login.yaml
+
+# ── Symptoms tab ──────────────────────────────────────────────────────────────
+- tapOn:
+    label: "Symptoms tab"
+- assertVisible: "Log a symptom"
+
+# Select the "Pain" symptom type
+- tapOn:
+    label: "Pain"
+
+# (Optional) add a note
+- tapOn:
+    label: "Note (optional)"
+- inputText: "Sharp pain in left shoulder"
+
+# Save the log — button is now enabled after selecting a symptom
+- tapOn:
+    label: "Save Log"
+
+# ── Verify success ────────────────────────────────────────────────────────────
+- assertVisible: "✓ Symptom logged"
+
+# Logged entry should appear in the recent entries list
+- assertVisible:
+    text: "Severity 5/10"

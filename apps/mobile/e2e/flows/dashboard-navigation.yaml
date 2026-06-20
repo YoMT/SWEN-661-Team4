@@ -1,0 +1,66 @@
+appId: com.anonymous.mobile
+---
+# Journey: Dashboard quick links + tab bar navigation across all main tabs
+- launchApp:
+    clearState: true
+
+# ── Login ─────────────────────────────────────────────────────────────────────
+- runFlow: ../_helpers/login.yaml
+
+# ── Dashboard stat tiles ──────────────────────────────────────────────────────
+- assertVisible: "Doses today"
+- assertVisible: "Upcoming"
+
+# Navigate to medications list via dashboard card
+- tapOn:
+    label: "View all medications"
+- assertVisible: "Medications"
+- tapOn:
+    label: "Home tab"
+
+# Navigate to appointments list via dashboard card
+- tapOn:
+    label: "View schedule"
+- assertVisible: "Appointments"
+- tapOn:
+    label: "Home tab"
+
+# ── Tab bar navigation ────────────────────────────────────────────────────────
+# Medications tab
+- tapOn:
+    label: "Medications tab"
+- assertVisible: "Medications"
+
+# Appointments tab
+- tapOn:
+    label: "Appointments tab"
+- assertVisible: "Appointments"
+
+# Symptoms tab
+- tapOn:
+    label: "Symptoms tab"
+- assertVisible: "Log a symptom"
+
+# Profile tab
+- tapOn:
+    label: "Profile tab"
+- assertVisible: "Alex Johnson"
+
+# ── Dashboard quick links ─────────────────────────────────────────────────────
+- tapOn:
+    label: "Home tab"
+
+- tapOn:
+    label: "Emergency"
+- assertVisible: "Emergency contacts"
+- tapOn:
+    label: "Go back"
+
+- tapOn:
+    label: "Home tab"
+
+- tapOn:
+    label: "Provider report"
+- assertVisible: "Provider Report"
+- tapOn:
+    label: "Go back"
