@@ -54,8 +54,28 @@
     "testMatch": ["**/__tests__/**/*.test.[jt]s?(x)", "**/?(*.)+(spec|test).[jt]s?(x)"],
     "setupFiles": ["<rootDir>/jest.env.js"],
     "setupFilesAfterEnv": ["<rootDir>/jest.setup.js"],
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}",
+      "!src/**/*.d.ts",
+      "!src/**/__tests__/**",
+      "!src/**/index.ts",
+      "!src/components/**",
+      "!src/app/explore.tsx",
+      "!src/app/index.tsx",
+      "!src/app/**/_layout.tsx",
+      "!src/**/*.web.{ts,tsx}"
+    ],
     "moduleNameMapper": {
+      "^@/assets/(.*)$": "<rootDir>/src/__tests__/asset-mock.js",
       "\\.(css)$": "<rootDir>/src/__tests__/css-mock.js"
+    },
+    "coverageThreshold": {
+      "global": {
+        "statements": 75,
+        "branches": 70,
+        "functions": 70,
+        "lines": 75
+      }
     },
     "reporters": [
       "default",
