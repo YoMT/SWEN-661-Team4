@@ -1,0 +1,27 @@
+appId: host.exp.exponent
+---
+# Journey: Dashboard → Symptoms tab → Select symptom → Save → Verify entry
+
+# ── Login ─────────────────────────────────────────────────────────────────────
+- runFlow: ../_helpers/login-exponent.yaml
+
+# ── Symptoms tab ──────────────────────────────────────────────────────────────
+- tapOn: "Symptoms"
+- assertVisible: "Log a symptom"
+
+# Select the "Pain" symptom type (button has accessibilityLabel="Pain")
+# Deliberately skip the Note field: typing there opens the keyboard which then
+# blocks the Save Log button if adjustResize is not in effect.
+- tapOn:
+    label: "Pain"
+
+# Save the log — enabled because a symptom type is now selected
+- tapOn: "Save Log"
+
+# ── Verify success ────────────────────────────────────────────────────────────
+# "✓ Symptom logged" banner confirms the save; the recent entry ("Severity 5/10")
+# is below the fold in the ScrollView and cannot be asserted without scrolling.
+- assertVisible: "✓ Symptom logged"
+
+# ── Teardown ──────────────────────────────────────────────────────────────────
+- runFlow: ../_helpers/logout-exponent.yaml

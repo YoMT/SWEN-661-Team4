@@ -1,0 +1,43 @@
+appId: host.exp.exponent
+---
+# Journey: Dashboard → Medications tab → Add medication → Verify in list
+
+# ── Login ─────────────────────────────────────────────────────────────────────
+- runFlow: ../_helpers/login-exponent.yaml
+
+# ── Medications list ──────────────────────────────────────────────────────────
+- tapOn: "Meds"
+- assertVisible: "Medications"
+
+# Open the add-medication form (button has accessibilityLabel="Add medication")
+- tapOn:
+    label: "Add medication"
+
+# ── Add medication form ───────────────────────────────────────────────────────
+- assertVisible: "Add Medication"
+
+# Tap each field by its placeholder text — this is immune to Gboard interception
+# because placeholder strings are unique and don't appear in keyboard suggestions.
+# pressKey: back between fields is avoided because it may navigate away from the
+# form if the keyboard was already auto-dismissed after inputText.
+- tapOn: "e.g. Levodopa"
+- inputText: "Aspirin"
+
+- tapOn: "e.g. 100mg"
+- inputText: "100mg"
+
+- tapOn: "e.g. Take with food"
+- inputText: "Take with a full glass of water"
+# Keyboard is open from Instructions typing. Dismiss it so Save Medication is
+# visible in the accessibility tree (occluded elements behind the IME are excluded).
+# Safe on a pushed route: Back-with-keyboard-open = close keyboard, not navigate back.
+# Also skips the "morning" time slot tap — morning is already the useState default;
+# tapping it at the keyboard boundary was opening the Gboard settings panel.
+- pressKey: back
+- tapOn: "Save Medication"
+
+# ── Back on medications list ──────────────────────────────────────────────────
+- assertVisible: "Aspirin"
+
+# ── Teardown ──────────────────────────────────────────────────────────────────
+- runFlow: ../_helpers/logout-exponent.yaml

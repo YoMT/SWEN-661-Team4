@@ -1,0 +1,42 @@
+appId: host.exp.exponent
+---
+# Journey: Landing → Login → Dashboard (Expo Go)
+
+# Safety net: if stored token auto-logged in, tap Profile then Sign out
+- tapOn:
+    text: "Profile"
+    optional: true
+- tapOn:
+    text: "Sign out"
+    optional: true
+
+# ── Landing screen ────────────────────────────────────────────────────────────
+- extendedWaitUntil:
+    visible: "Made for caregivers"
+    timeout: 10000
+- assertVisible: "CareConnect"
+- assertVisible: "Made for caregivers"
+- tapOn: "Sign in"
+
+# ── Login screen ──────────────────────────────────────────────────────────────
+- assertVisible: "Sign in"
+- tapOn:
+    label: "Email address"
+- inputText: "demo@careconnect.com"
+# Tap password by placeholder — avoids the visual label Text above the input
+- tapOn: "Enter your password"
+- inputText: "demo123"
+- pressKey: back
+# Point-based tap: Sign In button is below password field (bottom at y=1443).
+# Case-insensitive text "Sign In" also matches card title "Sign in" (non-clickable).
+- tapOn:
+    point: "50%,64%"
+
+# ── Dashboard ─────────────────────────────────────────────────────────────────
+- extendedWaitUntil:
+    visible: "Doses today"
+    timeout: 20000
+- assertVisible: "Margaret Johnson"
+
+# ── Teardown ──────────────────────────────────────────────────────────────────
+- runFlow: ../_helpers/logout-exponent.yaml

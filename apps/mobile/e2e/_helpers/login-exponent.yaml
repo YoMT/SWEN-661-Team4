@@ -1,0 +1,36 @@
+appId: host.exp.exponent
+---
+# Shared sub-flow: login with demo credentials (Expo Go)
+# Used by: dashboard-navigation, medication-add, symptom-log, profile-journey
+# ADB-restarts the bundle between flows (via run-e2e.ps1), so app is always
+# on Landing screen. The optional Profile→Sign out is a safety net for the rare
+# case the stored token auto-logs in after a bundle reload.
+
+- tapOn:
+    text: "Profile"
+    optional: true
+- tapOn:
+    text: "Sign out"
+    optional: true
+
+# "Made for caregivers" is unique to the Landing screen
+- extendedWaitUntil:
+    visible: "Made for caregivers"
+    timeout: 10000
+
+# ── Landing → Login ────────────────────────────────────────────────────────────
+- tapOn: "Sign in"
+- assertVisible: "Sign in"
+- tapOn:
+    label: "Email address"
+- inputText: "demo@careconnect.com"
+- tapOn: "Enter your password"
+- inputText: "demo123"
+- pressKey: back
+# Point-based tap: Sign In button at ~64% from top (card title "Sign in" appears
+# first in DOM and would be matched by case-insensitive text search)
+- tapOn:
+    point: "50%,64%"
+- extendedWaitUntil:
+    visible: "Doses today"
+    timeout: 20000

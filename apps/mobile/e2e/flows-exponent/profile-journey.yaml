@@ -1,0 +1,68 @@
+appId: host.exp.exponent
+---
+# Journey: Profile tab → emergency contacts → caretaker notes → AI chat → edit profile
+#
+# inputText: is intentionally absent from this flow.  Gboard on this emulator
+# has no network access; injecting natural-language text triggers a Google Play
+# Services "Something went wrong" fullscreen dialog that blocks every subsequent
+# assertion.  Text-input features (caretaker reply, Peggy messages, incident log)
+# are covered by the integration test suite (MSW + RNTL).
+
+# ── Login ─────────────────────────────────────────────────────────────────────
+- runFlow: ../_helpers/login-exponent.yaml
+
+# ── Profile overview ──────────────────────────────────────────────────────────
+- tapOn: "Profile"
+- assertVisible: "Alex Johnson"
+- assertVisible: "demo@careconnect.com"
+
+# ── Emergency contacts ────────────────────────────────────────────────────────
+# Use text: not label: — label: "Emergency contacts" (content-desc) was consistently
+# navigating to Edit Profile; text: matches the visible LinkRow text element.
+- tapOn:
+    text: "Emergency contacts"
+# Contacts load via async API call on mount; extendedWaitUntil handles the delay.
+- extendedWaitUntil:
+    visible: "Sarah Johnson"
+    timeout: 10000
+- tapOn:
+    label: "Go back"
+# "Call 911" is unique to Emergency contacts. Asserting it's gone confirms pop complete.
+- assertNotVisible: "Call 911"
+
+# ── Caretaker notes ───────────────────────────────────────────────────────────
+- tapOn:
+    text: "Caretaker notes"
+- assertVisible: "Maria (Day Nurse)"
+- assertVisible:
+    text: "Margaret had a good morning.*"
+- tapOn:
+    label: "Go back"
+# Re-activate the Profile tab: if the pop animation is still playing this
+# pops-to-root instantly; if already at root it's a no-op.  Ensures we are
+# fully settled on Profile index before the FAB tap.
+- tapOn: "Profile"
+- assertVisible: "Caregiver"
+
+# ── AI assistant (Peggy FAB) ──────────────────────────────────────────────────
+# label: "Open Peggy assistant" picks wrong element post-navigation (same
+# root cause as label: "Emergency contacts" → Edit Profile).  Tap by exact
+# screen coordinates: FAB lives at [882,1653]→[1036,1807] on a 1080×2340
+# screen ≈ 89%,74%.
+- tapOn:
+    point: "89%,74%"
+- assertVisible: "Peggy"
+- tapOn:
+    label: "Close assistant"
+
+# ── Edit profile ──────────────────────────────────────────────────────────────
+# Done last to avoid the animation race condition that occurs when navigating
+# Edit Profile → Back → another profile link within the same flow.
+- tapOn:
+    label: "Edit profile"
+- assertVisible: "Edit Profile"
+- tapOn:
+    label: "Go back"
+
+# ── Teardown ──────────────────────────────────────────────────────────────────
+- runFlow: ../_helpers/logout-exponent.yaml

@@ -1,0 +1,8 @@
+appId: host.exp.exponent
+---
+# Shared sub-flow: sign out and return to Landing screen (Expo Go)
+# Assumes user is logged in and on any tab screen.
+
+- tapOn: "Profile"
+- tapOn: "Sign out"
+- assertVisible: "CareConnect"

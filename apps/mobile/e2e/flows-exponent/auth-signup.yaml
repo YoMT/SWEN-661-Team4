@@ -1,0 +1,50 @@
+appId: host.exp.exponent
+---
+# Journey: Landing → Signup → Dashboard
+
+# Safety net: if stored token auto-logged in, tap Profile then Sign out
+- tapOn:
+    text: "Profile"
+    optional: true
+- tapOn:
+    text: "Sign out"
+    optional: true
+
+# ── Landing screen ────────────────────────────────────────────────────────────
+- extendedWaitUntil:
+    visible: "Made for caregivers"
+    timeout: 10000
+- assertVisible: "CareConnect"
+
+# CTA button has trailing em-dash + arrow; use wildcard regex to match
+- tapOn:
+    text: "Get started.*"
+
+# ── Signup screen ─────────────────────────────────────────────────────────────
+- assertVisible: "Create account"
+
+# Tap each field by placeholder text; dismiss keyboard between fields so it
+# doesn't intercept the next tap (Gboard overlays can steal label: searches)
+- tapOn: "Your name"
+- inputText: "Alex Johnson"
+- pressKey: back
+
+- tapOn: "you@example.com"
+- inputText: "alex.e2e@careconnect.com"
+- pressKey: back
+
+- tapOn: "Create a password"
+- inputText: "Password123!"
+- pressKey: back
+
+# Coordinate tap for Create Account button at ~70% from top
+- tapOn:
+    point: "50%,70%"
+
+# ── Dashboard ─────────────────────────────────────────────────────────────────
+- extendedWaitUntil:
+    visible: "Doses today"
+    timeout: 20000
+
+# ── Teardown ──────────────────────────────────────────────────────────────────
+- runFlow: ../_helpers/logout-exponent.yaml

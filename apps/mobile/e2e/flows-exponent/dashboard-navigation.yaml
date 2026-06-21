@@ -1,0 +1,58 @@
+appId: host.exp.exponent
+---
+# Journey: Dashboard quick links + tab bar navigation across all main tabs
+
+# ── Login ─────────────────────────────────────────────────────────────────────
+- runFlow: ../_helpers/login-exponent.yaml
+
+# ── Dashboard stat tiles ──────────────────────────────────────────────────────
+- assertVisible: "Doses today"
+- assertVisible: "Appointments"
+
+# Navigate to medications list via dashboard card (button has trailing arrow in text)
+- tapOn:
+    text: "View all medications.*"
+- assertVisible: "Medications"
+- tapOn: "Home"
+
+# Navigate to appointments list via dashboard card
+- tapOn:
+    text: "View schedule.*"
+- assertVisible: "Appointments"
+- tapOn: "Home"
+
+# ── Tab bar navigation ────────────────────────────────────────────────────────
+# Tab labels are the visual text under each icon in the bottom tab bar
+- tapOn: "Meds"
+- assertVisible: "Medications"
+
+- tapOn: "Schedule"
+- assertVisible: "Appointments"
+
+- tapOn: "Symptoms"
+- assertVisible: "Log a symptom"
+
+- tapOn: "Profile"
+- assertVisible: "Alex Johnson"
+
+# ── Dashboard quick links ─────────────────────────────────────────────────────
+- tapOn: "Home"
+
+# Buttons have emoji prefix in text; wildcard matches "🆘 Emergency" etc.
+- tapOn:
+    text: ".*Emergency"
+- assertVisible: "Emergency contacts"
+- tapOn:
+    label: "Go back"
+
+- tapOn: "Home"
+
+# a11yLabel="Provider report" but visible text is "📋 Report"
+- tapOn:
+    label: "Provider report"
+- assertVisible: "Provider Report"
+- tapOn:
+    label: "Go back"
+
+# ── Teardown ──────────────────────────────────────────────────────────────────
+- runFlow: ../_helpers/logout-exponent.yaml
