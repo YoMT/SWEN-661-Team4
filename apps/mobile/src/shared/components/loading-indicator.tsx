@@ -4,7 +4,12 @@ import { CC } from '@/constants/theme';
 
 export function LoadingIndicator({ message }: { message?: string }) {
   return (
-    <View style={styles.wrapper}>
+    <View
+      style={styles.wrapper}
+      accessible={true}
+      accessibilityRole="progressbar"
+      accessibilityLabel={message ?? 'Loading'}
+    >
       <ActivityIndicator size={32} color={CC.primary} />
       {message && <Text style={styles.msg}>{message}</Text>}
     </View>

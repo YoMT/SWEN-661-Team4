@@ -13,7 +13,11 @@ type HintRowProps = {
 
 export function HintRow({ title = 'Try editing', hint = 'app/index.tsx' }: HintRowProps) {
   return (
-    <View style={styles.stepRow}>
+    <View
+      style={styles.stepRow}
+      accessible={true}
+      accessibilityLabel={typeof hint === 'string' ? `${title}: ${hint}` : title}
+    >
       <ThemedText type="small">{title}</ThemedText>
       <ThemedView type="backgroundSelected" style={styles.codeSnippet}>
         <ThemedText themeColor="textSecondary">{hint}</ThemedText>
