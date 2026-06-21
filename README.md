@@ -13,6 +13,7 @@ CareConnect is a cross-platform Healthcare Management Application designed to su
 | Yoseph Tesfay    | [@Yomt](https://github.com/Yomt)                       | Yoseph.Tesfay@gmail.com      | EST      | Windows |
 | Donielle Kinchen | [@doniellekinchen](https://github.com/doniellekinchen) | donielle.kinchen10@gmail.com | EST      | macOS   |
 | Nuboke Bakoh     | [@Priestb](https://github.com/priestb)                 | priestbakoh@gmail.com        | EST      | Windows |
+| Prashanth Saseenthar | [@psaseenthar](https://github.com/psaseenthar)     | prashanth_saseenthar@hotmail.com | EST  | Windows |
 
 ---
 
