@@ -1,56 +1,69 @@
-# Welcome to your Expo app 👋
+# CareConnect — Mobile (Expo / React Native)
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+The mobile build of **CareConnect**, a healthcare/caregiver app designed around
+four WCAG-aligned accessibility constraints (large interactive buttons,
+confirmation dialogs, double-tap prevention, reduced motion).
 
-## Get started
+This Expo app is the team's **reference implementation** — the Flutter app
+(`apps/flutter-app`) is kept at feature parity with it.
 
-1. Install dependencies
+**Stack:** Expo SDK 54 · React Native 0.81 · React 19 · Expo Router (file-based) ·
+TypeScript. Data is served by a built-in in-memory mock API, so **no backend is
+required** — the app and all tests work offline.
 
-   ```bash
-   npm install
-   ```
+## Prerequisites
 
-2. Start the app
+- Node.js 20 LTS+ and pnpm 9+
+- For device runs / E2E: Android Studio (+ an emulator) or, on macOS, Xcode
 
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+Install dependencies from the repo root (see the [root README](../../README.md)):
 
 ```bash
-npm run reset-project
+pnpm install
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Running
 
-### Other setup steps
+```bash
+cd apps/mobile
+pnpm start        # Expo dev server — then press a / i / w for Android / iOS / web
+pnpm android      # build & run on Android (expo run:android)
+pnpm ios          # build & run on iOS (macOS only)
+pnpm web          # run in the browser
+```
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+Demo credentials: **`demo@careconnect.com` / `demo123`** (the mock API accepts any
+email/password).
 
-## Learn more
+## Testing
 
-To learn more about developing your project with Expo, look at the following resources:
+```bash
+cd apps/mobile
+pnpm test                                  # Jest: unit + integration (with coverage)
+npx jest --testPathPattern=integration     # integration tests only
+pnpm e2e                                    # Maestro E2E flows (requires an emulator)
+pnpm lint                                   # ESLint
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+- **Unit + integration** — Jest + React Native Testing Library + MSW. Details and
+  pitfalls: [docs/integration-testing.md](docs/integration-testing.md). Coverage
+  report: [docs/coverage-report.md](docs/coverage-report.md). Thresholds: 75%
+  statements/lines, 70% branches/functions.
+- **End-to-end** — Maestro (Android), with prerequisites and CI setup in
+  [e2e/README.md](e2e/README.md).
+- **Screen reader / TalkBack** — manual guide in
+  `docs/talkback-manual-testing.docx`; `pnpm talkback` / `pnpm talkback:off`
+  toggle TalkBack on a connected device.
 
-## Join the community
+## Project structure
 
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```
+src/
+  app/                  Expo Router routes — (auth) and (tabs) route groups
+  features/<feature>/   context + models + components per feature
+  services/             api.ts, mock-api.ts, validation.ts
+  shared/               shared components, contexts, hooks
+  data/seeds.ts         demo / seed data
+  __tests__/            unit, integration, and a11y test suites
+e2e/                    Maestro end-to-end flows
+```

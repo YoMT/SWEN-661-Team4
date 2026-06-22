@@ -113,6 +113,50 @@ flutter build ios        # build iOS (requires macOS + Xcode)
 
 ---
 
+## Testing
+
+Automated tests live alongside each app. The **web** and **desktop** apps do not
+have test suites yet.
+
+### Flutter App (`apps/flutter-app`)
+
+Unit, widget, accessibility, and integration tests run with `flutter test`;
+end-to-end tests use Flutter's `integration_test` harness (with Maestro flows for
+device black-box runs).
+
+```bash
+cd apps/flutter-app
+flutter analyze                                          # static analysis
+flutter test                                             # unit + widget + a11y + integration
+flutter test --coverage                                  # writes coverage/lcov.info
+flutter test integration_test/app_test.dart -d windows   # E2E on a device (or -d chrome)
+```
+
+- Coverage **83.8%** (threshold 80%) — see [coverage_report.md](apps/flutter-app/docs/coverage_report.md).
+- E2E setup (integration_test + Maestro) — see [e2e/README.md](apps/flutter-app/e2e/README.md).
+
+### Mobile App (`apps/mobile`)
+
+Unit + integration tests run with Jest (React Native Testing Library + MSW);
+end-to-end tests use Maestro against an Android emulator/device.
+
+```bash
+cd apps/mobile
+pnpm test                                  # Jest: unit + integration (with coverage)
+npx jest --testPathPattern=integration     # integration tests only
+pnpm e2e                                    # Maestro E2E flows (requires an emulator)
+pnpm e2e:auth                              # a single Maestro flow
+```
+
+- Jest coverage thresholds: 75% statements/lines, 70% branches/functions.
+- Integration tests — see [integration-testing.md](apps/mobile/docs/integration-testing.md).
+- E2E setup (Maestro, Android) — see [e2e/README.md](apps/mobile/e2e/README.md).
+
+> Run `pnpm install` at the repo root first. The Flutter app's dependencies are
+> managed separately via `flutter pub get`.
+
+---
+
 ## Branch Strategy
 
 We follow a **feature-branch workflow** with two long-lived branches:
