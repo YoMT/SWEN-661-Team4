@@ -10,10 +10,8 @@ class SymptomNoteField extends StatelessWidget {
   Widget build(BuildContext context) {
     return VoiceInputField(
       label: 'Additional notes',
+      hint: 'e.g. after lunch, lasted 10 min',
       controller: controller,
-      onVoiceTap: () {
-        // TODO: implement voice input
-      },
     );
   }
 }

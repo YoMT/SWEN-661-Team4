@@ -1,5 +1,6 @@
 import 'package:go_router/go_router.dart';
 
+import '../../features/auth/providers/auth_provider.dart';
 import '../../features/landing/screens/landing_screen.dart';
 import '../../features/auth/screens/login_screen.dart';
 import '../../features/auth/screens/signup_screen.dart';
@@ -26,8 +27,21 @@ import '../../features/profile/screens/edit_profile_screen.dart';
 import '../../shared/widgets/main_scaffold.dart';
 
 class AppRouter {
-  static final router = GoRouter(
+  static const _publicRoutes = {'/', '/login', '/signup'};
+
+  /// Builds the app router with an auth-aware redirect, mirroring the mobile
+  /// app's `(auth)` vs `(tabs)` route gating. Unauthenticated users are kept on
+  /// the public routes; authenticated users are sent into the app shell.
+  static GoRouter create(AuthProvider auth) => GoRouter(
     initialLocation: '/',
+    refreshListenable: auth,
+    redirect: (context, state) {
+      final loggedIn = auth.isAuthenticated;
+      final isPublic = _publicRoutes.contains(state.matchedLocation);
+      if (!loggedIn && !isPublic) return '/login';
+      if (loggedIn && isPublic) return '/dashboard';
+      return null;
+    },
     routes: [
       GoRoute(path: '/', builder: (ctx, state) => const LandingScreen()),
 

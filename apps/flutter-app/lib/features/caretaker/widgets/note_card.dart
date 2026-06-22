@@ -28,9 +28,10 @@ class NoteCard extends StatelessWidget {
                 ),
                 child: Text('Reply: ${note.replyContent}'),
               ),
+            ] else ...[
+              const SizedBox(height: 8),
+              NoteReplyField(noteId: note.id),
             ],
-            const SizedBox(height: 8),
-            NoteReplyField(noteId: note.id),
           ],
         ),
       ),

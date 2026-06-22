@@ -1,8 +1,10 @@
 import 'package:flutter/foundation.dart';
 import '../models/emergency_contact_model.dart';
+import '../../../core/data/seeds.dart';
+import '../../../core/error/error_bus.dart';
 
 class EmergencyProvider extends ChangeNotifier {
-  List<EmergencyContactModel> contacts = _sampleContacts();
+  List<EmergencyContactModel> contacts = Seeds.emergencyContacts();
   String incidentNote = '';
   bool incidentSaved = false;
   bool isLoading = false;
@@ -23,6 +25,7 @@ class EmergencyProvider extends ChangeNotifier {
       incidentNote = '';
     } catch (e) {
       errorMessage = 'Failed to save incident log.';
+      ErrorBus.instance.push(errorMessage!);
     } finally {
       isLoading = false;
       notifyListeners();
@@ -40,6 +43,7 @@ class EmergencyProvider extends ChangeNotifier {
       contacts = [...contacts, contact];
     } catch (e) {
       errorMessage = 'Failed to add contact.';
+      ErrorBus.instance.push(errorMessage!);
     }
     notifyListeners();
   }
@@ -50,37 +54,8 @@ class EmergencyProvider extends ChangeNotifier {
       contacts = contacts.where((c) => c.id != id).toList();
     } catch (e) {
       errorMessage = 'Failed to remove contact.';
+      ErrorBus.instance.push(errorMessage!);
     }
     notifyListeners();
   }
-}
-
-List<EmergencyContactModel> _sampleContacts() {
-  final now = DateTime.now();
-  return [
-    EmergencyContactModel(
-      id: '1',
-      createdAt: now,
-      updatedAt: now,
-      name: 'Sarah Carter',
-      phone: '(678) 555-0192',
-      relationship: 'Daughter',
-    ),
-    EmergencyContactModel(
-      id: '2',
-      createdAt: now,
-      updatedAt: now,
-      name: 'Dr. Lin',
-      phone: '(404) 555-0138',
-      relationship: 'Neurologist',
-    ),
-    EmergencyContactModel(
-      id: '3',
-      createdAt: now,
-      updatedAt: now,
-      name: 'Marcus Washington',
-      phone: '(770) 555-0247',
-      relationship: 'Son',
-    ),
-  ];
 }

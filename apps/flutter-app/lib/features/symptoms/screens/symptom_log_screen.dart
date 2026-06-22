@@ -6,6 +6,7 @@ import '../widgets/severity_selector.dart';
 import '../widgets/save_log_button.dart';
 import '../widgets/recent_entries_list.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/services/speech_input_service.dart';
 import '../../ai_assistant/widgets/assistant_toggle_button.dart';
 import '../../ai_assistant/widgets/assistant_drawer.dart';
 
@@ -18,11 +19,41 @@ class SymptomLogScreen extends StatefulWidget {
 
 class _SymptomLogScreenState extends State<SymptomLogScreen> {
   final _noteController = TextEditingController();
+  final _speech = SpeechInputService();
+  bool _listening = false;
 
   @override
   void dispose() {
+    _speech.dispose();
     _noteController.dispose();
     super.dispose();
+  }
+
+  Future<void> _toggleDictation() async {
+    if (_speech.isListening) {
+      await _speech.stop();
+      if (mounted) setState(() => _listening = false);
+      return;
+    }
+    final started = await _speech.start(
+      onResult: (words) {
+        _noteController.text = words;
+        _noteController.selection =
+            TextSelection.collapsed(offset: words.length);
+      },
+      onDone: () {
+        if (mounted) setState(() => _listening = false);
+      },
+    );
+    if (!mounted) return;
+    if (started) {
+      setState(() => _listening = true);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Voice input is not available on this device')),
+      );
+    }
   }
 
   @override
@@ -50,7 +81,7 @@ class _SymptomLogScreenState extends State<SymptomLogScreen> {
               ],
             ),
           ),
-        const Text("What's bothering Eleanor?",
+        const Text("What's bothering Margaret?",
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: AppColors.text)),
         const SizedBox(height: 16),
         const SymptomButtonsRow(),
@@ -68,12 +99,13 @@ class _SymptomLogScreenState extends State<SymptomLogScreen> {
             hintStyle: const TextStyle(color: AppColors.textMuted),
    suffixIcon: Semantics(
   key: const Key('voiceInputButton'),
-  label: 'Voice input',
+  label: _listening ? 'Stop voice input' : 'Voice input',
   button: true,
   child: IconButton(
-    icon: const Icon(Icons.mic_none, color: AppColors.primary),
-    onPressed: () {},
-    tooltip: 'Voice input',
+    icon: Icon(_listening ? Icons.mic : Icons.mic_none,
+        color: _listening ? AppColors.error : AppColors.primary),
+    onPressed: _toggleDictation,
+    tooltip: _listening ? 'Stop voice input' : 'Voice input',
   ),
 ),
           ),

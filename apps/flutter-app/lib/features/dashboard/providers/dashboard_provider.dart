@@ -1,8 +1,9 @@
 import 'package:flutter/foundation.dart';
+import '../../../core/data/seeds.dart';
 
 class DashboardProvider extends ChangeNotifier {
   bool isLoading = false;
-  String careeName = 'Eleanor Reyes';
+  String careeName = Seeds.careeName;
   String? errorMessage;
 
   Future<void> refresh() async {

@@ -10,24 +10,32 @@ class LoadingIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(
-            width: size,
-            height: size,
-            child: const CircularProgressIndicator(
-              strokeWidth: 3,
-              color: AppColors.primary,
-              strokeCap: StrokeCap.round,
-            ),
+    // Announced to screen readers as a single "Loading" (or message) node,
+    // matching the mobile app's progressbar role + label.
+    return Semantics(
+      label: message ?? 'Loading',
+      container: true,
+      child: ExcludeSemantics(
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                width: size,
+                height: size,
+                child: const CircularProgressIndicator(
+                  strokeWidth: 3,
+                  color: AppColors.primary,
+                  strokeCap: StrokeCap.round,
+                ),
+              ),
+              if (message != null) ...[
+                const SizedBox(height: 16),
+                Text(message!, style: const TextStyle(fontSize: 15, color: AppColors.textMuted)),
+              ],
+            ],
           ),
-          if (message != null) ...[
-            const SizedBox(height: 16),
-            Text(message!, style: const TextStyle(fontSize: 15, color: AppColors.textMuted)),
-          ],
-        ],
+        ),
       ),
     );
   }

@@ -50,7 +50,7 @@ class RecentEntriesList extends StatelessWidget {
                         style: const TextStyle(
                             fontSize: 15, fontWeight: FontWeight.w600, color: AppColors.text)),
                     Text(
-                      'Severity ${log.severity}/5${log.note != null ? ' · ${log.note}' : ''}',
+                      'Severity ${log.severity}/10${log.note != null ? ' · ${log.note}' : ''}',
                       style: const TextStyle(fontSize: 13, color: AppColors.textMuted),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,

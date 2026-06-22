@@ -141,36 +141,36 @@ class LandingScreen extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // Left column: text + CTAs
+              // Left column: text + CTAs (scrolls on short windows)
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildBadge(),
-                    const SizedBox(height: 20),
-                    _buildHeadline(),
-                    const SizedBox(height: 16),
-                    const Text(
-                      'Keep track of medicines, visits, and little moments — without the worry. We\'ll remember the details so you don\'t have to.',
-                      style: TextStyle(fontSize: 16, color: AppColors.textMuted, height: 1.5),
-                    ),
-                    const SizedBox(height: 24),
-                    AppButton(
-                      label: 'Get started — it\'s free',
-                      icon: Icons.arrow_forward,
-                      onPressed: () => context.go('/signup'),
-                      width: double.infinity,
-                      semanticLabel: 'Create a new account',
-                    ),
-                    const SizedBox(height: 12),
-                    AppButton(
-                      label: 'I already have an account',
-                      variant: AppButtonVariant.outline,
-                      onPressed: () => context.go('/login'),
-                      width: double.infinity,
-                    ),
-                    const Spacer(),
-                  ],
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildBadge(),
+                      const SizedBox(height: 20),
+                      _buildHeadline(),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Keep track of medicines, visits, and little moments — without the worry. We\'ll remember the details so you don\'t have to.',
+                        style: TextStyle(fontSize: 16, color: AppColors.textMuted, height: 1.5),
+                      ),
+                      const SizedBox(height: 24),
+                      AppButton(
+                        label: 'Get started — it\'s free',
+                        icon: Icons.arrow_forward,
+                        onPressed: () => context.go('/signup'),
+                        width: double.infinity,
+                      ),
+                      const SizedBox(height: 12),
+                      AppButton(
+                        label: 'I already have an account',
+                        variant: AppButtonVariant.outline,
+                        onPressed: () => context.go('/login'),
+                        width: double.infinity,
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(width: 24),
@@ -217,7 +217,6 @@ class LandingScreen extends StatelessWidget {
           icon: Icons.arrow_forward,
           onPressed: () => context.go('/signup'),
           width: double.infinity,
-          semanticLabel: 'Create a new account',
         ),
         const SizedBox(height: 12),
         AppButton(

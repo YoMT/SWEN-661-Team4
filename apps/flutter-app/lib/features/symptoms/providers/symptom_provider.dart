@@ -1,11 +1,13 @@
 import 'package:flutter/foundation.dart';
 import '../models/symptom_log_model.dart';
+import '../../../core/data/seeds.dart';
+import '../../../core/error/error_bus.dart';
 
 class SymptomProvider extends ChangeNotifier {
   SymptomType? selectedSymptom;
-  int severity = 3;
+  int severity = 5;
   String overallStatus = 'Stable';
-  List<SymptomLogModel> logs = _sampleLogs();
+  List<SymptomLogModel> logs = Seeds.symptomLogs();
   bool isLoading = false;
   String? errorMessage;
 
@@ -15,7 +17,7 @@ class SymptomProvider extends ChangeNotifier {
   }
 
   void setSeverity(int value) {
-    severity = value.clamp(1, 5);
+    severity = value.clamp(1, 10);
     notifyListeners();
   }
 
@@ -37,9 +39,10 @@ class SymptomProvider extends ChangeNotifier {
       logs = [log, ...logs];
       _updateStatus();
       selectedSymptom = null;
-      severity = 3;
+      severity = 5;
     } catch (e) {
       errorMessage = 'Failed to save symptom log.';
+      ErrorBus.instance.push(errorMessage!);
     } finally {
       isLoading = false;
       notifyListeners();
@@ -52,27 +55,6 @@ class SymptomProvider extends ChangeNotifier {
       return;
     }
     final recentSeverity = logs.take(3).map((l) => l.severity).reduce((a, b) => a + b) / 3;
-    overallStatus = recentSeverity <= 2 ? 'Good' : recentSeverity <= 3.5 ? 'Stable' : 'High';
+    overallStatus = recentSeverity <= 4 ? 'Good' : recentSeverity <= 7 ? 'Stable' : 'High';
   }
-}
-
-List<SymptomLogModel> _sampleLogs() {
-  final now = DateTime.now();
-  return [
-    SymptomLogModel(
-      id: '1',
-      createdAt: now.subtract(const Duration(days: 1)),
-      updatedAt: now.subtract(const Duration(days: 1)),
-      symptom: SymptomType.pain,
-      severity: 2,
-      note: 'After lunch, lasted 10 min',
-    ),
-    SymptomLogModel(
-      id: '2',
-      createdAt: now.subtract(const Duration(days: 2)),
-      updatedAt: now.subtract(const Duration(days: 2)),
-      symptom: SymptomType.dizzy,
-      severity: 3,
-    ),
-  ];
 }

@@ -1,8 +1,10 @@
 import 'package:flutter/foundation.dart';
 import '../models/appointment_model.dart';
+import '../../../core/data/seeds.dart';
+import '../../../core/error/error_bus.dart';
 
 class AppointmentProvider extends ChangeNotifier {
-  List<AppointmentModel> appointments = _sampleAppointments();
+  List<AppointmentModel> appointments = Seeds.appointments();
   bool isLoading = false;
   String? errorMessage;
 
@@ -55,6 +57,7 @@ class AppointmentProvider extends ChangeNotifier {
       appointments = [...appointments, appt];
     } catch (e) {
       errorMessage = 'Failed to book appointment.';
+      ErrorBus.instance.push(errorMessage!);
     }
     notifyListeners();
   }
@@ -79,47 +82,8 @@ class AppointmentProvider extends ChangeNotifier {
       appointments = List.of(appointments)..[idx] = updated;
     } catch (e) {
       errorMessage = 'Failed to cancel appointment.';
+      ErrorBus.instance.push(errorMessage!);
     }
     notifyListeners();
   }
-}
-
-List<AppointmentModel> _sampleAppointments() {
-  final now = DateTime.now();
-  final today2pm = DateTime(now.year, now.month, now.day, 14, 0);
-  return [
-    AppointmentModel(
-      id: '1',
-      createdAt: now,
-      updatedAt: now,
-      doctorName: 'Dr. Lee',
-      specialty: 'Cardiology',
-      location: 'Video check-in · 30 min',
-      dateTime: today2pm,
-      type: AppointmentType.video,
-      status: AppointmentStatus.upcoming,
-    ),
-    AppointmentModel(
-      id: '2',
-      createdAt: now,
-      updatedAt: now,
-      doctorName: 'Riverside Lab',
-      specialty: 'Lab',
-      location: 'Blood draw · fasting',
-      dateTime: DateTime(now.year, now.month, now.day + 4, 10, 30),
-      type: AppointmentType.inPerson,
-      status: AppointmentStatus.upcoming,
-    ),
-    AppointmentModel(
-      id: '3',
-      createdAt: now,
-      updatedAt: now,
-      doctorName: 'Dr. Okafor',
-      specialty: 'Primary Care',
-      location: 'Annual review',
-      dateTime: DateTime(now.year, now.month, now.day + 14, 9, 0),
-      type: AppointmentType.inPerson,
-      status: AppointmentStatus.upcoming,
-    ),
-  ];
 }

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../models/emergency_contact_model.dart';
 import '../providers/emergency_provider.dart';
 import '../widgets/contact_card.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/validators.dart';
+import '../../../shared/widgets/app_text_field.dart';
 import '../../../shared/widgets/loading_indicator.dart';
 import '../../ai_assistant/widgets/assistant_toggle_button.dart';
 import '../../ai_assistant/widgets/assistant_drawer.dart';
@@ -259,8 +262,101 @@ class _EmergencyContactScreenState extends State<EmergencyContactScreen> {
   }
 
   void _showAddContact(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Add contact — coming soon')),
+    showDialog(
+      context: context,
+      builder: (_) => ChangeNotifierProvider.value(
+        value: context.read<EmergencyProvider>(),
+        child: const _AddContactDialog(),
+      ),
+    );
+  }
+}
+
+class _AddContactDialog extends StatefulWidget {
+  const _AddContactDialog();
+
+  @override
+  State<_AddContactDialog> createState() => _AddContactDialogState();
+}
+
+class _AddContactDialogState extends State<_AddContactDialog> {
+  final _formKey = GlobalKey<FormState>();
+  final _name = TextEditingController();
+  final _phone = TextEditingController();
+  final _relationship = TextEditingController();
+
+  @override
+  void dispose() {
+    _name.dispose();
+    _phone.dispose();
+    _relationship.dispose();
+    super.dispose();
+  }
+
+  void _submit() {
+    if (!_formKey.currentState!.validate()) return;
+    final messenger = ScaffoldMessenger.of(context);
+    final now = DateTime.now();
+    context.read<EmergencyProvider>().add(
+          EmergencyContactModel(
+            id: now.millisecondsSinceEpoch.toString(),
+            createdAt: now,
+            updatedAt: now,
+            name: _name.text.trim(),
+            phone: _phone.text.trim(),
+            relationship: _relationship.text.trim().isEmpty
+                ? 'Contact'
+                : _relationship.text.trim(),
+          ),
+        );
+    Navigator.of(context).pop();
+    messenger.showSnackBar(
+      const SnackBar(content: Text('Contact added')),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Add Emergency Contact'),
+      content: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              AppTextField(
+                label: 'Name',
+                controller: _name,
+                validator: (v) => Validators.required(v, fieldName: 'Name'),
+              ),
+              const SizedBox(height: 12),
+              AppTextField(
+                label: 'Phone',
+                controller: _phone,
+                keyboardType: TextInputType.phone,
+                validator: Validators.phone,
+              ),
+              const SizedBox(height: 12),
+              AppTextField(
+                label: 'Relationship',
+                controller: _relationship,
+                hint: 'e.g. Daughter, Doctor',
+              ),
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cancel'),
+        ),
+        FilledButton(
+          onPressed: _submit,
+          child: const Text('Add'),
+        ),
+      ],
     );
   }
 }

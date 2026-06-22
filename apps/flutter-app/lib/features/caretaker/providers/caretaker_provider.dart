@@ -1,8 +1,10 @@
 import 'package:flutter/foundation.dart';
 import '../models/caretaker_note_model.dart';
+import '../../../core/data/seeds.dart';
+import '../../../core/error/error_bus.dart';
 
 class CaretakerProvider extends ChangeNotifier {
-  List<CaretakerNoteModel> notes = [];
+  List<CaretakerNoteModel> notes = Seeds.caretakerNotes();
   bool isLoading = false;
   String? errorMessage;
 
@@ -12,6 +14,7 @@ class CaretakerProvider extends ChangeNotifier {
     notifyListeners();
     try {
       await Future.delayed(const Duration(milliseconds: 500));
+      notes = Seeds.caretakerNotes();
     } catch (e) {
       errorMessage = 'Failed to load notes.';
     } finally {
@@ -39,6 +42,7 @@ class CaretakerProvider extends ChangeNotifier {
       }).toList();
     } catch (e) {
       errorMessage = 'Failed to send reply.';
+      ErrorBus.instance.push(errorMessage!);
     }
     notifyListeners();
   }

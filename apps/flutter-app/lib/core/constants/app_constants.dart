@@ -8,5 +8,5 @@ class AppConstants {
   static const double pagePadding = 16.0;
 
   static const int maxEmergencyContacts = 5;
-  static const int maxSymptomSeverity = 5;
+  static const int maxSymptomSeverity = 10;
 }
