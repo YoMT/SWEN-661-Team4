@@ -35,9 +35,7 @@
             "imageWidth": 76
           }
         }
-      ],
-      "expo-font",
-      "expo-image"
+      ]
     ],
     "experiments": {
       "typedRoutes": true,
