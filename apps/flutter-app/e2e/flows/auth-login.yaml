@@ -1,0 +1,20 @@
+appId: com.example.flutter_app
+---
+# Journey: Landing → Login → Dashboard
+- launchApp:
+    clearState: true
+
+# ── Landing ───────────────────────────────────────────────────────────────────
+- assertVisible: "CareConnect"
+- tapOn: "Sign in"
+
+# ── Login ─────────────────────────────────────────────────────────────────────
+- assertVisible: "Care management built for caregivers with tremors"
+- tapOn: "you@example.com"
+- inputText: "demo@careconnect.com"
+- tapOn: "Enter your password"
+- inputText: "demo123"
+- tapOn: "Sign In"
+
+# ── Dashboard ─────────────────────────────────────────────────────────────────
+- assertVisible: "Margaret Johnson"

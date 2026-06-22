@@ -64,7 +64,10 @@ void main() {
     testWidgets('shows Share with provider button', (tester) async {
       await tester.pumpWidget(_buildSubject(mockMeds));
       await tester.pumpAndSettle();
-      expect(find.text('Share with provider', skipOffstage: false), findsOneWidget);
+      final finder = find.text('Share with provider');
+      await tester.scrollUntilVisible(finder, 300,
+          scrollable: find.byType(Scrollable).first);
+      expect(finder, findsOneWidget);
     });
   });
 

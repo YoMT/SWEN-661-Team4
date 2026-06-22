@@ -1,0 +1,14 @@
+appId: com.example.flutter_app
+---
+# Journey: Sign in → Symptoms → log a symptom
+- runFlow: auth-login.yaml
+
+- tapOn: "Symptoms"
+- assertVisible: "Log a symptom"
+- assertVisible: "What's bothering Margaret?"
+
+# Select a symptom, then save the entry
+- tapOn: "Dizzy"
+- tapOn: "Save to log"
+
+- assertVisible: "Symptom logged"

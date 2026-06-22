@@ -1,0 +1,9 @@
+appId: com.example.flutter_app
+---
+# Journey: Sign in → Profile → confirm caregiver + care recipient
+- runFlow: auth-login.yaml
+
+- tapOn: "Profile"
+- assertVisible: "Caregiver"
+- assertVisible: "Caring for"
+- assertVisible: "Margaret Johnson"

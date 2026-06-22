@@ -66,12 +66,12 @@ testWidgets('renders voice input button', (tester) async {
       expect(find.text('AI Assistant'), findsNothing);
     });
 
-    testWidgets('tapping Peggy button opens assistant panel', (tester) async {
+    testWidgets('tapping Peggy button opens assistant drawer', (tester) async {
       await tester.pumpWidget(wrapWithProviders(const SymptomLogScreen()));
       await tester.pumpAndSettle();
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
-      expect(find.text('AI Assistant'), findsOneWidget);
+      expect(find.text('Peggy'), findsOneWidget);
     });
   });
 
@@ -127,12 +127,12 @@ testWidgets('renders voice input button', (tester) async {
       expect(find.byType(FloatingActionButton), findsOneWidget);
     });
 
-    testWidgets('tapping Peggy opens assistant panel', (tester) async {
+    testWidgets('tapping Peggy opens assistant drawer', (tester) async {
       await tester.pumpWidget(wrapWithProviders(const EmergencyContactScreen()));
       await tester.pumpAndSettle();
       await tester.tap(find.byType(FloatingActionButton));
       await tester.pumpAndSettle();
-      expect(find.text('AI Assistant'), findsOneWidget);
+      expect(find.text('Peggy'), findsOneWidget);
     });
   });
 
@@ -170,24 +170,17 @@ testWidgets('renders voice input button', (tester) async {
       expect(find.text("Don't have an account?"), findsOneWidget);
     });
 
-    testWidgets('renders Peggy floating action button', (tester) async {
+    testWidgets('has no Peggy FAB (matches mobile — login is unauthenticated)',
+        (tester) async {
       await tester.pumpWidget(wrapWithProviders(const LoginScreen()));
       await tester.pumpAndSettle();
-      expect(find.byType(FloatingActionButton), findsOneWidget);
+      expect(find.byType(FloatingActionButton), findsNothing);
     });
 
-    testWidgets('Peggy panel hidden by default', (tester) async {
+    testWidgets('assistant drawer not shown by default', (tester) async {
       await tester.pumpWidget(wrapWithProviders(const LoginScreen()));
       await tester.pumpAndSettle();
-      expect(find.text('AI Assistant'), findsNothing);
-    });
-
-    testWidgets('tapping Peggy opens assistant panel', (tester) async {
-      await tester.pumpWidget(wrapWithProviders(const LoginScreen()));
-      await tester.pumpAndSettle();
-      await tester.tap(find.byType(FloatingActionButton));
-      await tester.pumpAndSettle();
-      expect(find.text('AI Assistant'), findsOneWidget);
+      expect(find.text('Peggy'), findsNothing);
     });
   });
 }

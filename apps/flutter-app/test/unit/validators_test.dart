@@ -41,8 +41,8 @@ void main() {
       expect(Validators.password(''), isNotNull);
     });
 
-    test('returns error for 7-character password (below minimum)', () {
-      expect(Validators.password('short12'), isNotNull);
+    test('returns error for 5-character password (below 6-char minimum)', () {
+      expect(Validators.password('short'), isNotNull);
     });
   });
 

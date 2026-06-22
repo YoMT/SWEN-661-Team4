@@ -1,0 +1,17 @@
+appId: com.example.flutter_app
+---
+# Journey: Sign in → Medications → add a new medication
+- runFlow: auth-login.yaml
+
+- tapOn: "Meds"
+- assertVisible: "Medications"
+
+# Open the add-medication form (app-bar "+")
+- tapOn:
+    id: "Add medication"
+- assertVisible: "Add Medication"
+
+- tapOn: "Medication Name"
+- inputText: "Vitamin D"
+
+- tapOn: "Save Medication"

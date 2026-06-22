@@ -24,10 +24,10 @@ void main() {
       expect(find.text('Medication Adherence', skipOffstage: false), findsOneWidget);
     });
 
-    testWidgets('shows Peggy FAB label', (tester) async {
+    testWidgets('shows Peggy assistant FAB', (tester) async {
       await tester.pumpWidget(_buildSubject());
       await tester.pumpAndSettle();
-      expect(find.text('Peggy'), findsOneWidget);
+      expect(find.byType(FloatingActionButton), findsOneWidget);
     });
 
     testWidgets('shows Share with Care Team button', (tester) async {

@@ -1,0 +1,19 @@
+appId: com.example.flutter_app
+---
+# Journey: Sign in → open the Peggy AI assistant → ask a question
+- runFlow: auth-login.yaml
+
+# Open Peggy from the floating action button (semantic label)
+- tapOn:
+    id: "Open Peggy assistant"
+- assertVisible: "Peggy"
+- assertVisible: "Hi, I'm Peggy!"
+
+- tapOn: "Ask me anything..."
+- inputText: "What medication is due?"
+- tapOn:
+    id: "Send message"
+# Peggy replies after a short typing delay
+- assertVisible:
+    text: "Metoprolol"
+    timeout: 5000

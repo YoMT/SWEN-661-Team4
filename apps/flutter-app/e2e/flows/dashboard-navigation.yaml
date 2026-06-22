@@ -1,0 +1,19 @@
+appId: com.example.flutter_app
+---
+# Journey: Sign in, then visit every main tab
+- runFlow: auth-login.yaml
+
+- tapOn: "Meds"
+- assertVisible: "Medications"
+
+- tapOn: "Schedule"
+- assertVisible: "Appointments"
+
+- tapOn: "Symptoms"
+- assertVisible: "Log a symptom"
+
+- tapOn: "Profile"
+- assertVisible: "Caregiver"
+
+- tapOn: "Home"
+- assertVisible: "Margaret Johnson"
