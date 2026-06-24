@@ -1,9 +1,11 @@
 appId: com.example.flutter_app
 ---
-# Journey: Sign in → Profile → confirm caregiver + care recipient
+# Journey: Sign in → Profile → confirm caregiver + care recipient.
+# Flutter merges sibling text into one a11y node and Maestro full-matches, so use
+# (?s)<substring>.* for names/roles that share a node (e.g. "A\nAlex Johnson\nCaregiver").
 - runFlow: auth-login.yaml
 
-- tapOn: "Profile"
-- assertVisible: "Caregiver"
+- tapOn: "(?s)Profile.*"
+- assertVisible: "(?s).*Caregiver.*"
 - assertVisible: "Caring for"
-- assertVisible: "Margaret Johnson"
+- assertVisible: "(?s).*Margaret Johnson.*"

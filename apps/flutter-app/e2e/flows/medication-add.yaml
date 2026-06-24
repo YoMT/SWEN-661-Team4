@@ -3,12 +3,11 @@ appId: com.example.flutter_app
 # Journey: Sign in → Medications → add a new medication
 - runFlow: auth-login.yaml
 
-- tapOn: "Meds"
+- tapOn: "(?s)Meds.*"
 - assertVisible: "Medications"
 
-# Open the add-medication form (app-bar "+")
-- tapOn:
-    id: "Add medication"
+# Open the add-medication form (app-bar "+", semantic label "Add medication")
+- tapOn: "Add medication"
 - assertVisible: "Add Medication"
 
 - tapOn: "Medication Name"

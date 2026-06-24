@@ -3,12 +3,15 @@ appId: com.example.flutter_app
 # Journey: Sign in → Symptoms → log a symptom
 - runFlow: auth-login.yaml
 
-- tapOn: "Symptoms"
+- tapOn: "(?s)Symptoms.*"
 - assertVisible: "Log a symptom"
-- assertVisible: "What's bothering Margaret?"
+# "?" is a regex metachar and the prompt may share a node, so match loosely
+- assertVisible: "(?s).*bothering Margaret.*"
 
 # Select a symptom, then save the entry
-- tapOn: "Dizzy"
+- tapOn: "(?s)Dizzy.*"
 - tapOn: "Save to log"
 
-- assertVisible: "Symptom logged"
+- extendedWaitUntil:
+    visible: "(?s).*Symptom logged.*"
+    timeout: 10000

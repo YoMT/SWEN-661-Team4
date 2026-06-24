@@ -1,19 +1,21 @@
 appId: com.example.flutter_app
 ---
-# Journey: Sign in, then visit every main tab
+# Journey: Sign in, then visit every main tab.
+# Bottom-nav items expose merged accessibility text ("Meds\nTab 2 of 5"), and
+# Maestro does a full-text regex match — so match with (?s)<label>.*
 - runFlow: auth-login.yaml
 
-- tapOn: "Meds"
+- tapOn: "(?s)Meds.*"
 - assertVisible: "Medications"
 
-- tapOn: "Schedule"
+- tapOn: "(?s)Schedule.*"
 - assertVisible: "Appointments"
 
-- tapOn: "Symptoms"
+- tapOn: "(?s)Symptoms.*"
 - assertVisible: "Log a symptom"
 
-- tapOn: "Profile"
-- assertVisible: "Caregiver"
+- tapOn: "(?s)Profile.*"
+- assertVisible: "(?s).*Caregiver.*"
 
-- tapOn: "Home"
-- assertVisible: "Margaret Johnson"
+- tapOn: "(?s)Home.*"
+- assertVisible: "Mark as taken"
