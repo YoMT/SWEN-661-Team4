@@ -13,4 +13,12 @@ appId: com.example.flutter_app
 - tapOn: "Medication Name"
 - inputText: "Vitamin D"
 
+# "Save Medication" is at the bottom of a scrollable ListView, below the keyboard.
+# Scroll to it before tapping (do NOT hideKeyboard — on this emulator it sends
+# BACK and exits the screen to the launcher).
+- scrollUntilVisible:
+    element:
+      text: "Save Medication"
+    direction: DOWN
+    visibilityPercentage: 40
 - tapOn: "Save Medication"
