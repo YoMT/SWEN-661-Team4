@@ -28,5 +28,16 @@ export default defineConfig(
       ...eslintPluginReactRefresh.configs.vite.rules
     }
   },
+  {
+    // Feature state providers intentionally colocate the Provider component with
+    // its consumer hook (so fast-refresh's component-only rule doesn't apply),
+    // and their data-loading effects set loading/error state at fetch start by
+    // design. This mirrors the provider pattern in apps/mobile.
+    files: ['src/renderer/src/state/**/*.tsx'],
+    rules: {
+      'react-refresh/only-export-components': 'off',
+      'react-hooks/set-state-in-effect': 'off'
+    }
+  },
   eslintConfigPrettier
 )

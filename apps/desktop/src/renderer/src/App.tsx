@@ -1,34 +1,50 @@
-import Versions from './components/Versions'
-import electronLogo from './assets/electron.svg'
+import React, { useState } from 'react'
+import { AppProviders } from '@renderer/state/providers'
+import { useAuthContext } from '@renderer/state/auth-context'
+import { Sidebar, type View } from '@renderer/components/Sidebar'
+import { LoginScreen } from '@renderer/screens/LoginScreen'
+import { DashboardScreen } from '@renderer/screens/DashboardScreen'
+import { MedicationsScreen } from '@renderer/screens/MedicationsScreen'
+import { AppointmentsScreen } from '@renderer/screens/AppointmentsScreen'
+import { SymptomsScreen } from '@renderer/screens/SymptomsScreen'
 
-function App(): React.JSX.Element {
-  const ipcHandle = (): void => window.electron.ipcRenderer.send('ping')
+function AuthedApp(): React.JSX.Element {
+  const [view, setView] = useState<View>('dashboard')
 
   return (
-    <>
-      <img alt="logo" className="logo" src={electronLogo} />
-      <div className="creator">Powered by electron-vite</div>
-      <div className="text">
-        Build an Electron app with <span className="react">React</span>
-        &nbsp;and <span className="ts">TypeScript</span>
+    <div className="app-shell">
+      <Sidebar active={view} onNavigate={setView} />
+      <main className="main">
+        {view === 'dashboard' && <DashboardScreen onNavigate={setView} />}
+        {view === 'medications' && <MedicationsScreen />}
+        {view === 'appointments' && <AppointmentsScreen />}
+        {view === 'symptoms' && <SymptomsScreen />}
+      </main>
+    </div>
+  )
+}
+
+function Gate(): React.JSX.Element {
+  const { isLoggedIn, isLoading } = useAuthContext()
+
+  if (isLoading) {
+    return (
+      <div className="login-page">
+        <p className="muted" style={{ marginTop: 80 }}>
+          Loading CareConnect…
+        </p>
       </div>
-      <p className="tip">
-        Please try pressing <code>F12</code> to open the devTool
-      </p>
-      <div className="actions">
-        <div className="action">
-          <a href="https://electron-vite.org/" target="_blank" rel="noreferrer">
-            Documentation
-          </a>
-        </div>
-        <div className="action">
-          <a target="_blank" rel="noreferrer" onClick={ipcHandle}>
-            Send IPC
-          </a>
-        </div>
-      </div>
-      <Versions></Versions>
-    </>
+    )
+  }
+
+  return isLoggedIn ? <AuthedApp /> : <LoginScreen />
+}
+
+function App(): React.JSX.Element {
+  return (
+    <AppProviders>
+      <Gate />
+    </AppProviders>
   )
 }
 

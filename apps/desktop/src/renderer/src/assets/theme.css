@@ -1,0 +1,495 @@
+/*
+ * CareConnect desktop theme.
+ * Palette mirrors the `CC` tokens in apps/mobile/src/constants/theme.ts so the
+ * desktop build stays visually in parity with the mobile reference app.
+ */
+:root {
+  --cc-bg: #f8f9fa;
+  --cc-surface: #ffffff;
+  --cc-surface-alt: #ebf0f6;
+  --cc-primary: #2e5c8a;
+  --cc-primary-dark: #234868;
+  --cc-on-primary: #ffffff;
+  --cc-text: #1a1a1a;
+  --cc-text-muted: #595959;
+  --cc-border-subtle: #e0e0e0;
+  --cc-border-strong: #6b6b6b;
+  --cc-success: #4a7c59;
+  --cc-warning: #9e6e00;
+  --cc-error: #b34040;
+  --cc-error-bg: #fef2f2;
+
+  --radius: 12px;
+  --radius-lg: 16px;
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--cc-text);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--cc-bg);
+  color: var(--cc-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* Visible focus ring for keyboard users (accessibility parity). */
+:focus-visible {
+  outline: 3px solid var(--cc-primary);
+  outline-offset: 2px;
+}
+
+/* ── App shell ─────────────────────────────────────────────────────────── */
+.app-shell {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background: var(--cc-primary);
+  color: var(--cc-on-primary);
+  display: flex;
+  flex-direction: column;
+  padding: 20px 14px;
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 8px 20px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 11px 12px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 15px;
+  font-weight: 600;
+  text-align: left;
+}
+
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.nav-item.active {
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+}
+
+.nav-icon {
+  font-size: 18px;
+  width: 22px;
+  text-align: center;
+}
+
+.sidebar-footer {
+  margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  padding-top: 14px;
+}
+
+.sidebar-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 8px 12px;
+}
+
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.24);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.sidebar-user-name {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.sidebar-user-sub {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.logout-btn {
+  width: 100%;
+  padding: 9px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 10px;
+  background: transparent;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.logout-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.main {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.main-inner {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 28px 32px 48px;
+}
+
+/* ── Headings ──────────────────────────────────────────────────────────── */
+.page-header {
+  margin-bottom: 4px;
+}
+
+.page-title {
+  font-size: 26px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.page-sub {
+  color: var(--cc-text-muted);
+  font-size: 15px;
+  margin: 2px 0 22px;
+}
+
+/* ── Cards ─────────────────────────────────────────────────────────────── */
+.card {
+  background: var(--cc-surface);
+  border: 1px solid var(--cc-border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-card);
+  margin-bottom: 16px;
+}
+
+.card-eyebrow {
+  font-size: 13px;
+  color: var(--cc-text-muted);
+  margin: 0 0 6px;
+}
+
+.card-main {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.card-sub {
+  font-size: 14px;
+  color: var(--cc-text-muted);
+  margin: 4px 0 0;
+}
+
+.card-link {
+  margin-top: 12px;
+  border: none;
+  background: none;
+  padding: 0;
+  color: var(--cc-primary);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.card-link:hover {
+  text-decoration: underline;
+}
+
+/* ── Stat tiles ────────────────────────────────────────────────────────── */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.stat-tile {
+  background: var(--cc-surface);
+  border: 1px solid var(--cc-border-subtle);
+  border-left-width: 4px;
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: var(--cc-text-muted);
+  margin-top: 2px;
+}
+
+/* ── Quick links ───────────────────────────────────────────────────────── */
+.quick-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.quick-btn {
+  background: var(--cc-surface);
+  border: 1px solid var(--cc-border-subtle);
+  border-radius: var(--radius);
+  padding: 14px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--cc-text);
+}
+
+.quick-btn:hover {
+  background: var(--cc-surface-alt);
+}
+
+/* ── Buttons ───────────────────────────────────────────────────────────── */
+.btn {
+  border: none;
+  border-radius: 10px;
+  padding: 12px 18px;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.btn-primary {
+  background: var(--cc-primary);
+  color: var(--cc-on-primary);
+  width: 100%;
+}
+
+.btn-primary:hover {
+  background: var(--cc-primary-dark);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 1.5px solid var(--cc-border-strong);
+  color: var(--cc-text);
+  width: 100%;
+}
+
+.btn-pill {
+  border: 1px solid var(--cc-primary);
+  background: var(--cc-primary);
+  color: #fff;
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.btn-pill:hover {
+  background: var(--cc-primary-dark);
+}
+
+/* ── Forms ─────────────────────────────────────────────────────────────── */
+.field {
+  margin-bottom: 16px;
+}
+
+.field-label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.field-input {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 15px;
+  border: 1.5px solid var(--cc-border-subtle);
+  border-radius: 10px;
+  background: var(--cc-surface);
+  color: var(--cc-text);
+}
+
+.field-input:focus {
+  border-color: var(--cc-primary);
+  outline: none;
+}
+
+.error-banner {
+  background: var(--cc-error-bg);
+  color: var(--cc-error);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 14px;
+  margin-bottom: 16px;
+}
+
+/* ── Login ─────────────────────────────────────────────────────────────── */
+.login-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--cc-bg);
+  overflow-y: auto;
+}
+
+.login-hero {
+  width: 100%;
+  background: var(--cc-primary);
+  color: #fff;
+  padding: 48px 20px;
+  text-align: center;
+}
+
+.login-hero-icon {
+  font-size: 44px;
+}
+
+.login-brand {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 8px 0 6px;
+}
+
+.login-tagline {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.85);
+  margin: 0;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  margin: -28px 20px 20px;
+  background: var(--cc-surface);
+  border: 1.5px solid var(--cc-border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+}
+
+.login-card-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 16px;
+}
+
+.login-hint {
+  font-size: 13px;
+  color: var(--cc-text-muted);
+  text-align: center;
+  margin: 16px 0 0;
+}
+
+.login-hint code {
+  background: var(--cc-surface-alt);
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.gap-12 {
+  height: 12px;
+}
+
+/* ── Lists (meds / appts / symptoms) ───────────────────────────────────── */
+.list-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+
+.badge-given {
+  background: rgba(74, 124, 89, 0.14);
+  color: var(--cc-success);
+}
+
+.badge-due {
+  background: rgba(158, 110, 0, 0.16);
+  color: var(--cc-warning);
+}
+
+.badge-upcoming {
+  background: rgba(46, 92, 138, 0.12);
+  color: var(--cc-primary);
+}
+
+.severity-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 3px;
+  background: var(--cc-border-subtle);
+}
+
+.severity-dot.on {
+  background: var(--cc-warning);
+}
+
+.muted {
+  color: var(--cc-text-muted);
+}
+
+.section-label {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--cc-text-muted);
+  margin: 22px 0 10px;
+}
