@@ -81,3 +81,57 @@ pnpm build:win    # Windows installer
 pnpm build:mac    # macOS app (macOS only)
 pnpm build:linux  # Linux package
 ```
+
+## Troubleshooting
+
+### `pnpm` is not found
+
+`pnpm` may not be on your PATH. It ships with Node via Corepack, which honors the
+repo's pinned pnpm version — just prefix commands with `corepack`:
+
+```bash
+corepack pnpm install
+cd apps/desktop
+corepack pnpm dev
+```
+
+### `Error: Electron uninstall` when running `pnpm dev`
+
+The Vite dev server starts (e.g. `http://localhost:5173`) but Electron fails to
+launch with:
+
+```
+error during start dev server and electron app:
+Error: Electron uninstall
+    at getElectronPath (.../electron-vite/dist/chunks/lib-*.js)
+```
+
+This means Electron's prebuilt binary wasn't extracted during install — its
+`dist/electron(.exe)` and `path.txt` are missing (the download can fail silently
+on Windows). The download itself is usually cached, so re-running the install
+script extracts it without re-downloading:
+
+```bash
+corepack pnpm rebuild electron
+```
+
+If that still leaves the binary missing, extract the cached zip manually
+(Windows / PowerShell — adjust the version and cache hash to match yours):
+
+```powershell
+$pkg = Resolve-Path "..\..\node_modules\.pnpm\electron@*\node_modules\electron"
+$zip = Get-ChildItem "$env:LOCALAPPDATA\electron\Cache\*\electron-v*-win32-x64.zip" | Select-Object -First 1
+Remove-Item "$pkg\dist" -Recurse -Force -ErrorAction SilentlyContinue
+New-Item -ItemType Directory "$pkg\dist" | Out-Null
+Expand-Archive $zip.FullName "$pkg\dist" -Force
+if (Test-Path "$pkg\dist\electron.d.ts") { Move-Item "$pkg\dist\electron.d.ts" "$pkg\electron.d.ts" -Force }
+Set-Content "$pkg\path.txt" -Value "electron.exe" -NoNewline -Encoding ascii
+```
+
+Verify from `apps/desktop`:
+
+```bash
+node -e "const p=require('electron'); console.log(p, require('fs').existsSync(p))"
+```
+
+It should print the path to `electron.exe` and `true`.
