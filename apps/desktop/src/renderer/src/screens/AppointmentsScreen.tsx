@@ -24,7 +24,7 @@ function ApptCard({ appt }: { appt: Appointment }): React.JSX.Element {
         {appt.specialty} · {appt.location}
       </p>
       {appt.notes && (
-        <p className="card-sub" style={{ marginTop: 6 }}>
+        <p className="card-sub" style={{ marginTop: 'var(--space-1_5)' }}>
           📌 {appt.notes}
         </p>
       )}
@@ -36,11 +36,9 @@ export function AppointmentsScreen(): React.JSX.Element {
   const { todayAppointments, upcomingAppointments, isLoading, error } = useAppointmentContext()
 
   return (
-    <div className="main-inner">
-      <div className="page-header">
-        <h1 className="page-title">Appointments</h1>
-        <p className="page-sub">Upcoming visits and video calls</p>
-      </div>
+    <div className="content-inner">
+      <h1 className="page-title">Appointments</h1>
+      <p className="page-sub">Upcoming visits and video calls</p>
 
       {isLoading && <p className="muted">Loading appointments…</p>}
       {error && (

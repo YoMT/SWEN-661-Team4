@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useSymptomContext } from '@renderer/state/symptom-context'
+import { useUI } from '@renderer/state/ui-context'
 import type { SymptomType } from '@renderer/types'
 
 const SYMPTOMS: { id: SymptomType; label: string; icon: string }[] = [
@@ -31,11 +32,11 @@ function timeAgo(iso: string): string {
 
 export function SymptomsScreen(): React.JSX.Element {
   const { logs, isLoading, error, addLog } = useSymptomContext()
+  const { announce } = useUI()
   const [symptom, setSymptom] = useState<SymptomType>('dizzy')
   const [severity, setSeverity] = useState(3)
   const [note, setNote] = useState('')
   const [saving, setSaving] = useState(false)
-  const [saved, setSaved] = useState(false)
 
   const handleSave = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault()
@@ -43,35 +44,33 @@ export function SymptomsScreen(): React.JSX.Element {
     try {
       await addLog({ symptom, severity, note: note.trim() || undefined })
       setNote('')
-      setSaved(true)
-      setTimeout(() => setSaved(false), 2500)
+      announce('Symptom logged')
     } finally {
       setSaving(false)
     }
   }
 
   return (
-    <div className="main-inner">
-      <div className="page-header">
-        <h1 className="page-title">Symptoms</h1>
-        <p className="page-sub">What&apos;s bothering Margaret today?</p>
-      </div>
+    <div className="content-inner">
+      <h1 className="page-title">Symptoms</h1>
+      <p className="page-sub">What&apos;s bothering Margaret today?</p>
 
-      <form className="card" onSubmit={handleSave}>
+      <form className="card" id="log-symptom-form" onSubmit={handleSave}>
         <p className="card-eyebrow">Log a symptom</p>
 
-        <div className="quick-row" style={{ gridTemplateColumns: 'repeat(3, 1fr)', marginTop: 8 }}>
-          {SYMPTOMS.map((s) => (
+        <div
+          className="quick-grid"
+          style={{ marginTop: 'var(--space-2)' }}
+          role="group"
+          aria-label="Symptom type"
+        >
+          {SYMPTOMS.map((s, i) => (
             <button
               key={s.id}
+              id={i === 0 ? 'log-symptom-first' : undefined}
               type="button"
               className="quick-btn"
               aria-pressed={symptom === s.id}
-              style={
-                symptom === s.id
-                  ? { borderColor: 'var(--cc-primary)', background: 'var(--cc-surface-alt)' }
-                  : undefined
-              }
               onClick={() => setSymptom(s.id)}
             >
               {s.icon} {s.label}
@@ -79,22 +78,25 @@ export function SymptomsScreen(): React.JSX.Element {
           ))}
         </div>
 
-        <p className="field-label" style={{ marginTop: 16 }}>
+        <p className="field-label" style={{ marginTop: 'var(--space-4)' }} id="severity-label">
           Severity: {severity}/5
         </p>
-        <div style={{ display: 'flex', gap: 8 }}>
+        <div
+          style={{ display: 'flex', gap: 'var(--space-2)' }}
+          role="group"
+          aria-labelledby="severity-label"
+        >
           {[1, 2, 3, 4, 5].map((n) => (
             <button
               key={n}
               type="button"
-              className="btn-pill"
+              className="quick-btn"
               aria-label={`Severity ${n}`}
               aria-pressed={severity === n}
               style={{
                 flex: 1,
-                background: severity >= n ? 'var(--cc-warning)' : 'var(--cc-surface)',
-                color: severity >= n ? '#fff' : 'var(--cc-text)',
-                border: '1px solid var(--cc-border-subtle)'
+                background: severity >= n ? 'var(--color-warning)' : 'var(--color-surface)',
+                color: severity >= n ? 'var(--color-on-warning)' : 'var(--color-text)'
               }}
               onClick={() => setSeverity(n)}
             >
@@ -103,7 +105,7 @@ export function SymptomsScreen(): React.JSX.Element {
           ))}
         </div>
 
-        <div className="field" style={{ marginTop: 16 }}>
+        <div className="field" style={{ marginTop: 'var(--space-4)' }}>
           <label className="field-label" htmlFor="note">
             Note (optional)
           </label>
@@ -116,18 +118,9 @@ export function SymptomsScreen(): React.JSX.Element {
           />
         </div>
 
-        <button type="submit" className="btn btn-primary" disabled={saving}>
+        <button type="submit" className="btn btn-primary critical" disabled={saving}>
           {saving ? 'Saving…' : 'Save to log'}
         </button>
-        {saved && (
-          <p
-            className="card-sub"
-            role="status"
-            style={{ color: 'var(--cc-success)', marginTop: 10 }}
-          >
-            ✓ Symptom logged
-          </p>
-        )}
       </form>
 
       <p className="section-label">Recent logs</p>
@@ -140,18 +133,18 @@ export function SymptomsScreen(): React.JSX.Element {
       {!isLoading && logs.length === 0 && <p className="muted">No symptoms logged yet.</p>}
       {logs.map((log) => (
         <div className="card" key={log.id}>
-          <div className="list-row">
+          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 'var(--space-4)' }}>
             <div>
               <p className="card-main">{LABEL[log.symptom]}</p>
               {log.note && <p className="card-sub">{log.note}</p>}
             </div>
             <div style={{ textAlign: 'right' }}>
-              <div aria-label={`Severity ${log.severity} of 5`}>
+              <div className="severity-dots" aria-label={`Severity ${log.severity} of 5`}>
                 {[1, 2, 3, 4, 5].map((n) => (
                   <span key={n} className={`severity-dot${n <= log.severity ? ' on' : ''}`} />
                 ))}
               </div>
-              <p className="card-sub" style={{ marginTop: 4 }}>
+              <p className="card-sub" style={{ marginTop: 'var(--space-1)' }}>
                 {timeAgo(log.createdAt)}
               </p>
             </div>

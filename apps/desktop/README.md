@@ -10,16 +10,51 @@ mobile reference so the two stay in parity.
 
 ## Status
 
-Initial implementation with the core screens **wired up to live state** (React
-context over an in-memory mock backend — no server required):
+Implements the **CareConnect Desktop Design System** (`DESKTOP_DESIGN_SYSTEM.md`)
+and the keyboard-first **accessibility model** (`DESKTOP_ACCESSIBILITY.md`):
+a full desktop shell over live state (React context + in-memory mock backend, no
+server required).
 
-| Screen           | Wired up | What works                                                              |
-| ---------------- | :------: | ---------------------------------------------------------------------- |
-| **Login**        |    ✅    | Email/password validation, demo auth, session persisted to `localStorage` |
-| **Dashboard**    |    ✅    | Live dose / appointment / symptom counts, next-med & next-appt cards, quick links, refresh |
-| **Medications**  |    ✅    | Dose list sorted by urgency, **Mark as taken** (optimistic update reflected on the Dashboard) |
-| **Appointments** |    ✅    | Today vs. upcoming visits from shared state                            |
-| **Symptoms**     |    ✅    | Recent log list **and** a working "Log a symptom" form (type, severity, note) |
+### App shell (§3)
+
+`title bar → menu bar → contextual toolbar → sidebar + content + assistant panel → status bar`
+
+- **Custom frameless title bar** with real, labelled window controls (§3.1).
+- **Menu bar** File / Edit / View / Help (`role="menubar"`, dropdowns, check &
+  radio items) plus a **native application menu** that registers the cross-platform
+  `CmdOrCtrl` accelerators (§3.2 / §6).
+- **Contextual toolbar** (`role="toolbar"`, roving tabindex) whose actions change
+  per screen; care-write buttons keep the 44px critical floor (§3.3).
+- **Sidebar** primary nav with roving focus, `aria-current`, count badges, ⌘B
+  collapse (§3.4).
+- **Dockable Peggy assistant** panel (⌘J, `role="log"`, wired to `/ai/chat`) —
+  replaces the mobile floating FAB (§3.8).
+- **Status bar** (`contentinfo`) with sync state + due counts (icon+text, never
+  color alone) (§3.7).
+- **Command palette** (⌘K) — a keyboard path to every action (§3.3).
+- **Two-step confirm dialog** for care writes, focus-trapped, Esc cancels (§3.6).
+
+### Screens (wired to live state)
+
+| Screen | What works |
+| --- | --- |
+| **Login** | Split-screen (§3.10), validation, demo auth, session in `localStorage` |
+| **Dashboard** | Live dose / appointment / symptom tiles, next-up cards, quick actions |
+| **Medications** | Keyboard **grid** (↑/↓/Home/End, Space/T to mark taken); Mark-as-taken is ≥44px with a **600ms debounce** + **two-step confirm** |
+| **Appointments** | Today vs. upcoming from shared state |
+| **Symptoms** | Recent-log list + working "Log a symptom" form |
+| **Profile** | Account info + **accessibility preferences** (theme, text size, Tremor mode, reduce motion) + sign out |
+
+### Accessibility (the four pillars + WCAG 2.1 AA)
+
+- **Design tokens** (`assets/theme.css`, mirrored in `theme/tokens.ts`) — color,
+  chrome, spacing, type, radius, elevation; **light + `[data-theme="dark"]`** and
+  the **Accessible/Tremor density** via `[data-density="accessible"]` (§2/§7).
+- **Keyboard-first** — ⌘1…5 nav, ⌘B/⌘J/⌘K, **F6 region cycling**, Esc precedence,
+  roving tabindex in menu/toolbar/sidebar/grid; `:focus-visible` rings; landmarks
+  + skip link (§4).
+- **Reduce Motion** default on, honoring `prefers-reduced-motion` (Pillar 4).
+- **Live regions** announce saves, marks and refreshes (§4.6).
 
 ### Demo account
 
@@ -32,24 +67,38 @@ password: demo123
 
 ```
 src/
-  main/            Electron main process (window lifecycle)
-  preload/         Context-isolated bridge
+  main/
+    index.ts       Frameless window + window-control IPC + native menu wiring
+    menu.ts        Native application menu (accelerators → menu:action)
+  preload/         contextBridge: window controls + onMenuAction
   renderer/src/
     types.ts       Shared domain types (User, Medication, Appointment, …)
+    actions.ts     ActionId catalog + command-palette commands
+    theme/         tokens.ts (TS mirror of the CSS design tokens)
+    lib/           use-debounced-action (600ms care-write guard, Pillar 3)
     services/      api client + in-memory mock backend + form validation
-    state/         React context providers (auth, profile, meds, appts, symptoms)
-                   + AppProviders composer + useDashboard aggregator hook
-    components/    Sidebar (navigation shell)
-    screens/       Login, Dashboard, Medications, Appointments, Symptoms
-    assets/        theme.css (CareConnect palette, mirrors the mobile tokens)
-    App.tsx        Auth gate + sidebar-driven view switching
+    state/         ui-context (prefs/chrome/confirm/live) + feature providers
+                   (auth, profile, meds, appts, symptoms) + useDashboard
+    components/    TitleBar, MenuBar, Toolbar, Sidebar, StatusBar,
+                   AssistantPanel, ConfirmDialog, CommandPalette
+    screens/       Login, Dashboard, Medications, Appointments, Symptoms, Profile
+    assets/        theme.css (design-system tokens + shell + components)
+    App.tsx        Auth gate + shell assembly + central action dispatcher + shortcuts
 ```
 
-State flows the same way as the mobile app: feature **providers** load data from
-the `api` service (which resolves to the bundled mock backend) and expose it via
-hooks. A shared `RefreshProvider` lets the Dashboard re-pull everything, and
-`useDashboard` aggregates cross-feature counts. Because Medications and the
-Dashboard read the same provider, marking a dose taken updates both instantly.
+State flows as on mobile: feature **providers** load from the `api` service
+(bundled mock backend) and expose hooks; a shared `RefreshProvider` re-pulls
+everything; `useDashboard` aggregates counts; `ui-context` owns preferences,
+chrome visibility, the two-step `confirm()` promise and live-region announcements.
+Every command resolves through a single dispatcher in `App.tsx`, fed by the native
+menu, the in-window menu bar, the toolbar and the command palette.
+
+### Deferred (see DESKTOP_ACCESSIBILITY.md §11 "Known Limitations")
+
+New-medication / new-appointment / edit-profile forms, right-click context menus,
+and the Emergency Contacts / Caretaker Notes / Generate Report destinations are
+present as affordances that announce "coming soon"; the assistant uses the mock
+`/ai/chat` service.
 
 ## Recommended IDE Setup
 

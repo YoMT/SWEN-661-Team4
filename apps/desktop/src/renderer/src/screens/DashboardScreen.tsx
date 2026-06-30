@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDashboard } from '@renderer/state/use-dashboard'
-import type { View } from '@renderer/components/Sidebar'
+import { useUI } from '@renderer/state/ui-context'
 
 function greeting(): string {
   const h = new Date().getHours()
@@ -26,15 +26,10 @@ function StatTile({
   )
 }
 
-interface DashboardProps {
-  onNavigate: (view: View) => void
-}
-
-export function DashboardScreen({ onNavigate }: DashboardProps): React.JSX.Element {
+export function DashboardScreen(): React.JSX.Element {
+  const { setView } = useUI()
   const {
     careeName,
-    isLoading,
-    refresh,
     givenDoses,
     totalDoses,
     todayAppointmentsCount,
@@ -44,29 +39,25 @@ export function DashboardScreen({ onNavigate }: DashboardProps): React.JSX.Eleme
   } = useDashboard()
 
   return (
-    <div className="main-inner">
-      <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <div>
-          <p className="page-sub" style={{ margin: 0 }}>
-            {greeting()} · caring for
-          </p>
-          <h1 className="page-title">{careeName}</h1>
-        </div>
-        <button
-          type="button"
-          className="btn-pill"
-          onClick={refresh}
-          disabled={isLoading}
-          aria-label="Refresh dashboard"
-        >
-          {isLoading ? 'Refreshing…' : '↻ Refresh'}
-        </button>
-      </div>
+    <div className="content-inner">
+      <p className="page-sub" style={{ margin: 0 }}>
+        {greeting()} · caring for
+      </p>
+      <h1 className="page-title">{careeName}</h1>
+      <div style={{ height: 'var(--space-6)' }} />
 
-      <div className="stats-row" style={{ marginTop: 18 }}>
-        <StatTile label="Doses today" value={`${givenDoses}/${totalDoses}`} color="#4a7c59" />
-        <StatTile label="Appointments" value={String(todayAppointmentsCount)} color="#2e5c8a" />
-        <StatTile label="Symptom logs" value={String(logsCount)} color="#9e6e00" />
+      <div className="stats-grid">
+        <StatTile
+          label="Doses today"
+          value={`${givenDoses}/${totalDoses}`}
+          color="var(--color-success)"
+        />
+        <StatTile
+          label="Appointments"
+          value={String(todayAppointmentsCount)}
+          color="var(--color-primary)"
+        />
+        <StatTile label="Symptom logs" value={String(logsCount)} color="var(--color-warning)" />
       </div>
 
       {nextMed && (
@@ -78,7 +69,7 @@ export function DashboardScreen({ onNavigate }: DashboardProps): React.JSX.Eleme
           <p className="card-sub">
             {nextMed.scheduledTime} · {nextMed.instruction}
           </p>
-          <button type="button" className="card-link" onClick={() => onNavigate('medications')}>
+          <button type="button" className="card-link" onClick={() => setView('medications')}>
             View all medications →
           </button>
         </div>
@@ -91,20 +82,21 @@ export function DashboardScreen({ onNavigate }: DashboardProps): React.JSX.Eleme
           <p className="card-sub">
             {nextAppt.specialty} · {nextAppt.location}
           </p>
-          <button type="button" className="card-link" onClick={() => onNavigate('appointments')}>
+          <button type="button" className="card-link" onClick={() => setView('appointments')}>
             View schedule →
           </button>
         </div>
       )}
 
-      <div className="quick-row">
-        <button type="button" className="quick-btn" onClick={() => onNavigate('medications')}>
+      <p className="section-label">Quick actions</p>
+      <div className="quick-grid">
+        <button type="button" className="quick-btn" onClick={() => setView('medications')}>
           💊 Medications
         </button>
-        <button type="button" className="quick-btn" onClick={() => onNavigate('appointments')}>
+        <button type="button" className="quick-btn" onClick={() => setView('appointments')}>
           📅 Schedule
         </button>
-        <button type="button" className="quick-btn" onClick={() => onNavigate('symptoms')}>
+        <button type="button" className="quick-btn" onClick={() => setView('symptoms')}>
           📝 Log symptom
         </button>
       </div>
