@@ -94,9 +94,15 @@ pnpm start        # start Expo dev server
 ```bash
 cd apps/desktop
 pnpm dev          # launch Electron in dev mode
+pnpm typecheck    # type-check main, preload, and renderer
 pnpm build:win    # build Windows installer
 pnpm build:mac    # build macOS app (macOS only)
 ```
+
+Sign in with the demo account **`demo@careconnect.com` / `demo123`** to reach
+the Dashboard, Medications, Appointments, and Symptoms screens. See
+[apps/desktop/README.md](apps/desktop/README.md) for the architecture and the
+list of wired-up screens.
 
 #### Flutter App (`apps/flutter-app`) — Flutter (mobile, desktop, web)
 
