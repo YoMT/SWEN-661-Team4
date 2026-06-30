@@ -6,7 +6,6 @@ import { api, setAuthToken, registerUnauthorizedHandler } from '@renderer/servic
 // (the mobile app used expo-secure-store).
 const TOKEN_KEY = 'auth_token'
 
-const getStoredToken = (): string | null => localStorage.getItem(TOKEN_KEY)
 const saveStoredToken = (token: string): void => localStorage.setItem(TOKEN_KEY, token)
 const deleteStoredToken = (): void => localStorage.removeItem(TOKEN_KEY)
 
@@ -27,23 +26,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }): React
   const [isLoading, setIsLoading] = useState(true)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
-  // Restore session on cold start
+  // Always start cold-started sessions logged out, on the landing page:
+  // discard any persisted token rather than restoring it.
   useEffect(() => {
-    ;(async () => {
-      try {
-        const token = getStoredToken()
-        if (token) {
-          setAuthToken(token)
-          const me = await api.get<User>('/auth/me')
-          setUser(me)
-        }
-      } catch {
-        setAuthToken(null)
-        deleteStoredToken()
-      } finally {
-        setIsLoading(false)
-      }
-    })()
+    setAuthToken(null)
+    deleteStoredToken()
+    setUser(null)
+    setIsLoading(false)
   }, [])
 
   const logout = useCallback(async () => {
