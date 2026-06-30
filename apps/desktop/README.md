@@ -82,6 +82,16 @@ pnpm build:mac    # macOS app (macOS only)
 pnpm build:linux  # Linux package
 ```
 
+## Design system & docs
+
+- [`docs/DESKTOP_DESIGN_SYSTEM.md`](docs/DESKTOP_DESIGN_SYSTEM.md) — the **source of truth** for
+  this Electron client: foundation tokens, desktop components, the keyboard-first interaction
+  model, motion, and platform-specific (Windows/macOS/Linux) conventions. (`.docx` alongside.)
+
+> Canonical copy lives at `Documentation/DESKTOP_DESIGN_SYSTEM.md` (regenerated to `.docx` via
+> `Documentation/md_to_docx.py`); the copy here is a co-located mirror — refresh it when the
+> canonical changes.
+
 ## Troubleshooting
 
 ### `pnpm` is not found
