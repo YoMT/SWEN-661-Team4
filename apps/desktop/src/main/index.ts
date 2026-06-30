@@ -1,25 +1,43 @@
-import { app, shell, BrowserWindow } from 'electron'
+import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import { buildAppMenu } from './menu'
 
 function createWindow(): void {
-  // Create the browser window.
+  // Frameless window — the renderer draws its own title bar / menu bar
+  // (window chrome) to match the desktop design system. Sized for large
+  // screens (≥1440px wide).
   const mainWindow = new BrowserWindow({
-    width: 1100,
-    height: 760,
-    minWidth: 940,
-    minHeight: 640,
+    width: 1440,
+    height: 900,
+    minWidth: 1280,
+    minHeight: 800,
     center: true,
     title: 'CareConnect',
     show: false,
-    autoHideMenuBar: true,
+    frame: false,
+    backgroundColor: '#f8f9fa',
+    titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'hidden',
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
     }
   })
+
+  // ── Window-control IPC (custom title bar) ────────────────────────────────
+  ipcMain.handle('window:minimize', () => mainWindow.minimize())
+  ipcMain.handle('window:maximize', () => {
+    if (mainWindow.isMaximized()) mainWindow.unmaximize()
+    else mainWindow.maximize()
+  })
+  ipcMain.handle('window:close', () => mainWindow.close())
+  ipcMain.handle('window:isMaximized', () => mainWindow.isMaximized())
+  mainWindow.on('maximize', () => mainWindow.webContents.send('window:maximized', true))
+  mainWindow.on('unmaximize', () => mainWindow.webContents.send('window:maximized', false))
+
+  buildAppMenu(mainWindow)
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()

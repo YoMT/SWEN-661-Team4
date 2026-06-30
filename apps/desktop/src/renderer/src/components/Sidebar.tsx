@@ -2,21 +2,23 @@ import React from 'react'
 import { useAuthContext } from '@renderer/state/auth-context'
 import { useProfileContext } from '@renderer/state/profile-context'
 
-export type View = 'dashboard' | 'medications' | 'appointments' | 'symptoms'
+export type View = 'dashboard' | 'medications' | 'appointments' | 'symptoms' | 'profile'
 
 const NAV: { id: View; label: string; icon: string }[] = [
   { id: 'dashboard', label: 'Dashboard', icon: '🏠' },
   { id: 'medications', label: 'Medications', icon: '💊' },
   { id: 'appointments', label: 'Appointments', icon: '📅' },
-  { id: 'symptoms', label: 'Symptoms', icon: '📝' }
+  { id: 'symptoms', label: 'Symptoms', icon: '📝' },
+  { id: 'profile', label: 'Profile', icon: '👤' }
 ]
 
 interface SidebarProps {
   active: View
   onNavigate: (view: View) => void
+  onTogglePeggy: () => void
 }
 
-export function Sidebar({ active, onNavigate }: SidebarProps): React.JSX.Element {
+export function Sidebar({ active, onNavigate, onTogglePeggy }: SidebarProps): React.JSX.Element {
   const { user, logout } = useAuthContext()
   const { profile } = useProfileContext()
   const initial = user?.name?.[0]?.toUpperCase() ?? 'C'
@@ -44,6 +46,18 @@ export function Sidebar({ active, onNavigate }: SidebarProps): React.JSX.Element
           </button>
         ))}
       </div>
+
+      <button
+        type="button"
+        className="nav-item peggy-toggle"
+        onClick={onTogglePeggy}
+        title="Toggle Peggy assistant (Ctrl/⌘ J)"
+      >
+        <span className="nav-icon" aria-hidden="true">
+          🤖
+        </span>
+        Ask Peggy
+      </button>
 
       <div className="sidebar-footer">
         <div className="sidebar-user">

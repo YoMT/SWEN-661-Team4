@@ -5,6 +5,7 @@ import { ProfileProvider } from '@renderer/state/profile-context'
 import { MedicationProvider } from '@renderer/state/medication-context'
 import { AppointmentProvider } from '@renderer/state/appointment-context'
 import { SymptomProvider } from '@renderer/state/symptom-context'
+import { AiAssistantProvider } from '@renderer/state/ai-assistant-context'
 
 /**
  * Composes every feature provider in one place so App.tsx stays flat.
@@ -17,7 +18,9 @@ export function AppProviders({ children }: { children: React.ReactNode }): React
         <ProfileProvider>
           <MedicationProvider>
             <AppointmentProvider>
-              <SymptomProvider>{children}</SymptomProvider>
+              <SymptomProvider>
+                <AiAssistantProvider>{children}</AiAssistantProvider>
+              </SymptomProvider>
             </AppointmentProvider>
           </MedicationProvider>
         </ProfileProvider>
