@@ -21,13 +21,10 @@ module.exports = {
     '**/*.(test|spec).(ts|tsx)'
   ],
 
+  // Custom ts-jest wrapper that strips Vite's `import.meta.env` so renderer
+  // modules reading build-time env (services/api.ts) load under jsdom.
   transform: {
-    '^.+\\.(ts|tsx)$': [
-      'ts-jest',
-      {
-        tsconfig: 'tsconfig.web.json'
-      }
-    ]
+    '^.+\\.(ts|tsx)$': '<rootDir>/jest/import-meta-transform.cjs'
   },
 
   moduleNameMapper: {
