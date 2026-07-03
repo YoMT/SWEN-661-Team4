@@ -48,10 +48,11 @@ export function DashboardScreen({ onNavigate }: DashboardProps): React.JSX.Eleme
       <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between' }}>
         <div>
           <p className="page-sub" style={{ margin: 0 }}>
-            {greeting()} · caring for
+            {greeting()} - caring for
           </p>
           <h1 className="page-title">{careeName}</h1>
         </div>
+
         <button
           type="button"
           className="btn-pill"
@@ -59,7 +60,7 @@ export function DashboardScreen({ onNavigate }: DashboardProps): React.JSX.Eleme
           disabled={isLoading}
           aria-label="Refresh dashboard"
         >
-          {isLoading ? 'Refreshing…' : '↻ Refresh'}
+          {isLoading ? 'Refreshing...' : 'Refresh'}
         </button>
       </div>
 
@@ -71,41 +72,44 @@ export function DashboardScreen({ onNavigate }: DashboardProps): React.JSX.Eleme
 
       {nextMed && (
         <div className="card">
-          <p className="card-eyebrow">💊 Next medication</p>
+          <p className="card-eyebrow">Next medication</p>
           <p className="card-main">
-            {nextMed.name} · {nextMed.dosage}
+            {nextMed.name} - {nextMed.dosage}
           </p>
           <p className="card-sub">
-            {nextMed.scheduledTime} · {nextMed.instruction}
+            {nextMed.scheduledTime} - {nextMed.instruction}
           </p>
           <button type="button" className="card-link" onClick={() => onNavigate('medications')}>
-            View all medications →
+            View all medications
           </button>
         </div>
       )}
 
       {nextAppt && (
         <div className="card">
-          <p className="card-eyebrow">📅 Today&apos;s appointment</p>
+          <p className="card-eyebrow">Today&apos;s appointment</p>
           <p className="card-main">{nextAppt.doctorName}</p>
           <p className="card-sub">
-            {nextAppt.specialty} · {nextAppt.location}
+            {nextAppt.specialty} - {nextAppt.location}
           </p>
           <button type="button" className="card-link" onClick={() => onNavigate('appointments')}>
-            View schedule →
+            View schedule
           </button>
         </div>
       )}
 
       <div className="quick-row">
         <button type="button" className="quick-btn" onClick={() => onNavigate('medications')}>
-          💊 Medications
+          Medications
         </button>
         <button type="button" className="quick-btn" onClick={() => onNavigate('appointments')}>
-          📅 Schedule
+          Schedule
         </button>
         <button type="button" className="quick-btn" onClick={() => onNavigate('symptoms')}>
-          📝 Log symptom
+          Symptoms
+        </button>
+        <button type="button" className="quick-btn" onClick={() => onNavigate('profile')}>
+          Profile
         </button>
       </div>
     </div>
