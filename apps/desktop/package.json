@@ -1,10 +1,10 @@
 {
-  "name": "apps-desktop",
+  "name": "careconnect-desktop",
   "version": "1.0.0",
-  "description": "An Electron application with React and TypeScript",
+  "description": "CareConnect desktop — cross-platform caregiver app (Electron + React + TypeScript)",
   "main": "./out/main/index.js",
-  "author": "example.com",
-  "homepage": "https://electron-vite.org",
+  "author": "CareConnect",
+  "homepage": "https://careconnect.app",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint --cache .",
