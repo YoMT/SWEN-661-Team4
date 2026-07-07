@@ -1365,3 +1365,37 @@ kbd {
   font-size: 13px;
   color: var(--cc-text-muted);
 }
+
+/* ── Two-step confirm dialog (Pillar 2) ────────────────────────────────── */
+/* Above other modals so a confirm can overlay e.g. the Edit Profile modal. */
+.confirm-scrim {
+  z-index: 200;
+  align-items: center;
+}
+/* Cancel (safe default) and Confirm pushed apart (≥80px, §3.6). */
+.confirm-actions {
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 20px;
+}
+.btn-danger {
+  background: var(--color-error);
+  color: #fff;
+  border: none;
+}
+.btn-danger:hover {
+  filter: brightness(1.06);
+}
+
+/* ── Medications keyboard grid (§4.2) ──────────────────────────────────── */
+.med-row {
+  cursor: default;
+}
+.med-row:focus-visible {
+  outline: 3px solid var(--color-primary);
+  outline-offset: -3px;
+}
+/* Care-write control never below the 44px critical floor (Pillar 1). */
+.med-mark {
+  min-height: 44px;
+}

@@ -1,5 +1,6 @@
 import React from 'react'
 import { PreferencesProvider } from '@renderer/state/preferences-context'
+import { ConfirmProvider } from '@renderer/state/confirm-context'
 import { RefreshProvider } from '@renderer/state/refresh-context'
 import { AuthProvider } from '@renderer/state/auth-context'
 import { ProfileProvider } from '@renderer/state/profile-context'
@@ -15,19 +16,21 @@ import { AiAssistantProvider } from '@renderer/state/ai-assistant-context'
 export function AppProviders({ children }: { children: React.ReactNode }): React.JSX.Element {
   return (
     <PreferencesProvider>
-      <RefreshProvider>
-        <AuthProvider>
-          <ProfileProvider>
-            <MedicationProvider>
-              <AppointmentProvider>
-                <SymptomProvider>
-                  <AiAssistantProvider>{children}</AiAssistantProvider>
-                </SymptomProvider>
-              </AppointmentProvider>
-            </MedicationProvider>
-          </ProfileProvider>
-        </AuthProvider>
-      </RefreshProvider>
+      <ConfirmProvider>
+        <RefreshProvider>
+          <AuthProvider>
+            <ProfileProvider>
+              <MedicationProvider>
+                <AppointmentProvider>
+                  <SymptomProvider>
+                    <AiAssistantProvider>{children}</AiAssistantProvider>
+                  </SymptomProvider>
+                </AppointmentProvider>
+              </MedicationProvider>
+            </ProfileProvider>
+          </AuthProvider>
+        </RefreshProvider>
+      </ConfirmProvider>
     </PreferencesProvider>
   )
 }

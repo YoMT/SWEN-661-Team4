@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useProfileContext } from '@renderer/state/profile-context'
+import { useConfirm } from '@renderer/state/confirm-context'
 import { validate } from '@renderer/services/validation'
 
 interface EditProfileModalProps {
@@ -20,6 +21,7 @@ interface FormState {
  */
 export function EditProfileModal({ onClose }: EditProfileModalProps): React.JSX.Element {
   const { profile, update } = useProfileContext()
+  const { confirm } = useConfirm()
 
   const initial: FormState = {
     name: profile?.name ?? '',
@@ -40,8 +42,17 @@ export function EditProfileModal({ onClose }: EditProfileModalProps): React.JSX.
 
   const isDirty = (Object.keys(form) as (keyof FormState)[]).some((k) => form[k] !== initial[k])
 
-  const requestClose = (): void => {
-    if (isDirty && !window.confirm('Discard changes?')) return
+  const requestClose = async (): Promise<void> => {
+    if (isDirty) {
+      const ok = await confirm({
+        title: 'Discard changes?',
+        body: 'Your unsaved edits to this profile will be lost.',
+        confirmLabel: 'Discard',
+        cancelLabel: 'Keep editing',
+        destructive: true
+      })
+      if (!ok) return
+    }
     onClose()
   }
 
@@ -77,7 +88,7 @@ export function EditProfileModal({ onClose }: EditProfileModalProps): React.JSX.
   const onKeyDown = (e: React.KeyboardEvent): void => {
     if (e.key === 'Escape') {
       e.preventDefault()
-      requestClose()
+      void requestClose()
     }
   }
 
@@ -94,7 +105,7 @@ export function EditProfileModal({ onClose }: EditProfileModalProps): React.JSX.
     .toUpperCase()
 
   return (
-    <div className="modal-scrim" onMouseDown={requestClose} onKeyDown={onKeyDown}>
+    <div className="modal-scrim" onMouseDown={() => void requestClose()} onKeyDown={onKeyDown}>
       <div
         className="modal-card"
         role="dialog"
@@ -104,7 +115,12 @@ export function EditProfileModal({ onClose }: EditProfileModalProps): React.JSX.
       >
         <div className="modal-head">
           <h2 className="modal-title">Edit Profile</h2>
-          <button type="button" className="peggy-close" onClick={requestClose} aria-label="Close">
+          <button
+            type="button"
+            className="peggy-close"
+            onClick={() => void requestClose()}
+            aria-label="Close"
+          >
             ✕
           </button>
         </div>
@@ -184,7 +200,11 @@ export function EditProfileModal({ onClose }: EditProfileModalProps): React.JSX.
           </div>
 
           <div className="modal-actions">
-            <button type="button" className="btn btn-outline modal-btn" onClick={requestClose}>
+            <button
+              type="button"
+              className="btn btn-outline modal-btn"
+              onClick={() => void requestClose()}
+            >
               Cancel
             </button>
             <button type="submit" className="btn btn-primary modal-btn" disabled={saving}>
