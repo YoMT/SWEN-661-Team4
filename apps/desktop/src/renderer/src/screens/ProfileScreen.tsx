@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useProfileContext } from '@renderer/state/profile-context'
 import { useAuthContext } from '@renderer/state/auth-context'
+import { usePreferences, type ThemeMode, type TextSize } from '@renderer/state/preferences-context'
 
 const LINK_ROWS = [
   'Accessibility settings',
@@ -35,6 +36,48 @@ function Toggle({
   )
 }
 
+function Segmented<T extends string>({
+  legend,
+  value,
+  options,
+  onChange
+}: {
+  legend: string
+  value: T
+  options: { id: T; label: string }[]
+  onChange: (v: T) => void
+}): React.JSX.Element {
+  return (
+    <div className="toggle-row" role="radiogroup" aria-label={legend}>
+      <span>{legend}</span>
+      <div style={{ display: 'flex', gap: 8 }}>
+        {options.map((o) => (
+          <button
+            key={o.id}
+            type="button"
+            role="radio"
+            aria-checked={value === o.id}
+            className="btn-pill"
+            aria-pressed={value === o.id}
+            style={
+              value === o.id
+                ? undefined
+                : {
+                    background: 'transparent',
+                    color: 'var(--color-text)',
+                    border: '1px solid var(--color-border-strong)'
+                  }
+            }
+            onClick={() => onChange(o.id)}
+          >
+            {o.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 interface ProfileScreenProps {
   onEdit: () => void
 }
@@ -42,18 +85,18 @@ interface ProfileScreenProps {
 export function ProfileScreen({ onEdit }: ProfileScreenProps): React.JSX.Element {
   const { profile, isLoading, error } = useProfileContext()
   const { user, logout } = useAuthContext()
-
-  const [tremor, setTremor] = useState(false)
-  const [reduceMotion, setReduceMotion] = useState(false)
-  const [highContrast, setHighContrast] = useState(false)
-
-  // Reflect accessibility preferences on the document root so global CSS can react.
-  useEffect(() => {
-    const root = document.documentElement
-    root.dataset.density = tremor ? 'accessible' : 'dense'
-    root.dataset.reduceMotion = reduceMotion ? 'true' : 'false'
-    root.dataset.highContrast = highContrast ? 'true' : 'false'
-  }, [tremor, reduceMotion, highContrast])
+  const {
+    theme,
+    setTheme,
+    textSize,
+    setTextSize,
+    density,
+    setDensity,
+    reduceMotion,
+    setReduceMotion,
+    highContrast,
+    setHighContrast
+  } = usePreferences()
 
   const name = profile?.name ?? user?.name ?? 'Caregiver'
   const initials = name
@@ -119,9 +162,37 @@ export function ProfileScreen({ onEdit }: ProfileScreenProps): React.JSX.Element
         ))}
       </div>
 
+      {/* Display preferences */}
+      <div className="card list-card">
+        <Segmented<ThemeMode>
+          legend="Theme"
+          value={theme}
+          onChange={setTheme}
+          options={[
+            { id: 'light', label: 'Light' },
+            { id: 'dark', label: 'Dark' },
+            { id: 'system', label: 'System' }
+          ]}
+        />
+        <Segmented<TextSize>
+          legend="Text size"
+          value={textSize}
+          onChange={setTextSize}
+          options={[
+            { id: 'standard', label: 'Standard' },
+            { id: 'large', label: 'Large' },
+            { id: 'largest', label: 'Largest' }
+          ]}
+        />
+      </div>
+
       {/* Accessibility toggles */}
       <div className="card list-card">
-        <Toggle label="Tremor (Accessible) mode" checked={tremor} onChange={setTremor} />
+        <Toggle
+          label="Tremor (Accessible) mode"
+          checked={density === 'accessible'}
+          onChange={(on) => setDensity(on ? 'accessible' : 'dense')}
+        />
         <Toggle label="Reduce motion" checked={reduceMotion} onChange={setReduceMotion} />
         <Toggle label="High contrast" checked={highContrast} onChange={setHighContrast} />
       </div>
