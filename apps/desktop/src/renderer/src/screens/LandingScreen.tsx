@@ -1,4 +1,5 @@
 import React from 'react'
+import heroImage from '../assets/landing-hero.jpg'
 
 interface LandingScreenProps {
   onGetStarted: () => void
@@ -23,6 +24,12 @@ export function LandingScreen({ onGetStarted }: LandingScreenProps): React.JSX.E
           CareConnect helps caregivers track medications, appointments and symptoms — built for
           keyboard-first use and designed for hands that shake.
         </p>
+
+        <img
+          className="landing-hero-image"
+          src={heroImage}
+          alt="A caregiver and her mother sharing a warm moment together"
+        />
 
         <button type="button" className="ask-pill" onClick={onGetStarted}>
           <span className="live-dot" aria-hidden="true" />
