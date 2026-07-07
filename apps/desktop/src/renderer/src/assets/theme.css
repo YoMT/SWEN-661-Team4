@@ -809,6 +809,100 @@ button {
   border-radius: 8px;
 }
 
+/* ════ Design-system reconciliation (DESKTOP_DESIGN_SYSTEM §2/§7) ══════════
+ * Introduces the canonical §7 token names as the source of truth and aliases
+ * the legacy --cc-* names to them, so every existing component inherits the
+ * dark theme and density scaling below without being rewritten. This block
+ * comes after the original :root, so its declarations win.
+ */
+:root {
+  /* canonical brand & semantic tokens — light (verbatim §7.1) */
+  --color-bg: #f8f9fa;
+  --color-surface: #ffffff;
+  --color-surface-alt: #ebf0f6;
+  --color-primary: #2e5c8a;
+  --color-primary-dark: #234868;
+  --color-on-primary: #ffffff;
+  --color-text: #1a1a1a;
+  --color-text-muted: #595959;
+  --color-border-subtle: #e0e0e0;
+  --color-border-strong: #6b6b6b;
+  --color-success: #4a7c59;
+  --color-warning: #9e6e00;
+  --color-on-warning: #1a1a1a;
+  --color-error: #b34040;
+  --color-error-bg: #fef2f2;
+
+  /* legacy aliases → canonical (existing components reference these) */
+  --cc-bg: var(--color-bg);
+  --cc-surface: var(--color-surface);
+  --cc-surface-alt: var(--color-surface-alt);
+  --cc-primary: var(--color-primary);
+  --cc-primary-dark: var(--color-primary-dark);
+  --cc-on-primary: var(--color-on-primary);
+  --cc-text: var(--color-text);
+  --cc-text-muted: var(--color-text-muted);
+  --cc-border-subtle: var(--color-border-subtle);
+  --cc-border-strong: var(--color-border-strong);
+  --cc-success: var(--color-success);
+  --cc-warning: var(--color-warning);
+  --cc-error: var(--color-error);
+  --cc-error-bg: var(--color-error-bg);
+
+  /* density + text tokens (§2.6 / §2.3) */
+  --control-critical: 44px;
+  --row-height: 32px;
+  --text-scale: 1;
+}
+
+/* Dark theme (§7.2) — overriding the canonical tokens flows through the aliases */
+:root[data-theme='dark'] {
+  --color-bg: #1a1b1e;
+  --color-surface: #212225;
+  --color-surface-alt: #2e3135;
+  --color-primary: #5b8fc0;
+  --color-primary-dark: #3f6f9c;
+  --color-on-primary: #0b1722;
+  --color-text: #f2f3f5;
+  --color-text-muted: #b0b4ba;
+  --color-border-subtle: #34373b;
+  --color-border-strong: #7c8089;
+  --color-success: #5fa776;
+  --color-warning: #e0b341;
+  --color-on-warning: #1a1b1e;
+  --color-error: #e0736f;
+  --color-error-bg: rgba(224, 115, 111, 0.16);
+  color-scheme: dark;
+}
+
+/* Accessible / Tremor density (§2.6) — enlarge care targets. Existing
+ * components hardcode px, so bump their hit areas by class here. */
+:root[data-density='accessible'] {
+  --control-critical: 64px;
+  --row-height: 48px;
+}
+:root[data-density='accessible'] .btn,
+:root[data-density='accessible'] .btn-pill {
+  min-height: 44px;
+  font-size: 16px;
+}
+:root[data-density='accessible'] .nav-item {
+  min-height: 48px;
+  font-size: 16px;
+}
+:root[data-density='accessible'] .toggle-row,
+:root[data-density='accessible'] .link-row {
+  min-height: 48px;
+}
+:root[data-density='accessible'] .menu-item {
+  min-height: 40px;
+}
+
+/* Text size (§2.3) — whole-content zoom honoring the user setting. */
+.main {
+  zoom: var(--text-scale);
+}
+
 /* ── Accessibility preference flags (set from Profile toggles) ─────────── */
 :root[data-reduce-motion='true'] * {
   transition: none !important;
@@ -816,8 +910,8 @@ button {
 }
 
 :root[data-high-contrast='true'] {
-  --cc-border-subtle: #6b6b6b;
-  --cc-text-muted: #3a3a3a;
+  --color-border-subtle: #6b6b6b;
+  --color-text-muted: #3a3a3a;
 }
 
 /* ═══ Desktop window chrome ═══════════════════════════════════════════════ */

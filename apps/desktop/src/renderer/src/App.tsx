@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { AppProviders } from '@renderer/state/providers'
 import { useAuthContext } from '@renderer/state/auth-context'
 import { useRefreshContext } from '@renderer/state/refresh-context'
+import { usePreferences } from '@renderer/state/preferences-context'
 import { Sidebar, type View } from '@renderer/components/Sidebar'
 import { TitleBar } from '@renderer/components/TitleBar'
 import { MenuBar } from '@renderer/components/MenuBar'
@@ -59,6 +60,7 @@ function cycleRegion(dir: 1 | -1): void {
 function AuthedApp(): React.JSX.Element {
   const { logout } = useAuthContext()
   const { triggerRefresh } = useRefreshContext()
+  const { setTheme, toggleDensity, reduceMotion, setReduceMotion } = usePreferences()
   const [view, setView] = useState<View>('dashboard')
   const [sidebarOpen, setSidebarOpen] = useState(true)
   const [peggyOpen, setPeggyOpen] = useState(false)
@@ -90,6 +92,21 @@ function AuthedApp(): React.JSX.Element {
         case 'nav-profile':
         case 'settings':
           setView('profile')
+          break
+        case 'toggle-density':
+          toggleDensity()
+          break
+        case 'toggle-motion':
+          setReduceMotion(!reduceMotion)
+          break
+        case 'theme-light':
+          setTheme('light')
+          break
+        case 'theme-dark':
+          setTheme('dark')
+          break
+        case 'theme-system':
+          setTheme('system')
           break
         case 'toggle-sidebar':
           setSidebarOpen((p) => !p)
@@ -140,7 +157,7 @@ function AuthedApp(): React.JSX.Element {
           break
       }
     },
-    [logout, triggerRefresh, flash]
+    [logout, triggerRefresh, flash, setTheme, toggleDensity, reduceMotion, setReduceMotion]
   )
 
   // Native menu accelerators forward here (the authoritative keyboard layer).

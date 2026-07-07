@@ -46,6 +46,12 @@ export const MENUS: MenuDef[] = [
       { label: 'Toggle Sidebar', action: 'toggle-sidebar', accelerator: `${MOD}+B` },
       { label: 'Show Assistant', action: 'toggle-assistant', accelerator: `${MOD}+J` },
       { label: '', separator: true },
+      { label: 'Tremor (Accessible) Mode', action: 'toggle-density' },
+      { label: 'Reduce Motion', action: 'toggle-motion' },
+      { label: 'Theme: Light', action: 'theme-light' },
+      { label: 'Theme: Dark', action: 'theme-dark' },
+      { label: 'Theme: System', action: 'theme-system' },
+      { label: '', separator: true },
       { label: 'Command Palette', action: 'command-palette', accelerator: `${MOD}+K` },
       { label: 'Settings', action: 'settings', accelerator: `${MOD}+,` }
     ]

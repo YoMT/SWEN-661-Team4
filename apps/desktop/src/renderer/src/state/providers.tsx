@@ -1,4 +1,5 @@
 import React from 'react'
+import { PreferencesProvider } from '@renderer/state/preferences-context'
 import { RefreshProvider } from '@renderer/state/refresh-context'
 import { AuthProvider } from '@renderer/state/auth-context'
 import { ProfileProvider } from '@renderer/state/profile-context'
@@ -9,22 +10,24 @@ import { AiAssistantProvider } from '@renderer/state/ai-assistant-context'
 
 /**
  * Composes every feature provider in one place so App.tsx stays flat.
- * Order: Refresh (outermost, feeds the data providers) → Auth → data providers.
+ * Order: Preferences (theme/density) → Refresh → Auth → data providers.
  */
 export function AppProviders({ children }: { children: React.ReactNode }): React.JSX.Element {
   return (
-    <RefreshProvider>
-      <AuthProvider>
-        <ProfileProvider>
-          <MedicationProvider>
-            <AppointmentProvider>
-              <SymptomProvider>
-                <AiAssistantProvider>{children}</AiAssistantProvider>
-              </SymptomProvider>
-            </AppointmentProvider>
-          </MedicationProvider>
-        </ProfileProvider>
-      </AuthProvider>
-    </RefreshProvider>
+    <PreferencesProvider>
+      <RefreshProvider>
+        <AuthProvider>
+          <ProfileProvider>
+            <MedicationProvider>
+              <AppointmentProvider>
+                <SymptomProvider>
+                  <AiAssistantProvider>{children}</AiAssistantProvider>
+                </SymptomProvider>
+              </AppointmentProvider>
+            </MedicationProvider>
+          </ProfileProvider>
+        </AuthProvider>
+      </RefreshProvider>
+    </PreferencesProvider>
   )
 }
