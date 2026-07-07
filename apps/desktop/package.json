@@ -19,6 +19,9 @@
     "build:win": "npm run build && electron-builder --win",
     "build:mac": "electron-vite build && electron-builder --mac",
     "build:linux": "electron-vite build && electron-builder --linux",
+    "report:package": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/report-package.ps1",
+    "package:win:report": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-win-installer.ps1",
+    "screenshots": "electron-vite build && node scripts/capture-screenshots.mjs",
     "test": "jest",
     "test:coverage": "jest --coverage"
   },
