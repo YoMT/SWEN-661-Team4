@@ -28,7 +28,8 @@ module.exports = {
   },
 
   moduleNameMapper: {
-    '^@renderer/(.*)$': '<rootDir>/src/renderer/src/$1'
+    '^@renderer/(.*)$': '<rootDir>/src/renderer/src/$1',
+    '\\.(jpg|jpeg|png|gif|webp|svg|avif)$': '<rootDir>/jest/file-mock.cjs'
   },
 
   collectCoverageFrom: [
