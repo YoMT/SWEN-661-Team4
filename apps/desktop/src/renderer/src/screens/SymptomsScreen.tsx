@@ -146,7 +146,7 @@ export function SymptomsScreen(): React.JSX.Element {
               {log.note && <p className="card-sub">{log.note}</p>}
             </div>
             <div style={{ textAlign: 'right' }}>
-              <div aria-label={`Severity ${log.severity} of 5`}>
+              <div role="img" aria-label={`Severity ${log.severity} of 5`}>
                 {[1, 2, 3, 4, 5].map((n) => (
                   <span key={n} className={`severity-dot${n <= log.severity ? ' on' : ''}`} />
                 ))}
