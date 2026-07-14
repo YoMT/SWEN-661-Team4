@@ -76,7 +76,7 @@ export function CommandPalette({ onClose, onCommand }: CommandPaletteProps): Rea
           }}
           aria-label="Command search"
         />
-        <div className="palette-list" role="listbox">
+        <div className="palette-list" role="listbox" aria-label="Commands">
           {results.length === 0 && <div className="palette-empty">No matching commands</div>}
           {results.map((c, i) => (
             <button

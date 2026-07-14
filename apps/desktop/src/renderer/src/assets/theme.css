@@ -319,6 +319,14 @@ button {
   cursor: default;
 }
 
+/* aria-disabled keeps a control focusable and announced while marking it unavailable;
+   give it the same muted affordance a native :disabled control gets. */
+.btn[aria-disabled='true'],
+.link-row[aria-disabled='true'] {
+  opacity: 0.6;
+  cursor: default;
+}
+
 .btn-outline {
   background: transparent;
   border: 1.5px solid var(--cc-border-strong);

@@ -106,10 +106,19 @@ export function ProfileScreen({ onEdit }: ProfileScreenProps): React.JSX.Element
 
       <p className="section-label">Settings</p>
 
-      {/* Link rows (targets out of scope — present but inert for now) */}
+      {/* Link rows (targets out of scope). aria-disabled rather than removing them from
+          the tab order, so screen reader users can still discover the row and hear that
+          it is not available yet. */}
       <div className="card list-card">
         {LINK_ROWS.map((label, i) => (
-          <div key={label} className={`link-row${i > 0 ? ' bordered' : ''}`}>
+          <div
+            key={label}
+            role="button"
+            tabIndex={0}
+            aria-disabled="true"
+            aria-label={`${label} (coming soon)`}
+            className={`link-row${i > 0 ? ' bordered' : ''}`}
+          >
             <span className="link-icon" aria-hidden="true" />
             <span className="link-label">{label}</span>
             <span className="link-chevron" aria-hidden="true">

@@ -113,7 +113,16 @@ export function EditProfileModal({ onClose }: EditProfileModalProps): React.JSX.
           <div className="avatar avatar-lg" aria-hidden="true">
             {initials}
           </div>
-          <button type="button" className="btn btn-outline modal-photo-btn" disabled>
+          {/* aria-disabled, not the native `disabled` attribute: a disabled button is
+              skipped by the tab order and never announced, so the control would be
+              invisible to screen reader users rather than merely unavailable. */}
+          <button
+            type="button"
+            className="btn btn-outline modal-photo-btn"
+            aria-disabled="true"
+            aria-label="Change photo (coming soon)"
+            onClick={(e) => e.preventDefault()}
+          >
             Change photo
           </button>
         </div>

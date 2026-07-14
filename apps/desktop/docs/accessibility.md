@@ -57,6 +57,18 @@ While `npm run dev` is running, open the Electron DevTools console (`F12`) — a
 any violations on every render, giving live feedback as you build. It is stripped from
 production builds and does not run under Jest.
 
+## Coverage and the pre-release manual pass
+
+The `*.a11y.test.tsx` suites cover the seven screens **and** the interactive overlays that
+mount outside them — the Edit Profile modal, the command palette, and info dialogs. Any new
+screen, modal, or dialog should get a suite before it ships.
+
+jsdom has no layout or paint engine, so the automated suites **cannot** evaluate colour
+contrast (1.4.3, 1.4.11) or visible focus indicators (2.4.7). Those are only observable in a
+real browser. **Before each release, run one manual axe DevTools pass over every screen**
+(see §1) and check keyboard focus is visible on each interactive element. Automated scans are
+a regression guard, not a substitute for that pass.
+
 ## Triaging findings
 
 Fix genuine violations at the source. axe rules map to WCAG success criteria; each console
@@ -64,3 +76,7 @@ entry and test failure links to a Deque University page explaining the rule and 
 For example, a decorative-but-labeled element flagged as `aria-prohibited-attr` usually
 needs an appropriate `role` (e.g. `role="img"`) so its `aria-label` is exposed to assistive
 technology.
+
+Controls that exist but are not implemented yet ("coming soon") should be marked
+`aria-disabled="true"` with a label that says so — **not** the native `disabled` attribute,
+which removes them from the tab order and hides them from screen readers entirely.
