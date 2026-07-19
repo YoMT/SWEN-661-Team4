@@ -1,0 +1,16 @@
+{
+  "name": "CareConnect — Caregiver Companion",
+  "short_name": "CareConnect",
+  "description": "Track medications, appointments and symptoms for the people you care for.",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#2e5c8a",
+  "background_color": "#f8f9fa",
+  "categories": ["medical", "health", "lifestyle"],
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/icon-maskable.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}

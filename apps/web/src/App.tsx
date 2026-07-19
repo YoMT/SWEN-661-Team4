@@ -1,122 +1,66 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import React, { useEffect } from 'react'
+import { AppProviders } from '@renderer/state/providers'
+import { RouterProvider, useRouter } from '@renderer/router'
+import { useAuthContext } from '@renderer/state/auth-context'
+import { AppShell } from '@renderer/components/AppShell'
+import { LandingScreen } from '@renderer/screens/LandingScreen'
+import { LoginScreen } from '@renderer/screens/LoginScreen'
+import { SignupScreen } from '@renderer/screens/SignupScreen'
+import type { View } from '@renderer/components/Sidebar'
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+const ROUTE_BY_PATH: Record<string, View> = {
+  '/dashboard': 'dashboard',
+  '/medications': 'medications',
+  '/appointments': 'appointments',
+  '/symptoms': 'symptoms',
+  '/profile': 'profile'
 }
 
-export default App
+function Routes(): React.JSX.Element {
+  const { isLoggedIn, isLoading } = useAuthContext()
+  const { path, navigate } = useRouter()
+  const view = ROUTE_BY_PATH[path]
+
+  // Redirects: gate protected routes and bounce authed users off pre-auth pages.
+  useEffect(() => {
+    if (isLoading) return
+    if (isLoggedIn) {
+      if (path === '/' || path === '/login' || path === '/signup' || !view) {
+        navigate('/dashboard', { replace: true })
+      }
+    } else if (view) {
+      navigate('/login', { replace: true })
+    }
+  }, [isLoggedIn, isLoading, path, view, navigate])
+
+  if (isLoading) {
+    return (
+      <div className="boot">
+        <p className="muted">Loading CareConnect…</p>
+      </div>
+    )
+  }
+
+  if (isLoggedIn) {
+    if (view) return <AppShell view={view} />
+    return (
+      <div className="boot">
+        <p className="muted">Redirecting…</p>
+      </div>
+    )
+  }
+
+  if (path === '/login') return <LoginScreen />
+  if (path === '/signup') return <SignupScreen />
+  return <LandingScreen />
+}
+
+export default function App(): React.JSX.Element {
+  return (
+    <AppProviders>
+      <RouterProvider>
+        <Routes />
+      </RouterProvider>
+    </AppProviders>
+  )
+}

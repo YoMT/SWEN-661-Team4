@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#2e5c8a" />
+    <title>Offline · CareConnect</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f8f9fa;
+        color: #1a1a1a;
+        font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      }
+      .box {
+        max-width: 420px;
+        text-align: center;
+        padding: 32px 24px;
+      }
+      .mark {
+        font-size: 44px;
+      }
+      h1 {
+        font-size: 22px;
+        margin: 12px 0 8px;
+      }
+      p {
+        color: #595959;
+        line-height: 1.55;
+        margin: 0 0 20px;
+      }
+      button {
+        background: #2e5c8a;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        padding: 12px 20px;
+        font-size: 15px;
+        font-weight: 600;
+        min-height: 44px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box">
+      <div class="mark" aria-hidden="true">❤️</div>
+      <h1>You&apos;re offline</h1>
+      <p>
+        CareConnect can&apos;t reach the network right now. Your last synced schedule is still
+        available once you&apos;re back on — reconnect to continue.
+      </p>
+      <button type="button" onclick="location.reload()">Try again</button>
+    </div>
+  </body>
+</html>
