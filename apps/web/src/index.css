@@ -252,9 +252,14 @@ button {
   font-size: 13px;
   font-weight: 600;
   min-height: 44px;
+  white-space: nowrap;
 }
 .btn-pill:hover {
   background: var(--cc-primary-dark);
+}
+/* In list rows the action must keep its width; let the text column shrink instead. */
+.list-row .btn-pill {
+  flex-shrink: 0;
 }
 
 /* ── Forms ─────────────────────────────────────────────────────────────── */
@@ -1055,8 +1060,8 @@ kbd {
 .landing-hero-image {
   display: block;
   width: 100%;
-  max-width: 520px;
-  aspect-ratio: 4 / 5;
+  max-width: 560px;
+  aspect-ratio: 3 / 2;
   object-fit: cover;
   border-radius: 20px;
   border: 1px solid rgba(107, 69, 34, 0.12);
