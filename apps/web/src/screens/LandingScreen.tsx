@@ -13,6 +13,9 @@ export function LandingScreen(): React.JSX.Element {
 
   return (
     <div className="landing">
+      <a className="skip-link" href="#main">
+        Skip to content
+      </a>
       <header className="landing-top">
         <span className="landing-top-brand">
           <span aria-hidden="true">❤️</span> CareConnect
@@ -22,7 +25,7 @@ export function LandingScreen(): React.JSX.Element {
         </Link>
       </header>
 
-      <main id="main" className="landing-hero-grid">
+      <main id="main" className="landing-hero-grid" tabIndex={-1}>
         <section className="landing-copy">
           <span className="landing-pill">
             <span aria-hidden="true">❤️</span> Made for caregivers

@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { AppProviders } from '@renderer/state/providers'
 import { RouterProvider, useRouter } from '@renderer/router'
 import { useAuthContext } from '@renderer/state/auth-context'
 import { AppShell } from '@renderer/components/AppShell'
+import { UpdateToast } from '@renderer/components/UpdateToast'
 import { LandingScreen } from '@renderer/screens/LandingScreen'
 import { LoginScreen } from '@renderer/screens/LoginScreen'
 import { SignupScreen } from '@renderer/screens/SignupScreen'
@@ -33,6 +34,18 @@ function Routes(): React.JSX.Element {
     }
   }, [isLoggedIn, isLoading, path, view, navigate])
 
+  // Pre-auth route changes: move focus to the new screen's main region so
+  // keyboard/SR users don't stay stranded on the old page's link. (The authed
+  // shell does the same per-view inside AppShell.)
+  const firstPath = useRef(true)
+  useEffect(() => {
+    if (firstPath.current) {
+      firstPath.current = false
+      return
+    }
+    if (!isLoggedIn) document.getElementById('main')?.focus({ preventScroll: true })
+  }, [path, isLoggedIn])
+
   if (isLoading) {
     return (
       <div className="boot">
@@ -60,6 +73,7 @@ export default function App(): React.JSX.Element {
     <AppProviders>
       <RouterProvider>
         <Routes />
+        <UpdateToast />
       </RouterProvider>
     </AppProviders>
   )

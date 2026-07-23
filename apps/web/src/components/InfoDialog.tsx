@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useRef } from 'react'
+import { useModalFocus } from '@renderer/hooks/use-modal-focus'
 
 interface InfoDialogProps {
   title: string
@@ -6,21 +7,17 @@ interface InfoDialogProps {
   children: React.ReactNode
 }
 
-/** Standard dialog with scrim + focus on close button + Esc to dismiss. */
+/** Standard dialog with scrim + focus trap/restore + Esc to dismiss. */
 export function InfoDialog({ title, onClose, children }: InfoDialogProps): React.JSX.Element {
   const closeRef = useRef<HTMLButtonElement>(null)
+  const cardRef = useRef<HTMLDivElement>(null)
 
-  useEffect(() => {
-    closeRef.current?.focus()
-  }, [])
+  useModalFocus(cardRef, { onClose, initialFocusRef: closeRef })
 
   return (
-    <div
-      className="modal-scrim"
-      onMouseDown={onClose}
-      onKeyDown={(e) => e.key === 'Escape' && onClose()}
-    >
+    <div className="modal-scrim" onMouseDown={onClose}>
       <div
+        ref={cardRef}
         className="modal-card"
         role="dialog"
         aria-modal="true"

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useRouter } from '@renderer/router'
 import { SideNav, RailNav, BottomTabs, NAV, type View } from '@renderer/components/Sidebar'
 import { TopBar } from '@renderer/components/TopBar'
@@ -37,10 +37,41 @@ export function AppShell({ view }: { view: View }): React.JSX.Element {
   const [peggyOpen, setPeggyOpen] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
   const [shortcutsOpen, setShortcutsOpen] = useState(false)
+  const [online, setOnline] = useState(() => navigator.onLine)
 
+  // Reflect connectivity in the status strip (the SW serves cached data offline).
+  useEffect(() => {
+    const up = (): void => setOnline(true)
+    const down = (): void => setOnline(false)
+    window.addEventListener('online', up)
+    window.addEventListener('offline', down)
+    return () => {
+      window.removeEventListener('online', up)
+      window.removeEventListener('offline', down)
+    }
+  }, [])
+
+  // Title + focus per route: move focus to the main region on navigation so
+  // keyboard/SR users land on the new content (skip the initial mount).
+  const firstView = useRef(true)
   useEffect(() => {
     document.title = `${TITLES[view]} · CareConnect`
+    if (firstView.current) {
+      firstView.current = false
+      return
+    }
+    document.getElementById('main')?.focus({ preventScroll: true })
   }, [view])
+
+  // When the Peggy panel closes while focus was inside it, the browser drops
+  // focus on <body>; hand it back to the toggle in the top bar instead.
+  const prevPeggy = useRef(false)
+  useEffect(() => {
+    if (prevPeggy.current && !peggyOpen && document.activeElement === document.body) {
+      document.getElementById('peggy-toggle')?.focus()
+    }
+    prevPeggy.current = peggyOpen
+  }, [peggyOpen])
 
   const goto = useCallback((v: View) => navigate(NAV.find((n) => n.id === v)!.path), [navigate])
 
@@ -115,7 +146,12 @@ export function AppShell({ view }: { view: View }): React.JSX.Element {
       <BottomTabs active={view} />
 
       <footer className="status-strip" data-region="contentinfo">
-        <span aria-hidden="true">●</span> Synced just now
+        <span aria-hidden="true">●</span>{' '}
+        {online ? (
+          <span>Synced just now</span>
+        ) : (
+          <span className="status-offline">Offline — showing cached data</span>
+        )}
         <span className="status-spacer" />
         <span className="muted">CareConnect · demo data</span>
       </footer>

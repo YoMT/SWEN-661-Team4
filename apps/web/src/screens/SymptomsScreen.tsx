@@ -58,50 +58,51 @@ export function SymptomsScreen(): React.JSX.Element {
       </div>
 
       <form className="card" onSubmit={handleSave}>
-        <p className="card-eyebrow">Log a symptom</p>
+        <fieldset className="fieldset-reset">
+          <legend className="card-eyebrow">Log a symptom</legend>
 
-        <div className="quick-row" style={{ gridTemplateColumns: 'repeat(3, 1fr)', marginTop: 8 }}>
-          {SYMPTOMS.map((s) => (
-            <button
-              key={s.id}
-              type="button"
-              className="quick-btn"
-              aria-pressed={symptom === s.id}
-              style={
-                symptom === s.id
-                  ? { borderColor: 'var(--cc-primary)', background: 'var(--cc-surface-alt)' }
-                  : undefined
-              }
-              onClick={() => setSymptom(s.id)}
-            >
-              {s.icon} {s.label}
-            </button>
-          ))}
-        </div>
+          <div className="quick-row symptom-grid" style={{ marginTop: 8 }}>
+            {SYMPTOMS.map((s) => (
+              <button
+                key={s.id}
+                type="button"
+                className="quick-btn"
+                aria-pressed={symptom === s.id}
+                style={
+                  symptom === s.id
+                    ? { borderColor: 'var(--cc-primary)', background: 'var(--cc-surface-alt)' }
+                    : undefined
+                }
+                onClick={() => setSymptom(s.id)}
+              >
+                <span aria-hidden="true">{s.icon}</span> {s.label}
+              </button>
+            ))}
+          </div>
+        </fieldset>
 
-        <p className="field-label" style={{ marginTop: 16 }}>
-          Severity: {severity}/5
-        </p>
-        <div style={{ display: 'flex', gap: 8 }}>
-          {[1, 2, 3, 4, 5].map((n) => (
-            <button
-              key={n}
-              type="button"
-              className="btn-pill"
-              aria-label={`Severity ${n}`}
-              aria-pressed={severity === n}
-              style={{
-                flex: 1,
-                background: severity >= n ? 'var(--cc-warning)' : 'var(--cc-surface)',
-                color: severity >= n ? '#fff' : 'var(--cc-text)',
-                border: '1px solid var(--cc-border-subtle)'
-              }}
-              onClick={() => setSeverity(n)}
-            >
-              {n}
-            </button>
-          ))}
-        </div>
+        <fieldset className="fieldset-reset" style={{ marginTop: 16 }}>
+          <legend className="field-label">Severity: {severity}/5</legend>
+          <div className="severity-row">
+            {[1, 2, 3, 4, 5].map((n) => (
+              <button
+                key={n}
+                type="button"
+                className="btn-pill"
+                aria-label={`Severity ${n}`}
+                aria-pressed={severity === n}
+                style={{
+                  background: severity >= n ? 'var(--cc-warning)' : 'var(--cc-surface)',
+                  color: severity >= n ? '#fff' : 'var(--cc-text)',
+                  border: '1px solid var(--cc-border-subtle)'
+                }}
+                onClick={() => setSeverity(n)}
+              >
+                {n}
+              </button>
+            ))}
+          </div>
+        </fieldset>
 
         <div className="field" style={{ marginTop: 16 }}>
           <label className="field-label" htmlFor="note">
@@ -125,12 +126,12 @@ export function SymptomsScreen(): React.JSX.Element {
             role="status"
             style={{ color: 'var(--cc-success)', marginTop: 10 }}
           >
-            ✓ Symptom logged
+            <span aria-hidden="true">✓</span> Symptom logged
           </p>
         )}
       </form>
 
-      <p className="section-label">Recent logs</p>
+      <h2 className="section-label">Recent logs</h2>
       {isLoading && <p className="muted">Loading logs…</p>}
       {error && (
         <div className="error-banner" role="alert">
@@ -138,26 +139,28 @@ export function SymptomsScreen(): React.JSX.Element {
         </div>
       )}
       {!isLoading && logs.length === 0 && <p className="muted">No symptoms logged yet.</p>}
-      {logs.map((log) => (
-        <div className="card" key={log.id}>
-          <div className="list-row">
-            <div>
-              <p className="card-main">{LABEL[log.symptom]}</p>
-              {log.note && <p className="card-sub">{log.note}</p>}
-            </div>
-            <div style={{ textAlign: 'right' }}>
-              <div role="img" aria-label={`Severity ${log.severity} of 5`}>
-                {[1, 2, 3, 4, 5].map((n) => (
-                  <span key={n} className={`severity-dot${n <= log.severity ? ' on' : ''}`} />
-                ))}
+      <ul className="list-reset">
+        {logs.map((log) => (
+          <li className="card" key={log.id}>
+            <div className="list-row">
+              <div>
+                <p className="card-main">{LABEL[log.symptom]}</p>
+                {log.note && <p className="card-sub">{log.note}</p>}
               </div>
-              <p className="card-sub" style={{ marginTop: 4 }}>
-                {timeAgo(log.createdAt)}
-              </p>
+              <div style={{ textAlign: 'right' }}>
+                <div role="img" aria-label={`Severity ${log.severity} of 5`}>
+                  {[1, 2, 3, 4, 5].map((n) => (
+                    <span key={n} className={`severity-dot${n <= log.severity ? ' on' : ''}`} />
+                  ))}
+                </div>
+                <p className="card-sub" style={{ marginTop: 4 }}>
+                  {timeAgo(log.createdAt)}
+                </p>
+              </div>
             </div>
-          </div>
-        </div>
-      ))}
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }

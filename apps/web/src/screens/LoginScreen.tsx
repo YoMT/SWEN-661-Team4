@@ -33,7 +33,10 @@ export function LoginScreen(): React.JSX.Element {
 
   return (
     <div className="auth-split">
-      <main id="main" className="auth-panel">
+      <a className="skip-link" href="#main">
+        Skip to content
+      </a>
+      <main id="main" className="auth-panel" tabIndex={-1}>
         <div className="auth-form">
           <span className="auth-brand">
             <span aria-hidden="true">❤️</span> CareConnect
@@ -44,7 +47,7 @@ export function LoginScreen(): React.JSX.Element {
           <form onSubmit={handleLogin} noValidate>
             {displayError && (
               <div className="error-banner" role="alert">
-                ⚠️ {displayError}
+                <span aria-hidden="true">⚠️</span> {displayError}
               </div>
             )}
 

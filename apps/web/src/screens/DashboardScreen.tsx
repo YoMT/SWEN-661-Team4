@@ -19,10 +19,10 @@ function StatTile({
   color: string
 }): React.JSX.Element {
   return (
-    <div className="stat-tile" style={{ borderLeftColor: color }}>
+    <li className="stat-tile" style={{ borderLeftColor: color }}>
       <div className="stat-value">{value}</div>
       <div className="stat-label">{label}</div>
-    </div>
+    </li>
   )
 }
 
@@ -45,7 +45,7 @@ export function DashboardScreen({ onNavigate }: DashboardProps): React.JSX.Eleme
 
   return (
     <div className="main-inner">
-      <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <div className="page-header row-between">
         <div>
           <p className="page-sub" style={{ margin: 0 }}>
             {greeting()} - caring for
@@ -64,15 +64,15 @@ export function DashboardScreen({ onNavigate }: DashboardProps): React.JSX.Eleme
         </button>
       </div>
 
-      <div className="stats-row" style={{ marginTop: 18 }}>
+      <ul className="stats-row list-reset" style={{ marginTop: 18 }}>
         <StatTile label="Doses today" value={`${givenDoses}/${totalDoses}`} color="#4a7c59" />
         <StatTile label="Appointments" value={String(todayAppointmentsCount)} color="#2e5c8a" />
         <StatTile label="Symptom logs" value={String(logsCount)} color="#9e6e00" />
-      </div>
+      </ul>
 
       {nextMed && (
         <div className="card">
-          <p className="card-eyebrow">Next medication</p>
+          <h2 className="card-eyebrow">Next medication</h2>
           <p className="card-main">
             {nextMed.name} - {nextMed.dosage}
           </p>
@@ -87,7 +87,7 @@ export function DashboardScreen({ onNavigate }: DashboardProps): React.JSX.Eleme
 
       {nextAppt && (
         <div className="card">
-          <p className="card-eyebrow">Today&apos;s appointment</p>
+          <h2 className="card-eyebrow">Today&apos;s appointment</h2>
           <p className="card-main">{nextAppt.doctorName}</p>
           <p className="card-sub">
             {nextAppt.specialty} - {nextAppt.location}

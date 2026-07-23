@@ -5,15 +5,39 @@
  *   - Static assets (script/style/font/image) → Stale-While-Revalidate
  * The data layer is an in-memory mock, so there is no API to cache here yet;
  * a Network-First API route would slot into the fetch handler the same way.
+ *
+ * BUILD and HASHED_ASSETS are injected at build time by the inline Vite plugin
+ * in vite.config.ts (keep each marker line intact and single-line). In dev the
+ * file stays valid as-is; the SW is only registered in production builds.
  */
-const VERSION = 'cc-web-v1'
+const BUILD = 'dev' /* @build */
+const HASHED_ASSETS = [] /* @assets */
+
+const VERSION = `cc-web-${BUILD}`
 const SHELL_CACHE = `${VERSION}-shell`
 const ASSET_CACHE = `${VERSION}-assets`
-const PRECACHE = ['/', '/offline.html', '/manifest.webmanifest', '/favicon.svg', '/icon.svg']
+const SHELL_PRECACHE = [
+  '/',
+  '/offline.html',
+  '/manifest.webmanifest',
+  '/favicon.svg',
+  '/icon.svg',
+  '/icon-maskable.svg',
+  '/icon-192.png',
+  '/icon-512.png',
+  '/icon-maskable-192.png',
+  '/icon-maskable-512.png',
+  '/apple-touch-icon.png'
+]
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(SHELL_CACHE).then((cache) => cache.addAll(PRECACHE)).then(() => self.skipWaiting())
+    Promise.all([
+      caches.open(SHELL_CACHE).then((cache) => cache.addAll(SHELL_PRECACHE)),
+      // Hashed build assets go in the asset cache so the fetch handler's
+      // cache.match(request) finds them offline on first navigation.
+      caches.open(ASSET_CACHE).then((cache) => cache.addAll(HASHED_ASSETS))
+    ]).then(() => self.skipWaiting())
   )
 })
 
