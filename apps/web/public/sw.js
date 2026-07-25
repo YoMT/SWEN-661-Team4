@@ -59,15 +59,23 @@ self.addEventListener('fetch', (event) => {
   if (url.origin !== self.location.origin) return
 
   // App-shell navigations: Network-First → cached shell → offline page.
+  // Every client route serves the same index.html and lets the in-app router
+  // resolve the path, so we must NOT pass a host 404 straight through. A 404/500
+  // is still a *resolved* response (the .catch only fires on network failure),
+  // so treat any non-OK navigation as a miss and fall back to the cached shell —
+  // otherwise a deep-link refresh (e.g. /medications) shows the host's
+  // "Not Found" page. Only an OK response is cached as the shell, so a 404 can
+  // never poison it.
   if (request.mode === 'navigate') {
     event.respondWith(
       fetch(request)
         .then((res) => {
+          if (!res.ok) throw new Error(`navigation ${res.status}`)
           const copy = res.clone()
           caches.open(SHELL_CACHE).then((c) => c.put('/', copy))
           return res
         })
-        .catch(async () => (await caches.match('/')) ?? caches.match('/offline.html'))
+        .catch(async () => (await caches.match('/')) ?? (await caches.match('/offline.html')))
     )
     return
   }
