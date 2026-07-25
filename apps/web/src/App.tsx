@@ -17,6 +17,11 @@ const ROUTE_BY_PATH: Record<string, View> = {
   '/profile': 'profile'
 }
 
+// Where a logged-out deep link was headed, stashed across the landing → login
+// flow so we can return there once the visitor authenticates. sessionStorage
+// (not a ref) so it survives the page reload a direct URL / refresh triggers.
+const REDIRECT_KEY = 'cc:redirectTo'
+
 function Routes(): React.JSX.Element {
   const { isLoggedIn, isLoading } = useAuthContext()
   const { path, navigate } = useRouter()
@@ -26,11 +31,22 @@ function Routes(): React.JSX.Element {
   useEffect(() => {
     if (isLoading) return
     if (isLoggedIn) {
+      // If a logged-out deep link was bounced to the landing page, return the
+      // now-authenticated visitor to where they were originally headed.
+      const pending = sessionStorage.getItem(REDIRECT_KEY)
+      if (pending) {
+        sessionStorage.removeItem(REDIRECT_KEY)
+        navigate(pending, { replace: true })
+        return
+      }
       if (path === '/' || path === '/login' || path === '/signup' || !view) {
         navigate('/dashboard', { replace: true })
       }
     } else if (view) {
-      navigate('/login', { replace: true })
+      // Protected route hit while logged out (direct URL or refresh): remember
+      // the intended destination, then send the visitor to the landing page.
+      sessionStorage.setItem(REDIRECT_KEY, path)
+      navigate('/', { replace: true })
     }
   }, [isLoggedIn, isLoading, path, view, navigate])
 
