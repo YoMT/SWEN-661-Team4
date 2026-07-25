@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useMemo, useCallback, useEf
 import type { Appointment } from '@renderer/types'
 import { api } from '@renderer/services/api'
 import { useRefreshContext } from '@renderer/state/refresh-context'
+import { useAuthContext } from '@renderer/state/auth-context'
 
 interface AppointmentState {
   appointments: Appointment[]
@@ -21,11 +22,20 @@ export function AppointmentProvider({
   children: React.ReactNode
 }): React.JSX.Element {
   const { refreshKey } = useRefreshContext()
+  const { isLoggedIn } = useAuthContext()
   const [appointments, setAppointments] = useState<Appointment[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    // Protected endpoint — don't fetch until authenticated, or the pre-auth
+    // landing/login pages would fire requests that 401.
+    if (!isLoggedIn) {
+      setAppointments([])
+      setError(null)
+      setIsLoading(false)
+      return
+    }
     setIsLoading(true)
     setError(null)
     api
@@ -33,7 +43,7 @@ export function AppointmentProvider({
       .then(setAppointments)
       .catch(() => setError('Could not load appointments'))
       .finally(() => setIsLoading(false))
-  }, [refreshKey])
+  }, [refreshKey, isLoggedIn])
 
   const todayStr = new Date().toDateString()
 

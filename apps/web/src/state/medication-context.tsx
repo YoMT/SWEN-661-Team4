@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useMemo, useCallback, useEf
 import type { Medication, DoseTimeSlot } from '@renderer/types'
 import { api } from '@renderer/services/api'
 import { useRefreshContext } from '@renderer/state/refresh-context'
+import { useAuthContext } from '@renderer/state/auth-context'
 
 interface MedicationState {
   medications: Medication[]
@@ -18,11 +19,20 @@ const MedicationContext = createContext<MedicationState | null>(null)
 
 export function MedicationProvider({ children }: { children: React.ReactNode }): React.JSX.Element {
   const { refreshKey } = useRefreshContext()
+  const { isLoggedIn } = useAuthContext()
   const [medications, setMedications] = useState<Medication[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    // Protected endpoint — don't fetch until authenticated, or the pre-auth
+    // landing/login pages would fire requests that 401.
+    if (!isLoggedIn) {
+      setMedications([])
+      setError(null)
+      setIsLoading(false)
+      return
+    }
     setIsLoading(true)
     setError(null)
     api
@@ -30,7 +40,7 @@ export function MedicationProvider({ children }: { children: React.ReactNode }):
       .then(setMedications)
       .catch(() => setError('Could not load medications'))
       .finally(() => setIsLoading(false))
-  }, [refreshKey])
+  }, [refreshKey, isLoggedIn])
 
   const totalDoses = medications.length
   const givenDoses = useMemo(

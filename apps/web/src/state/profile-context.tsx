@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useCallback, useEffect } fr
 import type { Profile } from '@renderer/types'
 import { api } from '@renderer/services/api'
 import { useRefreshContext } from '@renderer/state/refresh-context'
+import { useAuthContext } from '@renderer/state/auth-context'
 
 interface ProfileState {
   profile: Profile | null
@@ -14,11 +15,20 @@ const ProfileContext = createContext<ProfileState | null>(null)
 
 export function ProfileProvider({ children }: { children: React.ReactNode }): React.JSX.Element {
   const { refreshKey } = useRefreshContext()
+  const { isLoggedIn } = useAuthContext()
   const [profile, setProfile] = useState<Profile | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
+    // Protected endpoint — don't fetch until authenticated, or the pre-auth
+    // landing/login pages would fire requests that 401.
+    if (!isLoggedIn) {
+      setProfile(null)
+      setError(null)
+      setIsLoading(false)
+      return
+    }
     setIsLoading(true)
     setError(null)
     api
@@ -26,7 +36,7 @@ export function ProfileProvider({ children }: { children: React.ReactNode }): Re
       .then(setProfile)
       .catch(() => setError('Could not load profile'))
       .finally(() => setIsLoading(false))
-  }, [refreshKey])
+  }, [refreshKey, isLoggedIn])
 
   const update = useCallback(async (patch: Partial<Profile>) => {
     const updated = await api.patch<Profile>('/profile', patch)
