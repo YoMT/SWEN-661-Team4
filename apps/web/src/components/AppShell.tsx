@@ -1,6 +1,12 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useRouter } from '@renderer/router'
-import { SideNav, RailNav, BottomTabs, NAV, type View } from '@renderer/components/Sidebar'
+import {
+  SideNav,
+  RailNav,
+  BottomTabs,
+  NAV,
+  type View
+} from '@renderer/components/Sidebar'
 import { TopBar } from '@renderer/components/TopBar'
 import { PeggyPanel } from '@renderer/components/PeggyPanel'
 import { EditProfileModal } from '@renderer/components/EditProfileModal'
@@ -19,21 +25,47 @@ const TITLES: Record<View, string> = {
   profile: 'Profile'
 }
 
-/** Cycle focus between the shell's landmark regions with F6 / Shift+F6. */
-function cycleRegion(dir: 1 | -1): void {
-  const nodes = Array.from(document.querySelectorAll<HTMLElement>('[data-region]'))
-  if (nodes.length === 0) return
-  const current = (document.activeElement as HTMLElement | null)?.closest('[data-region]')
-  const idx = current ? nodes.indexOf(current as HTMLElement) : -1
-  const next = nodes[(idx + dir + nodes.length) % nodes.length]
-  const focusable = next.querySelector<HTMLElement>(
-    'a, button, input, textarea, select, [tabindex]:not([tabindex="-1"])'
+/**
+ * Cycles keyboard focus between the shell's landmark regions
+ * using F6 and Shift + F6.
+ */
+function cycleRegion(direction: 1 | -1): void {
+  const regions = Array.from(
+    document.querySelectorAll<HTMLElement>('[data-region]')
   )
-  ;(focusable ?? next).focus()
+
+  if (regions.length === 0) return
+
+  const activeElement = document.activeElement as HTMLElement | null
+  const currentRegion = activeElement?.closest<HTMLElement>('[data-region]')
+  const currentIndex = currentRegion ? regions.indexOf(currentRegion) : -1
+
+  const nextIndex =
+    (currentIndex + direction + regions.length) % regions.length
+
+  const nextRegion = regions[nextIndex]
+
+  const focusableElement = nextRegion.querySelector<HTMLElement>(
+    [
+      'a[href]',
+      'button:not([disabled])',
+      'input:not([disabled])',
+      'textarea:not([disabled])',
+      'select:not([disabled])',
+      '[tabindex]:not([tabindex="-1"])'
+    ].join(',')
+  )
+
+  ;(focusableElement ?? nextRegion).focus()
 }
 
-export function AppShell({ view }: { view: View }): React.JSX.Element {
+export function AppShell({
+  view
+}: {
+  view: View
+}): React.JSX.Element {
   const { navigate } = useRouter()
+
   const [peggyOpen, setPeggyOpen] = useState(false)
   const [editOpen, setEditOpen] = useState(false)
   const [shortcutsOpen, setShortcutsOpen] = useState(false)
@@ -42,41 +74,79 @@ export function AppShell({ view }: { view: View }): React.JSX.Element {
     document.title = `${TITLES[view]} · CareConnect`
   }, [view])
 
-  const goto = useCallback((v: View) => navigate(NAV.find((n) => n.id === v)!.path), [navigate])
+  const goto = useCallback(
+    (nextView: View): void => {
+      const destination = NAV.find((item) => item.id === nextView)
 
-  // Keyboard-first model: number jumps, assistant toggle, shortcuts, Esc.
+      if (destination) {
+        navigate(destination.path)
+      }
+    },
+    [navigate]
+  )
+
   useEffect(() => {
-    const onKey = (e: KeyboardEvent): void => {
-      const mod = e.metaKey || e.ctrlKey
-      const target = e.target as HTMLElement
-      const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName) || target.isContentEditable
+    const handleKeyDown = (event: KeyboardEvent): void => {
+      const modifierPressed = event.metaKey || event.ctrlKey
+      const target = event.target as HTMLElement | null
 
-      if (e.key === 'F6') {
-        e.preventDefault()
-        cycleRegion(e.shiftKey ? -1 : 1)
+      const userIsTyping =
+        target !== null &&
+        (/^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName) ||
+          target.isContentEditable)
+
+      if (event.key === 'F6') {
+        event.preventDefault()
+        cycleRegion(event.shiftKey ? -1 : 1)
         return
       }
-      if (mod && e.key.toLowerCase() === 'j') {
-        e.preventDefault()
-        setPeggyOpen((p) => !p)
+
+      if (
+        modifierPressed &&
+        event.key.toLowerCase() === 'j' &&
+        !userIsTyping
+      ) {
+        event.preventDefault()
+        setPeggyOpen((currentValue) => !currentValue)
         return
       }
-      if (mod && ['1', '2', '3', '4', '5'].includes(e.key)) {
-        e.preventDefault()
-        goto(NAV[Number(e.key) - 1].id)
+
+      if (
+        modifierPressed &&
+        ['1', '2', '3', '4', '5'].includes(event.key) &&
+        !userIsTyping
+      ) {
+        event.preventDefault()
+
+        const navigationItem = NAV[Number(event.key) - 1]
+
+        if (navigationItem) {
+          goto(navigationItem.id)
+        }
+
         return
       }
-      if (e.key === '?' && !typing) {
-        e.preventDefault()
+
+      const questionMarkPressed =
+        event.key === '?' ||
+        (event.code === 'Slash' && event.shiftKey)
+
+      if (questionMarkPressed && !userIsTyping) {
+        event.preventDefault()
         setShortcutsOpen(true)
         return
       }
-      if (e.key === 'Escape') {
+
+      if (event.key === 'Escape') {
         setShortcutsOpen(false)
       }
     }
-    window.addEventListener('keydown', onKey)
-    return () => window.removeEventListener('keydown', onKey)
+
+    window.addEventListener('keydown', handleKeyDown)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+    }
   }, [goto])
 
   return (
@@ -86,7 +156,7 @@ export function AppShell({ view }: { view: View }): React.JSX.Element {
       </a>
 
       <TopBar
-        onTogglePeggy={() => setPeggyOpen((p) => !p)}
+        onTogglePeggy={() => setPeggyOpen((currentValue) => !currentValue)}
         onShowShortcuts={() => setShortcutsOpen(true)}
         peggyOpen={peggyOpen}
       />
@@ -97,17 +167,33 @@ export function AppShell({ view }: { view: View }): React.JSX.Element {
           <RailNav active={view} />
         </div>
 
-        <main id="main" className="main" data-region="main" tabIndex={-1}>
-          {view === 'dashboard' && <DashboardScreen onNavigate={goto} />}
+        <main
+          id="main"
+          className="main"
+          data-region="main"
+          tabIndex={-1}
+        >
+          {view === 'dashboard' && (
+            <DashboardScreen onNavigate={goto} />
+          )}
+
           {view === 'medications' && <MedicationsScreen />}
+
           {view === 'appointments' && <AppointmentsScreen />}
+
           {view === 'symptoms' && <SymptomsScreen />}
-          {view === 'profile' && <ProfileScreen onEdit={() => setEditOpen(true)} />}
+
+          {view === 'profile' && (
+            <ProfileScreen onEdit={() => setEditOpen(true)} />
+          )}
         </main>
 
         {peggyOpen && (
           <div className="peggy-dock" data-region="assistant">
-            <PeggyPanel open onClose={() => setPeggyOpen(false)} />
+            <PeggyPanel
+              open
+              onClose={() => setPeggyOpen(false)}
+            />
           </div>
         )}
       </div>
@@ -115,36 +201,53 @@ export function AppShell({ view }: { view: View }): React.JSX.Element {
       <BottomTabs active={view} />
 
       <footer className="status-strip" data-region="contentinfo">
-        <span aria-hidden="true">●</span> Synced just now
+        <span aria-hidden="true">●</span>
+        <span>Synced just now</span>
+
         <span className="status-spacer" />
-        <span className="muted">CareConnect · demo data</span>
+
+        <span className="muted">
+          CareConnect · demo data
+        </span>
       </footer>
 
-      {editOpen && <EditProfileModal onClose={() => setEditOpen(false)} />}
+      {editOpen && (
+        <EditProfileModal
+          onClose={() => setEditOpen(false)}
+        />
+      )}
 
       {shortcutsOpen && (
-        <InfoDialog title="Keyboard Shortcuts" onClose={() => setShortcutsOpen(false)}>
+        <InfoDialog
+          title="Keyboard Shortcuts"
+          onClose={() => setShortcutsOpen(false)}
+        >
           <ul className="shortcut-list">
             <li>
               <span>Go to Dashboard … Profile</span>
               <kbd>Ctrl/⌘ 1 … 5</kbd>
             </li>
+
             <li>
               <span>Toggle Peggy assistant</span>
               <kbd>Ctrl/⌘ J</kbd>
             </li>
+
             <li>
               <span>Cycle shell regions</span>
               <kbd>F6 / ⇧ F6</kbd>
             </li>
+
             <li>
-              <span>Mark a dose taken (on Medications)</span>
+              <span>Mark a dose taken on Medications</span>
               <kbd>Enter</kbd>
             </li>
+
             <li>
               <span>Open this help</span>
               <kbd>?</kbd>
             </li>
+
             <li>
               <span>Close overlay</span>
               <kbd>Esc</kbd>
