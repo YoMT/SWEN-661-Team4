@@ -1,0 +1,5 @@
+# SPA fallback for static hosting (Render / Netlify syntax).
+# Serve index.html for any path that isn't a real file, so client-side routes
+# like /dashboard or /medications resolve on direct access and refresh instead
+# of 404ing. The React router then decides what to render.
+/*    /index.html   200

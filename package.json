@@ -9,6 +9,8 @@
     "lint": "turbo run lint",
     "test": "turbo run test",
     "web": "pnpm --filter web dev",
+    "server": "pnpm --filter server dev",
+    "server:init-db": "pnpm --filter server init-db",
     "mobile": "pnpm --filter mobile start",
     "desktop": "pnpm --filter desktop dev",
     "desktop:build": "pnpm --filter desktop build",

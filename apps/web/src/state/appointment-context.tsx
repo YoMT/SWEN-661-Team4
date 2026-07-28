@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useState, useMemo, useCallback, useEffect } from 'react'
+import React, { createContext, useContext, useMemo, useCallback } from 'react'
 import type { Appointment } from '@renderer/types'
 import { api } from '@renderer/services/api'
-import { useRefreshContext } from '@renderer/state/refresh-context'
+import { useAuthedResource } from '@renderer/state/use-authed-resource'
 
 interface AppointmentState {
   appointments: Appointment[]
@@ -15,25 +15,20 @@ interface AppointmentState {
 
 const AppointmentContext = createContext<AppointmentState | null>(null)
 
+// Stable empty reference for the logged-out / loading states.
+const NO_APPOINTMENTS: Appointment[] = []
+
 export function AppointmentProvider({
   children
 }: {
   children: React.ReactNode
 }): React.JSX.Element {
-  const { refreshKey } = useRefreshContext()
-  const [appointments, setAppointments] = useState<Appointment[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    setIsLoading(true)
-    setError(null)
-    api
-      .get<Appointment[]>('/appointments')
-      .then(setAppointments)
-      .catch(() => setError('Could not load appointments'))
-      .finally(() => setIsLoading(false))
-  }, [refreshKey])
+  const {
+    data: appointments,
+    isLoading,
+    error,
+    setData: setAppointments
+  } = useAuthedResource<Appointment[]>('/appointments', NO_APPOINTMENTS, 'Could not load appointments')
 
   const todayStr = new Date().toDateString()
 
@@ -55,7 +50,7 @@ export function AppointmentProvider({
       const created = await api.post<Appointment>('/appointments', appt)
       setAppointments((prev) => [...prev, created])
     },
-    []
+    [setAppointments]
   )
 
   const reschedule = useCallback(async (id: string, dateTime: string) => {
@@ -63,7 +58,7 @@ export function AppointmentProvider({
     setAppointments((prev) =>
       prev.map((a) => (a.id === id ? { ...a, dateTime, updatedAt: new Date().toISOString() } : a))
     )
-  }, [])
+  }, [setAppointments])
 
   const value = useMemo(
     () => ({

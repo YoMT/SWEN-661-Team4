@@ -15,20 +15,21 @@ function formatWhen(iso: string): string {
 
 function ApptCard({ appt }: { appt: Appointment }): React.JSX.Element {
   return (
-    <div className="card">
-      <p className="card-eyebrow">
-        {appt.type === 'video' ? '🎥 Video visit' : '🏥 In person'} · {formatWhen(appt.dateTime)}
-      </p>
+    <li className="card">
+      <h3 className="card-eyebrow">
+        <span aria-hidden="true">{appt.type === 'video' ? '🎥' : '🏥'}</span>{' '}
+        {appt.type === 'video' ? 'Video visit' : 'In person'} · {formatWhen(appt.dateTime)}
+      </h3>
       <p className="card-main">{appt.doctorName}</p>
       <p className="card-sub">
         {appt.specialty} · {appt.location}
       </p>
       {appt.notes && (
         <p className="card-sub" style={{ marginTop: 6 }}>
-          📌 {appt.notes}
+          <span aria-hidden="true">📌</span> {appt.notes}
         </p>
       )}
-    </div>
+    </li>
   )
 }
 
@@ -51,18 +52,26 @@ export function AppointmentsScreen(): React.JSX.Element {
 
       {!isLoading && (
         <>
-          <p className="section-label">Today</p>
+          <h2 className="section-label">Today</h2>
           {todayAppointments.length === 0 ? (
             <p className="muted">No appointments today.</p>
           ) : (
-            todayAppointments.map((a) => <ApptCard key={a.id} appt={a} />)
+            <ul className="list-reset">
+              {todayAppointments.map((a) => (
+                <ApptCard key={a.id} appt={a} />
+              ))}
+            </ul>
           )}
 
-          <p className="section-label">Upcoming</p>
+          <h2 className="section-label">Upcoming</h2>
           {upcomingAppointments.length === 0 ? (
             <p className="muted">Nothing else scheduled.</p>
           ) : (
-            upcomingAppointments.map((a) => <ApptCard key={a.id} appt={a} />)
+            <ul className="list-reset">
+              {upcomingAppointments.map((a) => (
+                <ApptCard key={a.id} appt={a} />
+              ))}
+            </ul>
           )}
         </>
       )}

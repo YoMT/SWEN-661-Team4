@@ -39,9 +39,18 @@ export function PeggyPanel({ open, onClose }: PeggyPanelProps): React.JSX.Elemen
   }
 
   return (
-    <aside className="peggy-panel" aria-label="Peggy assistant">
+    <aside
+      className="peggy-panel"
+      aria-label="Peggy assistant"
+      onKeyDown={(e) => {
+        // Non-modal panel: Esc from anywhere inside it closes (no focus trap).
+        if (e.key === 'Escape') onClose()
+      }}
+    >
       <div className="peggy-head">
-        <span className="peggy-title">🤖 Peggy</span>
+        <span className="peggy-title">
+          <span aria-hidden="true">🤖</span> Peggy
+        </span>
         <button
           type="button"
           className="peggy-close"
@@ -64,7 +73,11 @@ export function PeggyPanel({ open, onClose }: PeggyPanelProps): React.JSX.Elemen
           </div>
         ))}
         {isTyping && <div className="bubble bubble-assistant typing">Peggy is typing…</div>}
-        {errorMessage && <div className="error-banner">{errorMessage}</div>}
+        {errorMessage && (
+          <div className="error-banner" role="alert">
+            {errorMessage}
+          </div>
+        )}
       </div>
 
       <div className="peggy-composer">

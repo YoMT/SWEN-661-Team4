@@ -23,6 +23,7 @@ export function TopBar({ onTogglePeggy, onShowShortcuts, peggyOpen }: TopBarProp
       <div className="top-spacer" />
 
       <button
+        id="peggy-toggle"
         type="button"
         className="top-action"
         onClick={onTogglePeggy}

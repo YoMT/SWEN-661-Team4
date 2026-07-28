@@ -21,7 +21,7 @@ function MedRow({
 }): React.JSX.Element {
   const meta = STATUS_META[med.status]
   return (
-    <div className="card">
+    <li className="card">
       <div className="list-row">
         <div>
           <p className="card-main">
@@ -49,7 +49,7 @@ function MedRow({
           </span>
         )}
       </div>
-    </div>
+    </li>
   )
 }
 
@@ -75,7 +75,13 @@ export function MedicationsScreen(): React.JSX.Element {
         </div>
       )}
 
-      {!isLoading && sorted.map((med) => <MedRow key={med.id} med={med} onMarkTaken={markTaken} />)}
+      {!isLoading && (
+        <ul className="list-reset">
+          {sorted.map((med) => (
+            <MedRow key={med.id} med={med} onMarkTaken={markTaken} />
+          ))}
+        </ul>
+      )}
     </div>
   )
 }

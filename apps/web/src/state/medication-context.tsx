@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useState, useMemo, useCallback, useEffect } from 'react'
+import React, { createContext, useContext, useMemo, useCallback } from 'react'
 import type { Medication, DoseTimeSlot } from '@renderer/types'
 import { api } from '@renderer/services/api'
-import { useRefreshContext } from '@renderer/state/refresh-context'
+import { useAuthedResource } from '@renderer/state/use-authed-resource'
 
 interface MedicationState {
   medications: Medication[]
@@ -16,21 +16,16 @@ interface MedicationState {
 
 const MedicationContext = createContext<MedicationState | null>(null)
 
-export function MedicationProvider({ children }: { children: React.ReactNode }): React.JSX.Element {
-  const { refreshKey } = useRefreshContext()
-  const [medications, setMedications] = useState<Medication[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+// Stable empty reference for the logged-out / loading states.
+const NO_MEDICATIONS: Medication[] = []
 
-  useEffect(() => {
-    setIsLoading(true)
-    setError(null)
-    api
-      .get<Medication[]>('/medications')
-      .then(setMedications)
-      .catch(() => setError('Could not load medications'))
-      .finally(() => setIsLoading(false))
-  }, [refreshKey])
+export function MedicationProvider({ children }: { children: React.ReactNode }): React.JSX.Element {
+  const {
+    data: medications,
+    isLoading,
+    error,
+    setData: setMedications
+  } = useAuthedResource<Medication[]>('/medications', NO_MEDICATIONS, 'Could not load medications')
 
   const totalDoses = medications.length
   const givenDoses = useMemo(
@@ -47,7 +42,7 @@ export function MedicationProvider({ children }: { children: React.ReactNode }):
       const created = await api.post<Medication>('/medications', med)
       setMedications((prev) => [...prev, created])
     },
-    []
+    [setMedications]
   )
 
   const markTaken = useCallback(async (id: string) => {
@@ -72,7 +67,7 @@ export function MedicationProvider({ children }: { children: React.ReactNode }):
         prev.map((m) => (m.id === id ? { ...m, status: 'upcoming', takenAt: undefined } : m))
       )
     }
-  }, [])
+  }, [setMedications])
 
   const value = useMemo(
     () => ({

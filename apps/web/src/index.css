@@ -133,6 +133,7 @@ button {
 }
 .card-eyebrow {
   font-size: 13px;
+  font-weight: 400; /* stays visually unchanged when used on <h3>/<legend> */
   color: var(--cc-text-muted);
   margin: 0 0 6px;
 }
@@ -281,9 +282,10 @@ button {
   background: var(--cc-surface);
   color: var(--cc-text);
 }
-.field-input:focus {
+.field-input:focus-visible {
   border-color: var(--cc-primary);
-  outline: none;
+  outline: 3px solid var(--cc-primary);
+  outline-offset: 2px;
 }
 .error-banner {
   background: var(--cc-error-bg);
@@ -340,6 +342,45 @@ button {
   margin: 22px 0 10px;
 }
 
+/* ── Semantic element resets (headings/fieldsets/lists keep the card look) ─ */
+.fieldset-reset {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0; /* fieldset defaults to min-content, which breaks shrink layouts */
+}
+.fieldset-reset legend {
+  padding: 0;
+}
+.list-reset {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.row-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.severity-row {
+  display: flex;
+  gap: 8px;
+}
+.severity-row .btn-pill {
+  flex: 1 1 0;
+  min-width: 0; /* five pills must fit a 320px viewport */
+  padding-left: 0;
+  padding-right: 0;
+}
+/* Symptom picker: 2-col on phones (inherits .quick-row), 3-col from 480px. */
+@media (min-width: 480px) {
+  .symptom-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 /* ── Profile ───────────────────────────────────────────────────────────── */
 .avatar {
   width: 38px;
@@ -366,17 +407,18 @@ button {
 .profile-name {
   font-size: 20px;
   font-weight: 700;
+  margin: 0;
 }
 .profile-role {
   font-size: 14px;
   color: var(--cc-text-muted);
-  margin-top: 4px;
+  margin: 4px 0 0;
 }
 .info-tiles {
   display: grid;
   grid-template-columns: 1fr;
   gap: 12px;
-  margin-bottom: 16px;
+  margin: 0 0 16px;
 }
 @media (min-width: 768px) {
   .info-tiles {
@@ -397,7 +439,7 @@ button {
 .info-value {
   font-size: 15px;
   font-weight: 600;
-  margin-top: 6px;
+  margin: 6px 0 0; /* also cancels the default <dd> indent */
 }
 .list-card {
   padding: 0;
@@ -627,9 +669,10 @@ kbd {
   color: var(--cc-text);
   max-height: 120px;
 }
-.peggy-input:focus {
+.peggy-input:focus-visible {
   border-color: var(--cc-primary);
-  outline: none;
+  outline: 3px solid var(--cc-primary);
+  outline-offset: 2px;
 }
 .peggy-send {
   width: auto;
@@ -723,7 +766,8 @@ kbd {
 .main {
   flex: 1;
   min-width: 0;
-  padding-bottom: 72px; /* clear the fixed bottom tabs on mobile */
+  /* clear the fixed bottom tabs on mobile, plus the home-indicator inset */
+  padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
 }
 
 .nav-left {
@@ -741,7 +785,8 @@ kbd {
   left: 0;
   right: 0;
   z-index: 30;
-  height: 60px;
+  height: calc(60px + env(safe-area-inset-bottom, 0px));
+  padding-bottom: env(safe-area-inset-bottom, 0px);
   background: var(--cc-surface);
   border-top: 1px solid var(--cc-border-subtle);
   display: flex;
@@ -779,6 +824,69 @@ kbd {
 }
 .status-spacer {
   flex: 1;
+}
+.status-offline {
+  color: var(--cc-warning);
+  font-weight: 600;
+}
+
+/* ── Update toast (SW "new version" notice) ────────────────────────────── */
+.toast {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: calc(72px + env(safe-area-inset-bottom, 0px)); /* clear the bottom tabs */
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: calc(100vw - 24px);
+  background: var(--cc-text);
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  box-shadow: var(--shadow-card);
+}
+@media (min-width: 768px) {
+  .toast {
+    bottom: 44px;
+  }
+}
+.toast-action {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+.toast-action:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+.toast-dismiss {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  padding: 4px;
+  flex-shrink: 0;
+}
+
+/* Install row: a real button styled like the profile link rows. */
+.link-row.install-row {
+  width: 100%;
+  background: none;
+  border: 0;
+  color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  text-align: left;
+}
+.link-row.install-row:hover {
+  background: var(--cc-surface-alt);
 }
 
 /* Peggy: full-screen drawer on mobile */

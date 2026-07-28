@@ -22,17 +22,18 @@ interface AuthState {
 const AuthContext = createContext<AuthState | null>(null)
 
 export function AuthProvider({ children }: { children: React.ReactNode }): React.JSX.Element {
+  // Cold-started sessions always start logged out (`user` null) on the landing
+  // page, and there is no async session restore, so nothing is "loading" up
+  // front — login()/signup() flip isLoading around their own requests.
   const [user, setUser] = useState<User | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
 
-  // Always start cold-started sessions logged out, on the landing page:
-  // discard any persisted token rather than restoring it.
+  // Discard any persisted token rather than restoring it (side effect only —
+  // the logged-out state above is already the initial render).
   useEffect(() => {
     setAuthToken(null)
     deleteStoredToken()
-    setUser(null)
-    setIsLoading(false)
   }, [])
 
   const logout = useCallback(async () => {

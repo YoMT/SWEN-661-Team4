@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useProfileContext } from '@renderer/state/profile-context'
 import { useAuthContext } from '@renderer/state/auth-context'
+import { useInstallPrompt } from '@renderer/hooks/use-install-prompt'
 
 const LINK_ROWS = [
   'Accessibility settings',
@@ -42,6 +43,7 @@ interface ProfileScreenProps {
 export function ProfileScreen({ onEdit }: ProfileScreenProps): React.JSX.Element {
   const { profile, isLoading, error } = useProfileContext()
   const { user, logout } = useAuthContext()
+  const { canInstall, promptInstall } = useInstallPrompt()
 
   const [tremor, setTremor] = useState(false)
   const [reduceMotion, setReduceMotion] = useState(false)
@@ -65,14 +67,18 @@ export function ProfileScreen({ onEdit }: ProfileScreenProps): React.JSX.Element
 
   return (
     <div className="main-inner">
-      <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <div className="page-header row-between">
         <h1 className="page-title">Profile</h1>
         <button type="button" className="btn-pill" onClick={onEdit}>
           Edit
         </button>
       </div>
 
-      {error && <div className="error-banner">{error}</div>}
+      {error && (
+        <div className="error-banner" role="alert">
+          {error}
+        </div>
+      )}
       {isLoading && !profile && <p className="muted">Loading profile…</p>}
 
       {/* Header card */}
@@ -81,30 +87,30 @@ export function ProfileScreen({ onEdit }: ProfileScreenProps): React.JSX.Element
           {initials}
         </div>
         <div>
-          <div className="profile-name">{name}</div>
-          <div className="profile-role">
+          <h2 className="profile-name">{name}</h2>
+          <p className="profile-role">
             Caregiver · caring for {profile?.careeName ?? 'your loved one'}
-          </div>
+          </p>
         </div>
       </div>
 
-      {/* Info tiles */}
-      <div className="info-tiles">
+      {/* Info tiles — name/value pairs, so a description list */}
+      <dl className="info-tiles">
         <div className="info-tile">
-          <div className="info-label">Email</div>
-          <div className="info-value">{profile?.email ?? '—'}</div>
+          <dt className="info-label">Email</dt>
+          <dd className="info-value">{profile?.email ?? '—'}</dd>
         </div>
         <div className="info-tile">
-          <div className="info-label">Phone</div>
-          <div className="info-value">{profile?.phone ?? '—'}</div>
+          <dt className="info-label">Phone</dt>
+          <dd className="info-value">{profile?.phone ?? '—'}</dd>
         </div>
         <div className="info-tile">
-          <div className="info-label">Blood type</div>
-          <div className="info-value">{profile?.bloodType ?? '—'}</div>
+          <dt className="info-label">Blood type</dt>
+          <dd className="info-value">{profile?.bloodType ?? '—'}</dd>
         </div>
-      </div>
+      </dl>
 
-      <p className="section-label">Settings</p>
+      <h2 className="section-label">Settings</h2>
 
       {/* Link rows (targets out of scope). aria-disabled rather than removing them from
           the tab order, so screen reader users can still discover the row and hear that
@@ -134,6 +140,19 @@ export function ProfileScreen({ onEdit }: ProfileScreenProps): React.JSX.Element
         <Toggle label="Reduce motion" checked={reduceMotion} onChange={setReduceMotion} />
         <Toggle label="High contrast" checked={highContrast} onChange={setHighContrast} />
       </div>
+
+      {/* PWA install (web-only; renders nothing unless the browser offers install) */}
+      {canInstall && (
+        <div className="card list-card">
+          <button type="button" className="link-row install-row" onClick={promptInstall}>
+            <span className="link-icon" aria-hidden="true" />
+            <span className="link-label">Install CareConnect app</span>
+            <span className="link-chevron" aria-hidden="true">
+              ›
+            </span>
+          </button>
+        </div>
+      )}
 
       <button type="button" className="btn btn-outline signout-btn" onClick={() => void logout()}>
         Sign out

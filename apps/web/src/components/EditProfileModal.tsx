@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useProfileContext } from '@renderer/state/profile-context'
 import { validate } from '@renderer/services/validation'
+import { useModalFocus } from '@renderer/hooks/use-modal-focus'
 
 interface EditProfileModalProps {
   onClose: () => void
@@ -33,10 +34,7 @@ export function EditProfileModal({ onClose }: EditProfileModalProps): React.JSX.
   const [error, setError] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const firstFieldRef = useRef<HTMLInputElement>(null)
-
-  useEffect(() => {
-    firstFieldRef.current?.focus()
-  }, [])
+  const cardRef = useRef<HTMLDivElement>(null)
 
   const isDirty = (Object.keys(form) as (keyof FormState)[]).some((k) => form[k] !== initial[k])
 
@@ -44,6 +42,9 @@ export function EditProfileModal({ onClose }: EditProfileModalProps): React.JSX.
     if (isDirty && !window.confirm('Discard changes?')) return
     onClose()
   }
+
+  // Focus trap + Escape + focus restore for the dialog.
+  useModalFocus(cardRef, { onClose: requestClose, initialFocusRef: firstFieldRef })
 
   const set =
     (key: keyof FormState) =>
@@ -74,13 +75,6 @@ export function EditProfileModal({ onClose }: EditProfileModalProps): React.JSX.
     }
   }
 
-  const onKeyDown = (e: React.KeyboardEvent): void => {
-    if (e.key === 'Escape') {
-      e.preventDefault()
-      requestClose()
-    }
-  }
-
   const onSubmit = (e: React.FormEvent): void => {
     e.preventDefault()
     void save()
@@ -94,8 +88,9 @@ export function EditProfileModal({ onClose }: EditProfileModalProps): React.JSX.
     .toUpperCase()
 
   return (
-    <div className="modal-scrim" onMouseDown={requestClose} onKeyDown={onKeyDown}>
+    <div className="modal-scrim" onMouseDown={requestClose}>
       <div
+        ref={cardRef}
         className="modal-card"
         role="dialog"
         aria-modal="true"
@@ -128,7 +123,11 @@ export function EditProfileModal({ onClose }: EditProfileModalProps): React.JSX.
         </div>
 
         <form onSubmit={onSubmit}>
-          {error && <div className="error-banner">{error}</div>}
+          {error && (
+            <div className="error-banner" role="alert" id="ep-error">
+              {error}
+            </div>
+          )}
 
           <div className="field">
             <label className="field-label" htmlFor="ep-name">
@@ -140,6 +139,8 @@ export function EditProfileModal({ onClose }: EditProfileModalProps): React.JSX.
               className="field-input"
               value={form.name}
               onChange={set('name')}
+              aria-invalid={error ? true : undefined}
+              aria-describedby={error ? 'ep-error' : undefined}
             />
           </div>
 
@@ -153,6 +154,8 @@ export function EditProfileModal({ onClose }: EditProfileModalProps): React.JSX.
               className="field-input"
               value={form.email}
               onChange={set('email')}
+              aria-invalid={error ? true : undefined}
+              aria-describedby={error ? 'ep-error' : undefined}
             />
           </div>
 
@@ -162,6 +165,9 @@ export function EditProfileModal({ onClose }: EditProfileModalProps): React.JSX.
             </label>
             <input
               id="ep-phone"
+              type="tel"
+              inputMode="tel"
+              autoComplete="tel"
               className="field-input"
               value={form.phone}
               onChange={set('phone')}
