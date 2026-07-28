@@ -282,8 +282,10 @@ button {
   background: var(--cc-surface);
   color: var(--cc-text);
 }
-.field-input:focus {
+.field-input:focus-visible {
   border-color: var(--cc-primary);
+  outline: 3px solid var(--cc-primary);
+  outline-offset: 2px;
 }
 .error-banner {
   background: var(--cc-error-bg);
@@ -667,8 +669,10 @@ kbd {
   color: var(--cc-text);
   max-height: 120px;
 }
-.peggy-input:focus {
+.peggy-input:focus-visible {
   border-color: var(--cc-primary);
+  outline: 3px solid var(--cc-primary);
+  outline-offset: 2px;
 }
 .peggy-send {
   width: auto;
