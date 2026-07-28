@@ -1,4 +1,4 @@
-import { renderWithProviders, screen, fireEvent, waitFor } from './test-utils'
+import { renderAuthed, screen, fireEvent, waitFor } from './test-utils'
 import { AppShell } from '@renderer/components/AppShell'
 
 // AppShell is driven by its `view` prop (the real App re-derives it from the route),
@@ -9,7 +9,7 @@ beforeEach(() => {
 
 describe('AppShell — screens', () => {
   test('dashboard shows the caree and stat tiles', async () => {
-    renderWithProviders(<AppShell view="dashboard" />)
+    renderAuthed(<AppShell view="dashboard" />)
     expect(await screen.findByRole('heading', { name: 'Margaret Johnson' })).toBeInTheDocument()
     expect(screen.getByText('Doses today')).toBeInTheDocument()
     // Quick-action button pushes the medications route.
@@ -18,7 +18,7 @@ describe('AppShell — screens', () => {
   })
 
   test('medications list renders and a dose can be marked taken', async () => {
-    renderWithProviders(<AppShell view="medications" />)
+    renderAuthed(<AppShell view="medications" />)
     expect(await screen.findByText(/Metoprolol/)).toBeInTheDocument()
 
     const markButtons = await screen.findAllByRole('button', { name: /Mark .* as taken/ })
@@ -29,14 +29,14 @@ describe('AppShell — screens', () => {
   })
 
   test('appointments render today + upcoming sections', async () => {
-    renderWithProviders(<AppShell view="appointments" />)
+    renderAuthed(<AppShell view="appointments" />)
     expect(await screen.findByRole('heading', { name: 'Appointments' })).toBeInTheDocument()
     expect(screen.getByText('Today')).toBeInTheDocument()
     expect(screen.getByText('Upcoming')).toBeInTheDocument()
   })
 
   test('symptoms: pick a symptom/severity, add a note, and save', async () => {
-    renderWithProviders(<AppShell view="symptoms" />)
+    renderAuthed(<AppShell view="symptoms" />)
     expect(await screen.findByRole('heading', { name: 'Symptoms' })).toBeInTheDocument()
 
     fireEvent.click(screen.getByRole('button', { name: /Pain/ }))
@@ -46,11 +46,13 @@ describe('AppShell — screens', () => {
     })
     fireEvent.click(screen.getByRole('button', { name: 'Save to log' }))
 
-    expect(await screen.findByText('✓ Symptom logged')).toBeInTheDocument()
+    // The ✓ lives in an aria-hidden span, so match the visible label text
+    // (RTL's default matcher only sees the element's direct text node).
+    expect(await screen.findByText(/Symptom logged/)).toBeInTheDocument()
   })
 
   test('profile: toggles flip and Edit opens the modal', async () => {
-    renderWithProviders(<AppShell view="profile" />)
+    renderAuthed(<AppShell view="profile" />)
     expect(await screen.findByRole('heading', { name: 'Profile' })).toBeInTheDocument()
 
     const tremor = screen.getByRole('switch', { name: 'Tremor (Accessible) mode' })
@@ -65,7 +67,7 @@ describe('AppShell — screens', () => {
 
 describe('AppShell — overlays and keyboard', () => {
   test('Ask Peggy button opens the assistant panel', async () => {
-    renderWithProviders(<AppShell view="dashboard" />)
+    renderAuthed(<AppShell view="dashboard" />)
     await screen.findByRole('heading', { name: 'Margaret Johnson' })
 
     fireEvent.click(screen.getByRole('button', { name: /Ask Peggy/ }))
@@ -73,7 +75,7 @@ describe('AppShell — overlays and keyboard', () => {
   })
 
   test('shortcuts button opens the help dialog', async () => {
-    renderWithProviders(<AppShell view="dashboard" />)
+    renderAuthed(<AppShell view="dashboard" />)
     await screen.findByRole('heading', { name: 'Margaret Johnson' })
 
     fireEvent.click(screen.getByRole('button', { name: 'Keyboard shortcuts' }))
@@ -81,7 +83,7 @@ describe('AppShell — overlays and keyboard', () => {
   })
 
   test('keyboard shortcuts: "?" opens help, Escape closes, Ctrl+J toggles Peggy, Ctrl+2 navigates', async () => {
-    renderWithProviders(<AppShell view="dashboard" />)
+    renderAuthed(<AppShell view="dashboard" />)
     await screen.findByRole('heading', { name: 'Margaret Johnson' })
 
     fireEvent.keyDown(window, { key: '?' })

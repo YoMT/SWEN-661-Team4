@@ -6,3 +6,22 @@ import '@testing-library/jest-dom'
 if (!Element.prototype.scrollTo) {
   Element.prototype.scrollTo = (): void => {}
 }
+
+// The router calls window.scrollTo on navigation; silence jsdom's
+// "Not implemented" noise.
+window.scrollTo = (): void => {}
+
+// jsdom has no matchMedia (use-install-prompt checks display-mode: standalone).
+if (!window.matchMedia) {
+  window.matchMedia = (query: string): MediaQueryList =>
+    ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addEventListener: () => {},
+      removeEventListener: () => {},
+      addListener: () => {},
+      removeListener: () => {},
+      dispatchEvent: () => false
+    }) as MediaQueryList
+}

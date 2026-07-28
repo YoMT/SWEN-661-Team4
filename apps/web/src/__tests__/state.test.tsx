@@ -1,5 +1,6 @@
 import { renderHook, act, waitFor } from '@testing-library/react'
 import { AppProviders } from '@renderer/state/providers'
+import { AuthedProviders } from './test-utils'
 import { useRefreshContext } from '@renderer/state/refresh-context'
 import { useAuthContext } from '@renderer/state/auth-context'
 import { useProfileContext } from '@renderer/state/profile-context'
@@ -64,9 +65,11 @@ describe('auth-context', () => {
 
 describe('profile-context', () => {
   test('loads the profile and applies an update', async () => {
-    const { result } = renderHook(() => useProfileContext(), { wrapper })
-    await waitFor(() => expect(result.current.isLoading).toBe(false))
-    expect(result.current.profile?.name).toBeTruthy()
+    // Profile is a protected endpoint — the context only fetches once
+    // authenticated, so render inside the signed-in providers and wait for the
+    // data (isLoading flips false immediately while logged out).
+    const { result } = renderHook(() => useProfileContext(), { wrapper: AuthedProviders })
+    await waitFor(() => expect(result.current.profile?.name).toBeTruthy())
     await act(async () => {
       await result.current.update({ bloodType: 'B+' })
     })
@@ -76,10 +79,11 @@ describe('profile-context', () => {
 
 describe('medication-context', () => {
   test('loads meds, exposes counts/byTimeSlot, adds and marks taken', async () => {
-    const { result } = renderHook(() => useMedicationContext(), { wrapper })
-    await waitFor(() => expect(result.current.isLoading).toBe(false))
+    // Meds are a protected endpoint; render authenticated and wait for the
+    // loaded doses rather than the (immediate, logged-out) isLoading flip.
+    const { result } = renderHook(() => useMedicationContext(), { wrapper: AuthedProviders })
+    await waitFor(() => expect(result.current.totalDoses).toBeGreaterThan(0))
 
-    expect(result.current.totalDoses).toBeGreaterThan(0)
     expect(result.current.givenDoses).toBeGreaterThanOrEqual(0)
     expect(Array.isArray(result.current.byTimeSlot('morning'))).toBe(true)
 
