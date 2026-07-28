@@ -25,5 +25,5 @@
     "noFallthroughCasesInSwitch": true
   },
   "include": ["src"],
-  "exclude": ["src/**/__tests__/**", "src/setupTests.ts", "src/vitest-axe.d.ts"]
+  "exclude": ["src/**/__tests__/**", "src/setupTests.ts"]
 }
