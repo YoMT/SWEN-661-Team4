@@ -42,14 +42,4 @@ export default defineConfig([
       'react-refresh/only-export-components': 'off',
     },
   },
-  {
-    // Each data context syncs server state to an effect keyed on auth/refresh:
-    // it resets to empty when logged out and (re)fetches when logged in. The
-    // synchronous reset is a deliberate part of that sync, not a cascading-render
-    // bug, so allow setState in these fetch effects.
-    files: ['src/state/*-context.tsx'],
-    rules: {
-      'react-hooks/set-state-in-effect': 'off',
-    },
-  },
 ])

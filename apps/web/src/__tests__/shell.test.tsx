@@ -31,7 +31,8 @@ describe('AppShell — screens', () => {
   test('appointments render today + upcoming sections', async () => {
     renderAuthed(<AppShell view="appointments" />)
     expect(await screen.findByRole('heading', { name: 'Appointments' })).toBeInTheDocument()
-    expect(screen.getByText('Today')).toBeInTheDocument()
+    // The Today/Upcoming sections render once the fetch settles (isLoading false).
+    expect(await screen.findByText('Today')).toBeInTheDocument()
     expect(screen.getByText('Upcoming')).toBeInTheDocument()
   })
 

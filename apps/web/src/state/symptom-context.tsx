@@ -1,8 +1,7 @@
-import React, { createContext, useContext, useState, useMemo, useCallback, useEffect } from 'react'
+import React, { createContext, useContext, useMemo, useCallback } from 'react'
 import type { SymptomLog } from '@renderer/types'
 import { api } from '@renderer/services/api'
-import { useRefreshContext } from '@renderer/state/refresh-context'
-import { useAuthContext } from '@renderer/state/auth-context'
+import { useAuthedResource } from '@renderer/state/use-authed-resource'
 
 interface SymptomState {
   logs: SymptomLog[]
@@ -13,35 +12,24 @@ interface SymptomState {
 
 const SymptomContext = createContext<SymptomState | null>(null)
 
+// Stable empty reference for the logged-out / loading states.
+const NO_LOGS: SymptomLog[] = []
+
 export function SymptomProvider({ children }: { children: React.ReactNode }): React.JSX.Element {
-  const { refreshKey } = useRefreshContext()
-  const { isLoggedIn } = useAuthContext()
-  const [logs, setLogs] = useState<SymptomLog[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const {
+    data: logs,
+    isLoading,
+    error,
+    setData: setLogs
+  } = useAuthedResource<SymptomLog[]>('/symptoms', NO_LOGS, 'Could not load symptom logs')
 
-  useEffect(() => {
-    // Protected endpoint — don't fetch until authenticated, or the pre-auth
-    // landing/login pages would fire requests that 401.
-    if (!isLoggedIn) {
-      setLogs([])
-      setError(null)
-      setIsLoading(false)
-      return
-    }
-    setIsLoading(true)
-    setError(null)
-    api
-      .get<SymptomLog[]>('/symptoms')
-      .then(setLogs)
-      .catch(() => setError('Could not load symptom logs'))
-      .finally(() => setIsLoading(false))
-  }, [refreshKey, isLoggedIn])
-
-  const addLog = useCallback(async (log: Omit<SymptomLog, 'id' | 'createdAt' | 'updatedAt'>) => {
-    const created = await api.post<SymptomLog>('/symptoms', log)
-    setLogs((prev) => [created, ...prev])
-  }, [])
+  const addLog = useCallback(
+    async (log: Omit<SymptomLog, 'id' | 'createdAt' | 'updatedAt'>) => {
+      const created = await api.post<SymptomLog>('/symptoms', log)
+      setLogs((prev) => [created, ...prev])
+    },
+    [setLogs]
+  )
 
   const value = useMemo(
     () => ({ logs, isLoading, error, addLog }),

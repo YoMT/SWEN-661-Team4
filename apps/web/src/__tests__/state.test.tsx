@@ -112,7 +112,9 @@ describe('medication-context', () => {
 
 describe('appointment-context', () => {
   test('loads, splits today/upcoming, adds and reschedules', async () => {
-    const { result } = renderHook(() => useAppointmentContext(), { wrapper })
+    // Appointments are a protected resource; render authenticated and wait for
+    // the fetch to settle before mutating (data is empty until logged in).
+    const { result } = renderHook(() => useAppointmentContext(), { wrapper: AuthedProviders })
     await waitFor(() => expect(result.current.isLoading).toBe(false))
 
     expect(Array.isArray(result.current.todayAppointments)).toBe(true)
@@ -142,7 +144,9 @@ describe('appointment-context', () => {
 
 describe('symptom-context', () => {
   test('loads and prepends a new log', async () => {
-    const { result } = renderHook(() => useSymptomContext(), { wrapper })
+    // Symptom logs are a protected resource; render authenticated and wait for
+    // the fetch to settle before mutating (data is empty until logged in).
+    const { result } = renderHook(() => useSymptomContext(), { wrapper: AuthedProviders })
     await waitFor(() => expect(result.current.isLoading).toBe(false))
     const before = result.current.logs.length
     await act(async () => {
