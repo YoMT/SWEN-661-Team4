@@ -2,24 +2,12 @@ import React from 'react'
 import { useAuthContext } from '@renderer/state/auth-context'
 import { useProfileContext } from '@renderer/state/profile-context'
 import { Link } from '@renderer/router'
+import { NAV, type View } from '@renderer/components/nav'
 
-export type View = 'dashboard' | 'medications' | 'appointments' | 'symptoms' | 'profile'
-
-export interface NavItem {
-  id: View
-  label: string
-  short: string
-  icon: string
-  path: string
-}
-
-export const NAV: NavItem[] = [
-  { id: 'dashboard', label: 'Dashboard', short: 'Home', icon: '🏠', path: '/dashboard' },
-  { id: 'medications', label: 'Medications', short: 'Meds', icon: '💊', path: '/medications' },
-  { id: 'appointments', label: 'Appointments', short: 'Appts', icon: '📅', path: '/appointments' },
-  { id: 'symptoms', label: 'Symptoms', short: 'Sympt.', icon: '📝', path: '/symptoms' },
-  { id: 'profile', label: 'Profile', short: 'Profile', icon: '👤', path: '/profile' }
-]
+// Re-export the nav *types* so existing type-only importers keep working. Type
+// re-exports are erased at build, so this stays a component-only runtime module
+// (Fast Refresh). The NAV value lives in ./nav — import it from there directly.
+export type { View, NavItem } from '@renderer/components/nav'
 
 /** Desktop (≥1200px): persistent labelled sidebar with an account footer. */
 export function SideNav({ active }: { active: View }): React.JSX.Element {

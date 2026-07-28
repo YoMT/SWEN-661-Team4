@@ -1,12 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useRouter } from '@renderer/router'
-import {
-  SideNav,
-  RailNav,
-  BottomTabs,
-  NAV,
-  type View
-} from '@renderer/components/Sidebar'
+import { SideNav, RailNav, BottomTabs } from '@renderer/components/Sidebar'
+import { NAV, type View } from '@renderer/components/nav'
 import { TopBar } from '@renderer/components/TopBar'
 import { PeggyPanel } from '@renderer/components/PeggyPanel'
 import { EditProfileModal } from '@renderer/components/EditProfileModal'
