@@ -58,10 +58,11 @@ test.describe('Caregiver flows', () => {
     await expect(panel.getByText(/Metoprolol/)).toBeVisible()
   })
 
-  test('signs out and is returned to the sign-in screen', async ({ page }) => {
-    // The route guard bounces a logged-out user off protected routes to /login.
+  test('signs out and is returned to the landing page', async ({ page }) => {
+    // The route guard bounces a logged-out user off protected routes to the
+    // landing page (which offers a Sign in link).
     await sideNav(page).getByRole('button', { name: 'Sign out' }).click()
-    await expect(page.getByRole('heading', { name: 'Sign in' })).toBeVisible()
-    await expect(page).toHaveURL(/\/login$/)
+    await expect(page).toHaveURL(/localhost:5173\/$/)
+    await expect(page.getByRole('link', { name: 'Sign in' })).toBeVisible()
   })
 })

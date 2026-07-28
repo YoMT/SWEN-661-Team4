@@ -11,6 +11,8 @@
     "test": "jest",
     "test:coverage": "jest --coverage",
     "test:e2e": "playwright test",
+    "test:e2e:mobile": "playwright test --project=mobile-mock",
+    "test:e2e:real": "playwright test --project=real-api",
     "test:e2e:report": "playwright show-report"
   },
   "dependencies": {

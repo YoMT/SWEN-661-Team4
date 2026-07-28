@@ -13,3 +13,6 @@ export async function login(page: Page): Promise<void> {
 
 /** The persistent desktop sidebar (visible at the configured 1440px viewport). */
 export const sideNav = (page: Page) => page.locator('.side-nav')
+
+/** The mobile bottom tab bar (visible below the 768px breakpoint). */
+export const bottomTabs = (page: Page) => page.locator('.bottom-tabs')
