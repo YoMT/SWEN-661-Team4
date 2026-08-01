@@ -15,8 +15,10 @@
   --cc-text-muted: #595959;
   --cc-border-subtle: #e0e0e0;
   --cc-border-strong: #6b6b6b;
-  --cc-success: #4a7c59;
-  --cc-warning: #9e6e00;
+  /* Darkened from #4a7c59 / #9e6e00 so the tinted status badges (.badge-given /
+     .badge-due) clear WCAG 2.1 AA 4.5:1 on their light backgrounds. */
+  --cc-success: #3d6a49;
+  --cc-warning: #835900;
   --cc-error: #b34040;
   --cc-error-bg: #fef2f2;
   --cc-landing-bg: #f5efe6;
@@ -727,7 +729,9 @@ kbd {
   font-weight: 600;
 }
 .top-action:hover {
-  background: rgba(255, 255, 255, 0.26);
+  /* Darken (not lighten) on hover: a lighter translucent-white overlay dropped
+     the white label to 3.8:1 on the blue bar. Darkening keeps it well past AA. */
+  background: rgba(0, 0, 0, 0.18);
 }
 .top-icon-btn {
   width: 36px;

@@ -50,9 +50,54 @@ export default defineConfig({
     {
       name: 'desktop-mock',
       testDir: './e2e',
-      testIgnore: ['**/mobile/**', '**/real-api/**'],
+      // The a11y (axe) scan runs under its own dedicated projects below.
+      testIgnore: ['**/mobile/**', '**/real-api/**', '**/a11y/**'],
       use: {
         ...devices['Desktop Chrome'],
+        viewport: { width: 1440, height: 900 },
+        baseURL: MOCK_URL
+      }
+    },
+    {
+      // Automated WCAG 2.1 AA scan (axe-core) in Chromium — the Chrome engine.
+      name: 'a11y-chromium',
+      testDir: './e2e/a11y',
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport: { width: 1440, height: 900 },
+        baseURL: MOCK_URL
+      }
+    },
+    {
+      // Same scan in Microsoft Edge (installed system channel), for the
+      // cross-browser evidence the directive asks for. Skipped automatically
+      // if Edge is not present on the machine.
+      name: 'a11y-edge',
+      testDir: './e2e/a11y',
+      use: {
+        ...devices['Desktop Edge'],
+        channel: 'msedge',
+        viewport: { width: 1440, height: 900 },
+        baseURL: MOCK_URL
+      }
+    },
+    {
+      // Same scan in Firefox (Gecko engine).
+      name: 'a11y-firefox',
+      testDir: './e2e/a11y',
+      use: {
+        ...devices['Desktop Firefox'],
+        viewport: { width: 1440, height: 900 },
+        baseURL: MOCK_URL
+      }
+    },
+    {
+      // Same scan in WebKit — the engine behind Safari. On Windows this is the
+      // closest automatable proxy for Safari's accessibility behaviour.
+      name: 'a11y-webkit',
+      testDir: './e2e/a11y',
+      use: {
+        ...devices['Desktop Safari'],
         viewport: { width: 1440, height: 900 },
         baseURL: MOCK_URL
       }
