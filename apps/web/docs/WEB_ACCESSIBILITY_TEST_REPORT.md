@@ -129,6 +129,12 @@ runs above, so **zero WAVE errors are expected**.
 > WAVE "Alerts" (e.g. redundant links, or a possible-heading) are advisory, not errors — note
 > them but they do not block the "zero errors" goal.
 
+**Reviewed alerts — intentional / by-design (no change required):**
+
+| Item | Where | Verdict |
+|------|-------|---------|
+| `tabindex="-1"` on `<main id="main">` | `LandingScreen.tsx`, `LoginScreen.tsx`, `SignupScreen.tsx`, `AppShell.tsx` | **Reviewed — intentional.** Required to make `<main>` a programmatic focus target for the "Skip to content" link (`href="#main"`) and per-route focus management (`App.tsx:62`, `AppShell.tsx:90` call `document.getElementById('main').focus()`). A value of `-1` keeps it out of the tab order while remaining `.focus()`-able — the WebAIM-recommended skip-target pattern. WAVE only errors on **positive** `tabindex`; `-1`/`0` are advisory at most. The axe `frame-focusable-content` rule for `tabindex=-1` applies to `<iframe>`/`<frame>`, not `<main>`. Removing it would break the skip link and route focus. |
+
 ### 1.3 Lighthouse — Accessibility score ≥ 90 — ✅ executed (score = 100)
 
 Lighthouse's Accessibility category is itself axe-powered. It was run headlessly (Lighthouse

@@ -25,6 +25,7 @@ export function LandingScreen(): React.JSX.Element {
         </Link>
       </header>
 
+      {/* tabIndex=-1: skip-link + per-route focus target (not a Tab stop). See WEB_ACCESSIBILITY_TEST_REPORT.md §1.2. */}
       <main id="main" className="landing-hero-grid" tabIndex={-1}>
         <section className="landing-copy">
           <span className="landing-pill">
@@ -45,7 +46,7 @@ export function LandingScreen(): React.JSX.Element {
               I already have an account
             </Link>
           </div>
-          <Link to="/login" className="ask-pill">
+          <Link to="/signup" className="ask-pill">
             <span className="ask-text">+ Ask CareConnect</span>
             <span className="live-dot" aria-hidden="true" />
           </Link>
