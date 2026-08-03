@@ -134,6 +134,7 @@ runs above, so **zero WAVE errors are expected**.
 | Item | Where | Verdict |
 |------|-------|---------|
 | `tabindex="-1"` on `<main id="main">` | `LandingScreen.tsx`, `LoginScreen.tsx`, `SignupScreen.tsx`, `AppShell.tsx` | **Reviewed — intentional.** Required to make `<main>` a programmatic focus target for the "Skip to content" link (`href="#main"`) and per-route focus management (`App.tsx:62`, `AppShell.tsx:90` call `document.getElementById('main').focus()`). A value of `-1` keeps it out of the tab order while remaining `.focus()`-able — the WebAIM-recommended skip-target pattern. WAVE only errors on **positive** `tabindex`; `-1`/`0` are advisory at most. The axe `frame-focusable-content` rule for `tabindex=-1` applies to `<iframe>`/`<frame>`, not `<main>`. Removing it would break the skip link and route focus. |
+| `<header>` structural element ("Ensure the header surrounds and defines page header content") | `LandingScreen.tsx` (`.landing-top`), plus `LoginScreen.tsx` / `SignupScreen.tsx` / `AppShell.tsx` headers | **Reviewed — intentional.** WAVE's `header` note is advisory, not an error. The element is a direct child of a plain wrapper `<div>` (not nested in `article`/`aside`/`main`/`nav`/`section`), so it maps to the `banner` landmark and correctly defines the page-level header. It surrounds only page-header content (brand + "Sign in"), and exactly one header/banner renders per page. No change required. |
 
 ### 1.3 Lighthouse — Accessibility score ≥ 90 — ✅ executed (score = 100)
 
