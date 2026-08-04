@@ -91,6 +91,16 @@ overlay, dropping the white label below AA. The hover now applies a *darkening* 
 **Re-scan after fix:** 0 violations on every surface in every browser (evidence in
 `test-results/a11y/`).
 
+**WAVE contrast — hero tagline (Login / Signup).** WAVE reported *"Very low contrast (1.05:1)"*
+on `.auth-hero-tagline` (white text). This was a scanner-fallback false reading: the text sits on
+the `.auth-hero` background **image** under a pseudo-element gradient scrim (`.auth-hero::before`),
+neither of which automated checkers evaluate, so WAVE measured white against the page fallback
+`#f8f9fa`. Fixed defensively in `src/index.css` by giving `.auth-hero-tagline` its own solid
+semi-opaque scrim (`background: rgba(20, 28, 36, 0.85)` + padding + radius). This yields ≈10.5:1
+real contrast over any hero photo **and** gives checkers a measurable background-color, clearing the
+flag. Shared class, so both `/login` and `/signup` are covered; the `<aside>` remains decorative
+(`aria-hidden`, duplicating the in-form `.auth-tagline`).
+
 #### axe DevTools *extension* — manual confirmation (optional) — ☐ tester
 
 The automated run above is authoritative. If a screenshot from the actual browser extension is

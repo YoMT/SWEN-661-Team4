@@ -1261,6 +1261,12 @@ kbd {
     font-weight: 700;
     max-width: 420px;
     margin: 0;
+    /* Solid semi-opaque scrim on the text itself: keeps white legible over any
+       hero photo (>10:1) AND gives contrast checkers a real background-color to
+       measure, instead of falling back to the page bg (false 1.05:1). */
+    padding: 14px 18px;
+    background: rgba(20, 28, 36, 0.85);
+    border-radius: 12px;
   }
 }
 
