@@ -36,6 +36,7 @@ export function LoginScreen(): React.JSX.Element {
       <a className="skip-link" href="#main">
         Skip to content
       </a>
+      {/* tabIndex=-1: skip-link + per-route focus target (not a Tab stop). See WEB_ACCESSIBILITY_TEST_REPORT.md §1.2. */}
       <main id="main" className="auth-panel" tabIndex={-1}>
         <div className="auth-form">
           <span className="auth-brand">
@@ -46,7 +47,7 @@ export function LoginScreen(): React.JSX.Element {
 
           <form onSubmit={handleLogin} noValidate>
             {displayError && (
-              <div className="error-banner" role="alert">
+              <div className="error-banner" role="alert" id="login-error">
                 <span aria-hidden="true">⚠️</span> {displayError}
               </div>
             )}
@@ -63,6 +64,8 @@ export function LoginScreen(): React.JSX.Element {
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                aria-invalid={displayError ? true : undefined}
+                aria-describedby={displayError ? 'login-error' : undefined}
               />
             </div>
 
@@ -78,6 +81,8 @@ export function LoginScreen(): React.JSX.Element {
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                aria-invalid={displayError ? true : undefined}
+                aria-describedby={displayError ? 'login-error' : undefined}
               />
             </div>
 

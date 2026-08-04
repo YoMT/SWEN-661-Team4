@@ -1,0 +1,48 @@
+
+=== appointments — 0 violation rule(s) ===
+
+=== dashboard — 0 violation rule(s) ===
+
+=== edit-profile-modal — 0 violation rule(s) ===
+
+=== landing — 0 violation rule(s) ===
+
+=== login — 0 violation rule(s) ===
+
+=== medications — 0 violation rule(s) ===
+
+=== peggy-panel — 0 violation rule(s) ===
+
+=== profile — 0 violation rule(s) ===
+
+=== shortcuts-dialog — 0 violation rule(s) ===
+
+=== signup — 0 violation rule(s) ===
+
+=== symptoms — 0 violation rule(s) ===
+
+TOTAL failing nodes across a11y-chromium: 0
+
+=== appointments — 0 violation rule(s) ===
+
+=== dashboard — 0 violation rule(s) ===
+
+=== edit-profile-modal — 0 violation rule(s) ===
+
+=== landing — 0 violation rule(s) ===
+
+=== login — 0 violation rule(s) ===
+
+=== medications — 0 violation rule(s) ===
+
+=== peggy-panel — 0 violation rule(s) ===
+
+=== profile — 0 violation rule(s) ===
+
+=== shortcuts-dialog — 0 violation rule(s) ===
+
+=== signup — 0 violation rule(s) ===
+
+=== symptoms — 0 violation rule(s) ===
+
+TOTAL failing nodes across a11y-edge: 0

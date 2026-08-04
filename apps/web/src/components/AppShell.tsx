@@ -193,6 +193,7 @@ export function AppShell({
           <RailNav active={view} />
         </div>
 
+        {/* tabIndex=-1: skip-link + per-route focus target (not a Tab stop). See WEB_ACCESSIBILITY_TEST_REPORT.md §1.2. */}
         <main
           id="main"
           className="main"
