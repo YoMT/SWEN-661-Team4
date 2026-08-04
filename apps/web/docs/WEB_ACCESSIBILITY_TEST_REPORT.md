@@ -101,6 +101,12 @@ real contrast over any hero photo **and** gives checkers a measurable background
 flag. Shared class, so both `/login` and `/signup` are covered; the `<aside>` remains decorative
 (`aria-hidden`, duplicating the in-form `.auth-tagline`).
 
+**WAVE small text — icon-rail nav labels (all authed screens).** WAVE reported *"Very small text"*
+on `.rail-label` (Home / Meds / Appts / Sympt. / Profile) in the tablet icon rail (768–1199px). The
+labels inherited `font-size: 10px` from `.rail-item`. Fixed in `src/index.css` by raising it to
+`12px` — above WAVE's small-text threshold and more readable, while the longest label ("Profile")
+still fits the 60px item width. Applies wherever the rail renders, not just the Dashboard.
+
 #### axe DevTools *extension* — manual confirmation (optional) — ☐ tester
 
 The automated run above is authoritative. If a screenshot from the actual browser extension is

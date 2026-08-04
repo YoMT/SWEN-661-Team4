@@ -942,7 +942,9 @@ kbd {
     border-radius: 8px;
     color: var(--cc-text-muted);
     text-decoration: none;
-    font-size: 10px;
+    /* 12px keeps the rail labels above WAVE's "very small text" threshold and
+       readable; longest label ("Profile") still fits the 60px item width. */
+    font-size: 12px;
     font-weight: 600;
   }
   .rail-item.active {
