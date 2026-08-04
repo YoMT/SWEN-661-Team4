@@ -107,6 +107,13 @@ labels inherited `font-size: 10px` from `.rail-item`. Fixed in `src/index.css` b
 `12px` — above WAVE's small-text threshold and more readable, while the longest label ("Profile")
 still fits the 60px item width. Applies wherever the rail renders, not just the Dashboard.
 
+**WAVE small text — mobile bottom-tab labels (all authed screens, phone width).** The same
+"very small text" alert also applied to `.tab-label` in the fixed bottom-tab nav (`.bottom-tabs`,
+visible < 768px), whose `.tab-item` set `font-size: 11px`. The earlier rail fix did not cover this
+parallel component. Raised `.tab-item` to `12px` in `src/index.css` to match `.rail-item`; labels
+still fit the equal-width tabs. Surfaces at phone width (the bottom tabs are `display:none` on
+tablet/desktop).
+
 #### axe DevTools *extension* — manual confirmation (optional) — ☐ tester
 
 The automated run above is authoritative. If a screenshot from the actual browser extension is

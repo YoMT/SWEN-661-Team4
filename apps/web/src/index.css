@@ -804,7 +804,9 @@ kbd {
   gap: 4px;
   color: var(--cc-text-muted);
   text-decoration: none;
-  font-size: 11px;
+  /* 12px matches .rail-item and keeps the bottom-tab labels above WAVE's
+     "very small text" threshold; labels still fit the equal-width tabs. */
+  font-size: 12px;
   font-weight: 600;
 }
 .tab-item.active {
