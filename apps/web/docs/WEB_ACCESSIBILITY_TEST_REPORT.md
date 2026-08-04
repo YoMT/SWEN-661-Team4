@@ -114,6 +114,14 @@ parallel component. Raised `.tab-item` to `12px` in `src/index.css` to match `.r
 still fit the equal-width tabs. Surfaces at phone width (the bottom tabs are `display:none` on
 tablet/desktop).
 
+**WAVE possible-heading — appointment cards (Appointments).** Each appointment card marked the
+type/time eyebrow as the `<h3>` while the visually-primary doctor name was a plain `<p>`, so the
+heading text was not the card's identifier (a "possible heading" advisory on the bold name).
+Swapped the semantics in `AppointmentsScreen.tsx`: the doctor name is now the `<h3 class="card-main">`
+and the type/time line is a non-heading `<p class="card-eyebrow">`. Both classes carry explicit
+font/margin, so the render is pixel-identical; the outline now reads `h1` → `h2` Today/Upcoming →
+`h3` doctor name.
+
 #### axe DevTools *extension* — manual confirmation (optional) — ☐ tester
 
 The automated run above is authoritative. If a screenshot from the actual browser extension is

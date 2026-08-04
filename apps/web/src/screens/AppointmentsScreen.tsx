@@ -16,11 +16,12 @@ function formatWhen(iso: string): string {
 function ApptCard({ appt }: { appt: Appointment }): React.JSX.Element {
   return (
     <li className="card">
-      <h3 className="card-eyebrow">
+      {/* Doctor name is the card's heading; type/time is a supporting eyebrow above it. */}
+      <p className="card-eyebrow">
         <span aria-hidden="true">{appt.type === 'video' ? '🎥' : '🏥'}</span>{' '}
         {appt.type === 'video' ? 'Video visit' : 'In person'} · {formatWhen(appt.dateTime)}
-      </h3>
-      <p className="card-main">{appt.doctorName}</p>
+      </p>
+      <h3 className="card-main">{appt.doctorName}</h3>
       <p className="card-sub">
         {appt.specialty} · {appt.location}
       </p>
