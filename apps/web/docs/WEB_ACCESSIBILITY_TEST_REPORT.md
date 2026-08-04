@@ -14,7 +14,7 @@
 |------|--------|
 | Automated — axe-core (WCAG 2.1 A/AA), 4 browsers | **0 violations** across 36 surface scans (after fixes) |
 | Automated — Lighthouse accessibility | **100 / 100** on all three public pages |
-| Defects found | **3** (all `color-contrast`, `serious`) — **all fixed** |
+| Defects found & fixed | **3** axe `color-contrast` (serious) **+ 4** WAVE manual-review items (hero-tagline contrast, icon-rail & bottom-tab small text, appointment-card heading) — **all fixed**. 3 further WAVE alerts reviewed as intentional (§1.2). |
 | Manual — keyboard navigation | Full app operable keyboard-only (verified in code + interactive runbook §2.1) |
 | Manual — screen reader | Landmarks, live regions, names verified in code; NVDA/VoiceOver runbook §2.2 |
 | Semantic HTML / ARIA / focus management | Verified (§2.3–2.5) |
@@ -24,7 +24,12 @@ The web app was already built with strong accessibility foundations (skip link, 
 landmarks, an `F6` region-cycling model, a reusable modal focus-trap hook, and
 per-route focus management). Automated scanning surfaced **three real colour-contrast
 defects**, which were fixed in `src/index.css`. After the fixes, every automated check
-is clean.
+is clean. A subsequent manual **WAVE** (WebAIM) review surfaced four further items — a
+hero-tagline contrast reading (a scanner fallback over a background image, fixed defensively),
+two very-small navigation labels (the icon rail and the mobile bottom tabs), and an
+appointment-card heading — all resolved in `src/index.css`/markup (§1.1–1.2). Three additional
+WAVE alerts (the `tabindex="-1"` skip target, the `<header>` banner, and the landing `<h1>`)
+were reviewed and confirmed **intentional** (§1.2).
 
 > **Scope & honesty note.** Items that require a human operating assistive technology or a
 > browser extension — the **WAVE** and **axe DevTools** *extensions*, hands-on **NVDA/VoiceOver**,
