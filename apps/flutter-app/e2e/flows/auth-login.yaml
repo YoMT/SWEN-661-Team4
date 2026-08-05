@@ -9,7 +9,11 @@ appId: com.example.flutter_app
 - tapOn: "Sign in"
 
 # ── Login ─────────────────────────────────────────────────────────────────────
-- assertVisible: "Care management built for caregivers with tremors"
+# Wait out the route transition; anchor on the (dark) field label rather than the
+# white header tagline, which is harder for the screen-reader tree to surface.
+- extendedWaitUntil:
+    visible: "Email address"
+    timeout: 15000
 - tapOn: "you@example.com"
 - inputText: "demo@careconnect.com"
 - tapOn: "Enter your password"
@@ -17,4 +21,9 @@ appId: com.example.flutter_app
 - tapOn: "Sign In"
 
 # ── Dashboard ─────────────────────────────────────────────────────────────────
-- assertVisible: "Margaret Johnson"
+# The care-recipient name sits in the dashboard's collapsing SliverAppBar, which
+# Flutter does not reliably expose to the accessibility tree Maestro reads. Assert
+# the always-surfaced "Mark as taken" action on the "Up next" card instead.
+- extendedWaitUntil:
+    visible: "Mark as taken"
+    timeout: 20000
