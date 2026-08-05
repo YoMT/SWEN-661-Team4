@@ -69,7 +69,7 @@ pnpm install
 
 The monorepo contains four apps. Set up each one based on what you're working on.
 
-#### Web App (`apps/web`) — React + Vite + TypeScript
+#### Web App (`apps/web`) — React + Vite + TypeScript (installable PWA)
 
 ```bash
 cd apps/web
@@ -77,6 +77,11 @@ pnpm dev          # start dev server at http://localhost:5173
 pnpm build        # production build
 pnpm preview      # preview production build locally
 ```
+
+Sign in with the demo account **`demo@careconnect.com` / `demo123`** to reach the
+Dashboard, Medications, Appointments, Symptoms, and Profile screens. The app uses an
+in-memory mock by default; set `VITE_API_URL` to point it at a running API. See
+[apps/web/README.md](apps/web/README.md) for features, testing, and accessibility.
 
 #### Mobile App (`apps/mobile`) — Expo + React Native
 
@@ -121,8 +126,25 @@ flutter build ios        # build iOS (requires macOS + Xcode)
 
 ## Testing
 
-Automated tests live alongside each app. The **web** and **desktop** apps do not
-have test suites yet.
+Automated tests live alongside each app.
+
+### Web App (`apps/web`)
+
+Unit + integration tests run with Jest 30 (React Testing Library); end-to-end tests
+use Playwright (mock and real-API projects); accessibility is scanned with axe-core
+(four browsers) and Lighthouse.
+
+```bash
+cd apps/web
+pnpm test               # Jest: unit + integration
+pnpm test:coverage      # Jest with coverage
+pnpm test:e2e           # Playwright E2E (all projects)
+pnpm test:e2e:real      # Playwright E2E against the real API
+```
+
+- **Accessibility: WCAG 2.1 Level AA** — 0 axe-core violations (Chromium, Edge,
+  Firefox; WebKit on public pages) and a Lighthouse accessibility score of 100/100.
+- Full report — see [WEB_ACCESSIBILITY_TEST_REPORT.md](apps/web/docs/WEB_ACCESSIBILITY_TEST_REPORT.md).
 
 ### Flutter App (`apps/flutter-app`)
 
